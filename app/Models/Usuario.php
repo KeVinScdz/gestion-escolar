@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class Usuario extends Authenticatable
+{
+    protected $table = 'usuarios';
+    protected $primaryKey = 'usuario_id';
+    public $timestamps = false;
+
+    protected $hidden = ['usuario_password'];
+
+    public function rol()
+    {
+        return $this->belongsTo(Rol::class, 'rol_id', 'rol_id');
+    }
+
+    public function persona()
+    {
+        return $this->hasOne(Persona::class, 'usuario_id', 'usuario_id');
+    }
+}
