@@ -20,6 +20,6 @@ class Usuario extends Authenticatable
 
     public function persona()
     {
-        return $this->hasOne(Persona::class, 'usuario_id', 'usuario_id');
+        return $this->hasOne(Persona::class, 'persona_id', 'persona_id');
     }
 }
