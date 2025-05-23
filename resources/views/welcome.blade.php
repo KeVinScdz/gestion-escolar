@@ -13,16 +13,16 @@
             <p class="text-pretty text-lg text-base-content/80">
                 <span class="semibold">Matryerse</span> es la plataforma en nube de gestión académica, resultado de profesionales del sector educativo y tecnológico, pioneros en España de la solución 100% nube en 2010, y en constante evolución
             </p>
-            <button class="btn btn-ghost text-base py-2 group pr-6 mt-8">
+            <a href="/login" class="btn btn-ghost text-base py-2 group pr-6 mt-8">
                 <span class="mr-1">Empezar ahora</span>
                 <i class="fa-solid fa-arrow-right group-hover:translate-x-2 duration-300"></i>
-            </button>
+            </a>
         </div>
     </div>
 </section>
 
 <section class="w-full px-5">
-    <div class="w-full max-w-[1200px] mx-auto py-10">
+    <div class="w-full max-w-[1200px] mx-auto py-15 pt-0">
         <div class="w-full flex items-center gap-10">
             <div class="md:w-1/2 space-y-6">
                 <h2 class="text-4xl font-bold">Todo lo que necesitas en un solo lugar</h2>
@@ -43,7 +43,7 @@
 </section>
 
 <section class="w-full px-5">
-    <div class="max-w-[1200px] mx-auto py-10 space-y-20">
+    <div class="max-w-[1200px] mx-auto py-15 space-y-20">
         <h2 class="text-4xl font-bold text-center">¿Por qué elegir Matryerse?</h2>
         <div class="grid md:grid-cols-3 gap-10 text-center">
             <div>
@@ -65,8 +65,8 @@
     </div>
 </section>
 
-<section class="w-full px-5 bg-base-100 py-16">
-    <div class="max-w-[1200px] mx-auto">
+<section class="w-full px-5">
+    <div class="max-w-[1200px] mx-auto py-15">
         <h2 class="text-4xl font-bold text-center mb-12">Principales funcionalidades</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div class="p-6 bg-base-200 rounded-lg">

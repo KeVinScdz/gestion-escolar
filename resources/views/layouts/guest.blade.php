@@ -14,20 +14,21 @@
             </div>
             <nav>
                 <ul class="flex gap-5">
-                    <li><a href="#">Inicio</a></li>
-                    <li><a href="#">Iniciar Sesión</a></li>
-                    <li><a href="#">Registrarse</a></li>
+                    <li><a href="/">Inicio</a></li>
+                    <li><a href="/login">Iniciar Sesión</a></li>
+                    <li><a href="/register">Registrarse</a></li>
                 </ul>
             </nav>
             <div class="flex-1 flex justify-end">
-                <button class="btn btn-primary btn-outline py-1">
+                <a href="/login" class="btn btn-primary btn-outline py-1">
                     <i class="fa-solid fa-right-to-bracket text-sm"></i>
                     <span class="ml-1">Autenticate</span>
-                </button>
+                </a>
             </div>
         </div>
     </header>
-    <main class="w-full flex-1 space-y-20">
+
+    <main class="w-full flex-1 space-y-20 mb-15">
         @yield('content')
     </main>
 

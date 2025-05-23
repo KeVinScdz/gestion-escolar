@@ -11,6 +11,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::middleware('guest')->group(function () {
+    Route::get('/login', function () {
+        return view('auth.login');
+    });
+
+    Route::get('/register', function () {
+       return view('auth.register'); 
+    });
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
