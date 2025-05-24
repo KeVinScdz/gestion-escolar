@@ -15,20 +15,17 @@ return new class extends Migration
         Schema::create('roles', function (Blueprint $table) {
             $table->id('rol_id');
             $table->string('rol_nombre');
-            $table->timestamps();
         });
 
         Schema::create('permisos', function (Blueprint $table) {
             $table->id('permiso_id');
             $table->string('permiso_nombre');
-            $table->timestamps();
         });
 
         Schema::create('roles_permisos', function (Blueprint $table) {
             $table->id('rol_permiso_id');
             $table->unsignedBigInteger('rol_id');
             $table->unsignedBigInteger('permiso_id');
-            $table->timestamps();
         });
 
         Schema::create('usuarios', function (Blueprint $table) {
@@ -56,21 +53,18 @@ return new class extends Migration
             $table->id('estudiante_id');
             $table->unsignedBigInteger('persona_id');
             $table->string('estudiante_codigo');
-            $table->timestamps();
         });
 
         Schema::create('docentes', function (Blueprint $table) {
             $table->id('docente_id');
             $table->unsignedBigInteger('persona_id');
             $table->string('docente_titulo');
-            $table->timestamps();
         });
 
         Schema::create('administrativos', function (Blueprint $table) {
             $table->id('administrativo_id');
             $table->unsignedBigInteger('persona_id');
             $table->string('administrativo_cargo');
-            $table->timestamps();
         });
 
         // Estructura academica
@@ -87,33 +81,28 @@ return new class extends Migration
             $table->string('periodo_academico_nombre');
             $table->date('periodo_academico_inicio');
             $table->date('periodo_academico_fin');
-            $table->timestamps();
         });
 
         Schema::create('niveles', function (Blueprint $table) {
             $table->id('nivel_id');
             $table->string('nivel_nombre');
-            $table->timestamps();
         });
 
         Schema::create('grados', function (Blueprint $table) {
             $table->id('grado_id');
             $table->unsignedBigInteger('nivel_id');
             $table->string('grado_nombre');
-            $table->timestamps();
         });
 
         Schema::create('grupos', function (Blueprint $table) {
             $table->id('grupo_id');
             $table->unsignedBigInteger('grado_id');
             $table->string('grupo_nombre');
-            $table->timestamps();
         });
 
         Schema::create('materias', function (Blueprint $table) {
             $table->id('materia_id');
             $table->string('materia_nombre');
-            $table->timestamps();
         });
 
         // Asignacion academica
@@ -128,9 +117,16 @@ return new class extends Migration
         Schema::create('horarios', function (Blueprint $table) {
             $table->id('horario_id');
             $table->unsignedBigInteger('asignacion_id');
-            $table->string('horario_dia');
+            $table->date('horario_dia');
             $table->time('horario_inicio');
             $table->time('horario_fin');
+        });
+
+        Schema::create('notas', function (Blueprint $table) {
+            $table->id('nota_id');
+            $table->unsignedBigInteger('matricula_id');
+            $table->unsignedBigInteger('materia_id');
+            $table->float('nota_valor');
             $table->timestamps();
         });
 
@@ -140,14 +136,6 @@ return new class extends Migration
             $table->unsignedBigInteger('estudiante_id');
             $table->unsignedBigInteger('grupo_id');
             $table->unsignedBigInteger('periodo_academico_id');
-            $table->timestamps();
-        });
-
-        Schema::create('notas', function (Blueprint $table) {
-            $table->id('nota_id');
-            $table->unsignedBigInteger('matricula_id');
-            $table->unsignedBigInteger('materia_id');
-            $table->float('nota_valor');
             $table->timestamps();
         });
 
