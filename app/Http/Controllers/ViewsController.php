@@ -24,7 +24,7 @@ class ViewsController
 
     public function dashboard()
     {
-        $user = Auth::user()->load('rol', 'persona');
+        $user = Auth::user()->load('rol');
 
         return view('app.dashboard', ['usuario' => $user]);
     }

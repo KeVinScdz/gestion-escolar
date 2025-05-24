@@ -33,7 +33,7 @@ class AuthController
 
             $credentials = $request->all();
 
-            $user = Usuario::with(['rol', 'persona'])->where('usuario_correo', $credentials['usuario_correo'])->first();
+            $user = Usuario::with(['rol'])->where('usuario_correo', $credentials['usuario_correo'])->first();
 
             if (!$user) {
                 return redirect()->back()->with('error', 'Usuario no encontrado')->withInput();

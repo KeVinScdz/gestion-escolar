@@ -20,9 +20,4 @@ class Usuario extends Authenticatable
     {
         return $this->belongsTo(Rol::class, 'rol_id', 'rol_id');
     }
-
-    public function persona()
-    {
-        return $this->hasOne(Persona::class, 'persona_id', 'persona_id');
-    }
 }

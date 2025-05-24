@@ -36,13 +36,13 @@
                     <div class="avatar avatar-placeholder">
                         <div class="bg-primary text-primary-content w-12 rounded-full">
                             <p class="text-xl">
-                                {{ $usuario->persona->persona_nombre[0] }}
+                                {{ $usuario->usuario_nombre[0] }}
                             </p>
                         </div>
                     </div>
                     <div class="flex-col text-sm">
                         <p class="font-medium">{{ $usuario->usuario_correo }}</p>
-                        <p class="text-xs">{{ $usuario->persona->persona_nombre }} {{ $usuario->persona->persona_apellido }}</p>
+                        <p class="text-xs">{{ $usuario->usuario_nombre }} {{ $usuario->usuario_apellido }}</p>
                         <p class="text-xs text-neutral-content/60">{{ $usuario->rol->rol_nombre }}</p>
                     </div>
                 </div>
@@ -93,6 +93,7 @@
                         </li>
                     @endif
                 </div>
+                <hr class="border-neutral-content/60 my-6">
                 <div>
                     <li>
                         <a class="block">

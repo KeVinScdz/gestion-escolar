@@ -10,9 +10,9 @@ class Estudiante extends Model
     protected $primaryKey = 'estudiante_id';
     public $timestamps = false;
 
-    public function persona()
+    public function usuario()
     {
-        return $this->belongsTo(Persona::class, 'persona_id', 'persona_id');
+        return $this->belongsTo(Usuario::class, 'usuario_id', 'usuario_id');
     }
 
     public function matriculas()
