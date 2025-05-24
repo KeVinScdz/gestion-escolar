@@ -34,7 +34,7 @@
             <div class="divider text-xs uppercase text-base-content/60">O inicia sesión con correo</div>
         </div>
 
-        <div class="space-y-4">
+        <form data-target="/api/login" data-method="post" data-show-alert="true" class="upload-form space-y-4">
             <fieldset class="fieldset">
                 <label class="fieldset-label">Correo electrónico:</label>
                 <label class="input">
@@ -49,7 +49,7 @@
                             <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                         </g>
                     </svg>
-                    <input type="email" placeholder="ejemplo@gmail.com" required />
+                    <input name="usuario_correo" placeholder="ejemplo@gmail.com" />
                 </label>
             </fieldset>
             <label class="input">
@@ -65,12 +65,12 @@
                         <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle>
                     </g>
                 </svg>
-                <input type="password" required placeholder="Ingresa tu contraseña" />
+                <input type="password" name="usuario_contraseña" placeholder="Ingresa tu contraseña" />
             </label>
             <fieldset class="fieldset">
                 <button class="btn btn-primary">Subir</button>
             </fieldset>
-        </div>
+        </form>
 
         <div class="flex justify-center items-center mt-6">
             <a href="/register" class="inline-flex items-center font-bold text-primary hover text-xs text-center">

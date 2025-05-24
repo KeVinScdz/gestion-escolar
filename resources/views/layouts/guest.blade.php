@@ -1,4 +1,4 @@
-<html data-theme="dark">
+<html data-theme="light">
 
 <head>
     <title>@yield('title') | Sistema de Gestión Escolar</title>
@@ -7,7 +7,7 @@
 </head>
 
 <body class="flex flex-col min-h-screen w-full font-poppins">
-    <header id="main-header" class="w-full px-5 z-50 sticky top-0 transition-all duration-300 border-transparent">
+    <header id="main-header" class="w-full px-5 z-50 sticky top-0 transition-all duration-300 border-b border-primary/0">
         <div class="w-full max-w-[1200px] mx-auto py-5 flex items-center justify-between">
             <div class="flex-1 text-2xl font-oswald">
                 <a href="/" class="hover:text-primary duration-300 cursor-pointer">MATRYERSE</a>
@@ -43,16 +43,15 @@
         .glass-effect {
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
     </style>
     <script>
-        const header = document.getElementById('main-header');
+        const $header = document.getElementById('main-header');
         window.addEventListener('scroll', function() {
             if (window.scrollY > 10) {
-                header.classList.add('glass-effect', 'bg-base-200/50');
+                $header.classList.add('glass-effect', 'border-primary/20', 'bg-base-200/50');
             } else {
-                header.classList.remove('glass-effect', 'bg-base-200/50');
+                $header.classList.remove('glass-effect', 'border-primary/20', 'bg-base-200/50');
             }
         });
     </script>

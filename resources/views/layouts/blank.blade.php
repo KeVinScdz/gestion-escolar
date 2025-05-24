@@ -1,9 +1,9 @@
-<html data-theme="dark">
+<html data-theme="light">
 
 <head>
     <title>@yield('title') | Sistema de Gestión Escolar</title>
     <script src="https://kit.fontawesome.com/eb36e646d1.js" crossorigin="anonymous"></script>
-    @vite(['resources/css/app.css'])
+    @vite(['resources/css/app.css', 'resources/js/uploadForm.js'])
 </head>
 
 <body class="flex flex-col min-h-screen w-full font-poppins">
