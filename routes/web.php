@@ -14,10 +14,11 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [ViewsController::class, 'register']);
 
     Route::post('/login', [AuthController::class, 'login']);
-    Route::post('logout', [AuthController::class, 'logout']);
 });
 
 // Authenticated Routes
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [ViewsController::class, 'dashboard']);
+
+    Route::post('logout', [AuthController::class, 'logout']);
 });

@@ -50,29 +50,45 @@
                             <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                         </g>
                     </svg>
-                    <input name="usuario_correo" placeholder="ejemplo@gmail.com" />
+                    <input name="usuario_correo" placeholder="ejemplo@gmail.com" value="{{ old('usuario_correo') }}" />
                 </label>
-            </fieldset>
-            <label class="input">
-                <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <g
-                        stroke-linejoin="round"
-                        stroke-linecap="round"
-                        stroke-width="2.5"
-                        fill="none"
-                        stroke="currentColor">
-                        <path
-                            d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"></path>
-                        <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle>
-                    </g>
-                </svg>
-                <input type="password" name="usuario_contra" placeholder="Ingresa tu contraseña" />
-            </label>
-            @if(session('error'))
+                @if($errors->has('usuario_correo'))
                 <p class="text-sm font-medium tracking-tight text-red-600">
-                    {{ session('error') }}
+                    {{ $errors->first('usuario_correo') }}
                 </p>
+                @endif
+            </fieldset>
+
+            <fieldset class="fieldset">
+                <label class="fieldset-label">Contraseña:</label>
+                <label class="input">
+                    <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <g
+                            stroke-linejoin="round"
+                            stroke-linecap="round"
+                            stroke-width="2.5"
+                            fill="none"
+                            stroke="currentColor">
+                            <path
+                                d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"></path>
+                            <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle>
+                        </g>
+                    </svg>
+                    <input type="password" name="usuario_contra" placeholder="Ingresa tu contraseña" />
+                </label>
+                @if($errors->has('usuario_contra'))
+                <p class="text-sm font-medium tracking-tight text-red-600">
+                    {{ $errors->first('usuario_contra') }}
+                </p>
+                @endif
+            </fieldset>
+
+            @if(session('error'))
+            <p class="text-sm font-medium tracking-tight text-red-600">
+                {{ session('error') }}
+            </p>
             @endif
+
             <fieldset class="fieldset">
                 <button class="btn btn-primary">Subir</button>
             </fieldset>

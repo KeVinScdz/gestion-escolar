@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ViewsController
 {
@@ -19,5 +20,12 @@ class ViewsController
     public function register()
     {
         return view('auth.register');
+    }
+
+    public function dashboard()
+    {
+        $user = Auth::user()->load('rol', 'persona');
+
+        return view('app.dashboard', ['user' => $user]);
     }
 }

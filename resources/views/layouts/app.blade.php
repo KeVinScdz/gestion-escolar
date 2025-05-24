@@ -1,18 +1,13 @@
-<html>
+<html data-theme="light">
 
 <head>
     <title>@yield('title') | Sistema de Gestión Escolar</title>
+    <script src="https://kit.fontawesome.com/eb36e646d1.js" crossorigin="anonymous"></script>
     @vite(['resources/css/app.css'])
 </head>
 
 <body>
-    @section('sidebar')
-    This is the master sidebar.
-    @show
-
-    <aside class="container">
-        @yield('content')
-    </aside>
+    @yield('content')
 </body>
 
 </html>
