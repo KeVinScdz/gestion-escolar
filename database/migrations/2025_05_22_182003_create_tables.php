@@ -28,48 +28,50 @@ return new class extends Migration
             $table->unsignedBigInteger('permiso_id');
         });
 
-        Schema::create('usuarios', function (Blueprint $table) {
-            $table->id('usuario_id');
-            $table->unsignedBigInteger('persona_id');
-            $table->unsignedBigInteger('rol_id');
-            $table->string('usuario_correo')->unique();
-            $table->string('usuario_contra');
-            $table->timestamps();
-        });
-
         // Perfil de usuarios
-        Schema::create('personas', function (Blueprint $table) {
-            $table->id('persona_id');
-            $table->string('persona_nombre');
-            $table->string('persona_apellido');
-            $table->string('persona_documento')->unique();
-            $table->date('persona_fecha_nacimiento');
-            $table->string('persona_direccion');
-            $table->string('persona_telefono');
+        Schema::create('usuarios', function (Blueprint $table) {
+            $table->uuid('usuario_id');
+            $table->string('usuario_nombre');
+            $table->string('usuario_apellido');
+            $table->string('usuario_correo')->unique();
+            $table->enum('usuario_documento_tipo', ['CC', 'TI', 'CE']);
+            $table->string('usuario_documento')->unique();
+            $table->date('usuario_nacimiento');
+            $table->string('usuario_direccion');
+            $table->string('usuario_telefono');
+            $table->string('usuario_contra');
+            $table->unsignedBigInteger('rol_id');
             $table->timestamps();
         });
 
         Schema::create('estudiantes', function (Blueprint $table) {
-            $table->id('estudiante_id');
-            $table->unsignedBigInteger('persona_id');
-            $table->string('estudiante_codigo');
+            $table->uuid('estudiante_id');
+            $table->uuid('institucion_id');
+            $table->uuid('usuario_id');
+        });
+
+        Schema::create('tutores', function (Blueprint $table) {
+            $table->uuid('tutor_id');
+            $table->uuid('usuario_id');
+            $table->uuid('estudiante_id');
         });
 
         Schema::create('docentes', function (Blueprint $table) {
-            $table->id('docente_id');
-            $table->unsignedBigInteger('persona_id');
+            $table->uuid('docente_id');
+            $table->uuid('usuario_id');
+            $table->uuid('institucion_id');
             $table->string('docente_titulo');
         });
 
         Schema::create('administrativos', function (Blueprint $table) {
-            $table->id('administrativo_id');
-            $table->unsignedBigInteger('persona_id');
+            $table->uuid('administrativo_id');
+            $table->uuid('usuario_id');
             $table->string('administrativo_cargo');
         });
 
         // Estructura academica
         Schema::create('instituciones', function (Blueprint $table) {
-            $table->id('institucion_id');
+            $table->uuid('institucion_id');
             $table->string('institucion_nombre');
             $table->string('institucion_direccion');
             $table->string('institucion_nit')->unique();
@@ -95,37 +97,41 @@ return new class extends Migration
         });
 
         Schema::create('grupos', function (Blueprint $table) {
-            $table->id('grupo_id');
+            $table->uuid('grupo_id');
             $table->unsignedBigInteger('grado_id');
+            $table->uuid('institucion_id');
             $table->string('grupo_nombre');
+            $table->unsignedBigInteger('grupo_año');
+            $table->timestamps();
         });
 
         Schema::create('materias', function (Blueprint $table) {
             $table->id('materia_id');
             $table->string('materia_nombre');
+            $table->uuid('institucion_id');
         });
 
         // Asignacion academica
         Schema::create('asignaciones', function (Blueprint $table) {
-            $table->id('asignacion_id');
-            $table->unsignedBigInteger('docente_id');
+            $table->uuid('asignacion_id');
+            $table->uuid('docente_id');
             $table->unsignedBigInteger('materia_id');
-            $table->unsignedBigInteger('grupo_id');
+            $table->uuid('grupo_id');
             $table->timestamps();
         });
 
         Schema::create('horarios', function (Blueprint $table) {
-            $table->id('horario_id');
-            $table->unsignedBigInteger('asignacion_id');
+            $table->uuid('horario_id');
+            $table->uuid('asignacion_id');
             $table->date('horario_dia');
             $table->time('horario_inicio');
             $table->time('horario_fin');
         });
 
         Schema::create('notas', function (Blueprint $table) {
-            $table->id('nota_id');
-            $table->unsignedBigInteger('matricula_id');
-            $table->unsignedBigInteger('materia_id');
+            $table->uuid('nota_id');
+            $table->uuid('estudiante_id');
+            $table->uuid('asignacion_id');
             $table->float('nota_valor');
             $table->timestamps();
         });
@@ -196,8 +202,8 @@ return new class extends Migration
         Schema::dropIfExists('roles_permisos');
 
         // Perfil de usuarios
-        Schema::dropIfExists('personas');
         Schema::dropIfExists('estudiantes');
+        Schema::dropIfExists('tutores');
         Schema::dropIfExists('docentes');
         Schema::dropIfExists('administrativos');
 
