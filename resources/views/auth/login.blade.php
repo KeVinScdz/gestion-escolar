@@ -34,7 +34,8 @@
             <div class="divider text-xs uppercase text-base-content/60">O inicia sesión con correo</div>
         </div>
 
-        <form data-target="/api/login" data-method="post" data-show-alert="true" data-redirect="/" class="upload-form space-y-4">
+        <form method="post" action="/login" class="space-y-4">
+            @csrf
             <fieldset class="fieldset">
                 <label class="fieldset-label">Correo electrónico:</label>
                 <label class="input">
@@ -65,8 +66,13 @@
                         <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle>
                     </g>
                 </svg>
-                <input type="password" name="usuario_contraseña" placeholder="Ingresa tu contraseña" />
+                <input type="password" name="usuario_contra" placeholder="Ingresa tu contraseña" />
             </label>
+            @if(session('error'))
+                <p class="text-sm font-medium tracking-tight text-red-600">
+                    {{ session('error') }}
+                </p>
+            @endif
             <fieldset class="fieldset">
                 <button class="btn btn-primary">Subir</button>
             </fieldset>

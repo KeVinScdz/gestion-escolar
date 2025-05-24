@@ -14,6 +14,7 @@ $forms.forEach(($form) => {
         const $method = $form.getAttribute("data-method");
         const $showAlert = $form.getAttribute("data-show-alert") === "true";
         const $redirect = $form.getAttribute("data-redirect");
+        const $callback = $form.getAttribute("data-callback");
 
         // send request
         const response = await fetch($target, {
@@ -21,6 +22,8 @@ $forms.forEach(($form) => {
             body: JSON.stringify(data),
             headers: {
                 "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("access-token"),
+                Accept: "application/json",
             },
         });
         const responseData = await response.json();
@@ -38,6 +41,12 @@ $forms.forEach(($form) => {
                 });
             }
             return;
+        }
+
+        if ($callback) {
+            const callback = window[$callback];
+            if (callback && typeof callback === "function")
+                callback(responseData);
         }
 
         if ($showAlert) {

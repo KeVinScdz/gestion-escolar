@@ -1,13 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 
-class UsuarioController extends Controller
+class UsuarioController
 {
-    public function getAll()
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
     {
         try {
             $usuarios = Usuario::all();
@@ -25,20 +28,23 @@ class UsuarioController extends Controller
         }
     }
 
+    /**
+     * Display a listing of the resource paginated.
+     */
     public function paginate(Request $request)
     {
         try {
+            $page = $request->input('page', 1);
             $perPage = $request->input('per_page', 10);
 
-            $usuarios = Usuario::with(['persona', 'rol'])->paginate($perPage);
+            $usuarios = Usuario::paginate($perPage, ['*'], 'page', $page);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Usuarios encontrados',
-                'data' => $usuarios->items(),
-                'total' => $usuarios->total(),
+                'data' => $usuarios,
                 'limit' => $usuarios->perPage(),
-                'page' => $usuarios->currentPage(),
+                'total' => $usuarios->total(),
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -48,7 +54,33 @@ class UsuarioController extends Controller
         }
     }
 
-    public function getByPK($id)
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        try {
+            $user = $request->all();
+
+            $usuario = Usuario::create($user);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Usuario creado correctamente',
+                'data' => $usuario,
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear el usuario: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
     {
         try {
             $usuario = Usuario::findOrFail($id);
@@ -68,32 +100,15 @@ class UsuarioController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error al obtener el usuario: '. $e->getMessage(),
+                'message' => 'Error al obtener el usuario: ' . $e->getMessage(),
             ], 500);
         }
     }
 
-    public function create(Request $request)
-    {
-        try {
-            ['user' => $user] = $request->all();
-
-            $usuario = Usuario::create($user);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Usuario creado correctamente',
-                'data' => $usuario,
-            ], 201);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error al crear el usuario: '. $e->getMessage(),
-            ], 500);
-        }
-    }
-
-    public function update(Request $request, $id)
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
     {
         try {
             $usuario = Usuario::findOrFail($id);
@@ -115,12 +130,15 @@ class UsuarioController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error al actualizar el usuario: '. $e->getMessage(),
+                'message' => 'Error al actualizar el usuario: ' . $e->getMessage(),
             ], 500);
         }
     }
 
-    public function destroy($id)
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
     {
         try {
             $usuario = Usuario::findOrFail($id);
@@ -141,7 +159,7 @@ class UsuarioController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error al eliminar el usuario: '. $e->getMessage(),
+                'message' => 'Error al eliminar el usuario: ' . $e->getMessage(),
             ], 500);
         }
     }

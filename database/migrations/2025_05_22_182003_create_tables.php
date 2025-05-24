@@ -36,7 +36,7 @@ return new class extends Migration
             $table->unsignedBigInteger('persona_id');
             $table->unsignedBigInteger('rol_id');
             $table->string('usuario_correo')->unique();
-            $table->string('usuario_contraseña');
+            $table->string('usuario_contra');
             $table->timestamps();
         });
 

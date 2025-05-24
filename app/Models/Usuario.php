@@ -14,7 +14,7 @@ class Usuario extends Authenticatable
     protected $primaryKey = 'usuario_id';
     public $timestamps = false;
 
-    protected $hidden = ['usuario_contraseña'];
+    protected $hidden = ['usuario_contra'];
 
     public function rol()
     {

@@ -1,29 +1,23 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    $user = Auth::user();
-    if (Auth::check()) {
-        return redirect('/home');
-    }
+use App\Http\Controllers\ViewsController;
+use App\Http\Controllers\Web\AuthController;
 
-    return view('welcome', ['user' => $user]);
-});
+// Public Routes
+Route::get('/', [ViewsController::class, 'index']);
 
+// Guest Routes
 Route::middleware('guest')->group(function () {
-    Route::get('/login', function () {
-        return view('auth.login');
-    });
+    Route::get('/login', [ViewsController::class, 'login']);
+    Route::get('/register', [ViewsController::class, 'register']);
 
-    Route::get('/register', function () {
-        return view('auth.register');
-    });
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('logout', [AuthController::class, 'logout']);
 });
 
+// Authenticated Routes
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    });
+    Route::get('/dashboard', [ViewsController::class, 'dashboard']);
 });
