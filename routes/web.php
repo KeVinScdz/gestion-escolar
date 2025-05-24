@@ -10,7 +10,7 @@ Route::get('/', [ViewsController::class, 'index']);
 
 // Guest Routes
 Route::middleware('guest')->group(function () {
-    Route::get('/login', [ViewsController::class, 'login']);
+    Route::get('/login', [ViewsController::class, 'login'])->name('login');
     Route::get('/register', [ViewsController::class, 'register']);
 
     Route::post('/login', [AuthController::class, 'login']);

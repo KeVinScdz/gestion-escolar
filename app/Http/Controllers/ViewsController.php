@@ -26,6 +26,6 @@ class ViewsController
     {
         $user = Auth::user()->load('rol', 'persona');
 
-        return view('app.dashboard', ['user' => $user]);
+        return view('app.dashboard', ['usuario' => $user]);
     }
 }
