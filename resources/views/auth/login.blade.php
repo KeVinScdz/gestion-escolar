@@ -34,7 +34,7 @@
             <div class="divider text-xs uppercase text-base-content/60">O inicia sesión con correo</div>
         </div>
 
-        <form data-target="/api/login" data-method="post" data-show-alert="true" class="upload-form space-y-4">
+        <form data-target="/api/login" data-method="post" data-show-alert="true" data-redirect="/" class="upload-form space-y-4">
             <fieldset class="fieldset">
                 <label class="fieldset-label">Correo electrónico:</label>
                 <label class="input">

@@ -4,11 +4,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
+    $user = Auth::user();
     if (Auth::check()) {
         return redirect('/home');
     }
 
-    return view('welcome');
+    return view('welcome', ['user' => $user]);
 });
 
 Route::middleware('guest')->group(function () {
@@ -17,7 +18,7 @@ Route::middleware('guest')->group(function () {
     });
 
     Route::get('/register', function () {
-       return view('auth.register'); 
+        return view('auth.register');
     });
 });
 

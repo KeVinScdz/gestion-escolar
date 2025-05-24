@@ -4,14 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
 
 class Usuario extends Authenticatable
 {
+    use HasApiTokens;
+
     protected $table = 'usuarios';
     protected $primaryKey = 'usuario_id';
     public $timestamps = false;
 
-    protected $hidden = ['usuario_password'];
+    protected $hidden = ['usuario_contraseña'];
 
     public function rol()
     {

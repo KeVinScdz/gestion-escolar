@@ -13,6 +13,7 @@ $forms.forEach(($form) => {
         const $target = $form.getAttribute("data-target");
         const $method = $form.getAttribute("data-method");
         const $showAlert = $form.getAttribute("data-show-alert") === "true";
+        const $redirect = $form.getAttribute("data-redirect");
 
         // send request
         const response = await fetch($target, {
@@ -46,7 +47,11 @@ $forms.forEach(($form) => {
                 text: responseData.message,
                 background: "var(--color-base-100)",
                 color: "var(--color-base-content)",
+            }).then(() => {
+                if ($redirect) window.location.href = $redirect;
             });
+        } else {
+            if ($redirect) window.location.href = $redirect;
         }
     });
 });
