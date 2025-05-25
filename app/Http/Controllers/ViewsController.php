@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Institucion;
+use App\Models\Rol;
+use App\Models\Usuario;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,13 +33,26 @@ class ViewsController
         return view('app.dashboard', compact('usuario'));
     }
 
+    // Admin Views
     public function institutions()
     {
         $usuario = Auth::user()->load('rol');
         $search = request('search');
 
-        $instituciones = Institucion::search($search ?? "")->paginate(2);
+        $instituciones = Institucion::search($search ?? '')->paginate(5);
 
         return view('app.admin.institutions', compact('usuario', 'instituciones'));
+    }
+
+    public function users()
+    {
+        $usuario = Auth::user()->load('rol');
+        $search = request('search');
+        $showAll = request('showAll') === 'true';
+
+        $usuarios = Usuario::search($search ?? '')->paginate(5);
+        $roles = Rol::all();
+
+        return view('app.admin.users', compact('usuario', 'usuarios', 'roles'));
     }
 }

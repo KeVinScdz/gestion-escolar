@@ -44,4 +44,15 @@ class Usuario extends Authenticatable
     {
         $this->attributes['usuario_contra'] = Hash::make($value);
     }
+
+    public function scopeSearch($query, $term)
+    {
+        if (empty($term)) return $query;
+        return $query->where(function ($q) use ($term) {
+            $q->where('institucion_nombre', 'like', "%{$term}%")
+                ->orWhere('institucion_correo', 'like', "%{$term}%")
+                ->orWhere('institucion_nit', 'like', "%{$term}%")
+                ->orWhere('institucion_direccion', 'like', "%{$term}%");
+        });
+    }
 }

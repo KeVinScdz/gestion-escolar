@@ -43,7 +43,6 @@ class Institucion extends Model
         return $this->hasMany(PeriodoAcademico::class, 'institucion_id', 'institucion_id');
     }
 
-    // Search scope for filtering by nombre, correo, nit, etc.
     public function scopeSearch($query, $term)
     {
         if (empty($term)) return $query;
