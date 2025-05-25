@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Institucion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,8 +25,16 @@ class ViewsController
 
     public function dashboard()
     {
-        $user = Auth::user()->load('rol');
+        $usuario = Auth::user()->load('rol');
 
-        return view('app.dashboard', ['usuario' => $user]);
+        return view('app.dashboard', compact('usuario'));
+    }
+
+    public function institutions()
+    {
+        $usuario = Auth::user()->load('rol');
+        $instituciones = Institucion::paginate(2);
+
+        return view('app.admin.institutions', compact('usuario', 'instituciones'));
     }
 }

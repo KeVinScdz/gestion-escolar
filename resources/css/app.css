@@ -82,3 +82,11 @@
 @utility input {
     @apply w-full focus:outline-0 focus:border-primary focus-within:outline-0 focus-within:border-primary;
 }
+
+.menu {
+    & :where(li ul) {
+      &::before {
+        @apply bg-neutral-content;
+      }
+    }
+  }

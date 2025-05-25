@@ -24,5 +24,6 @@ Route::middleware('auth')->group(function () {
 });
 
 // Admin Dashboard
-// Route::middleware(['auth', 'role:1'])->group(function () {
-// });
+Route::middleware(['auth', 'role:1'])->group(function () {
+    Route::get("/dashboard/instituciones", [ViewsController::class, 'institutions']);
+});
