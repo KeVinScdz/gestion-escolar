@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Support\Facades\Hash;
 
 class Usuario extends Authenticatable
 {
@@ -37,5 +38,10 @@ class Usuario extends Authenticatable
     public function rol()
     {
         return $this->belongsTo(Rol::class, 'rol_id', 'rol_id');
+    }
+
+    public function setUsuarioContraAttribute($value)
+    {
+        $this->attributes['usuario_contra'] = Hash::make($value);
     }
 }

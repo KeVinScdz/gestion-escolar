@@ -27,12 +27,12 @@
                 Actualizar Información Personal
             </div>
             <div class="collapse-content">
-                <form 
-                data-target="/api/users/{{ $usuario->usuario_id }}" 
-                data-method="PUT" 
-                data-show-alert="true"
-                data-reload="true"
-                class="upload-form space-y-2">
+                <form
+                    data-target="/api/users/{{ $usuario->usuario_id }}"
+                    data-method="PUT"
+                    data-show-alert="true"
+                    data-reload="true"
+                    class="upload-form space-y-2">
                     <fieldset class="w-full fieldset">
                         <label class="fieldset-label after:content-['*'] after:text-red-500" for="usuario_nombre">Nombre</label>
                         <input
@@ -137,45 +137,48 @@
                 Actualizar Contraseña
             </div>
             <div class="collapse-content">
-                <form action="/user/{{ $usuario->usuario_id }}/password" method="POST" class="space-y-2">
-                    @csrf
-                    @method('PUT')
+                <form
+                    data-target="/api/users/{{ $usuario->usuario_id }}"
+                    data-method="PUT"
+                    data-show-alert="true"
+                    data-reload="true"
+                    class="upload-form space-y-2">
                     <fieldset class="w-full fieldset">
-                        <label class="fieldset-label after:content-['*'] after:text-red-500" for="current_password">Contraseña Actual</label>
+                        <label class="fieldset-label after:content-['*'] after:text-red-500" for="actual_contra">Contraseña Actual</label>
                         <input
                             type="password"
-                            id="current_password"
-                            name="current_password"
+                            id="actual_contra"
+                            name="actual_contra"
                             class="input input-bordered w-full">
-                        @if($errors->has('current_password'))
+                        @if($errors->has('actual_contra'))
                         <p class="text-sm font-medium tracking-tight text-red-600">
-                            {{ $errors->first('current_password') }}
+                            {{ $errors->first('actual_contra') }}
                         </p>
                         @endif
                     </fieldset>
                     <fieldset class="w-full fieldset">
-                        <label class="fieldset-label after:content-['*'] after:text-red-500" for="new_password">Nueva Contraseña</label>
+                        <label class="fieldset-label after:content-['*'] after:text-red-500" for="usuario_contra">Nueva Contraseña</label>
                         <input
                             type="password"
-                            id="new_password"
-                            name="new_password"
+                            name="usuario_contra"
+                            id="usuario_contra"
                             class="input input-bordered w-full">
-                        @if($errors->has('new_password'))
+                        @if($errors->has('usuario_contra'))
                         <p class="text-sm font-medium tracking-tight text-red-600">
-                            {{ $errors->first('new_password') }}
+                            {{ $errors->first('usuario_contra') }}
                         </p>
                         @endif
                     </fieldset>
                     <fieldset class="w-full fieldset">
-                        <label class="fieldset-label after:content-['*'] after:text-red-500" for="new_password_confirmation">Confirmar Nueva Contraseña</label>
+                        <label class="fieldset-label after:content-['*'] after:text-red-500" for="usuario_contra_confirmacion">Confirmar Nueva Contraseña</label>
                         <input
                             type="password"
-                            id="new_password_confirmation"
-                            name="new_password_confirmation"
+                            id="usuario_contra_confirmacion"
+                            name="usuario_contra_confirmacion"
                             class="input input-bordered w-full">
-                        @if($errors->has('new_password_confirmation'))
+                        @if($errors->has('usuario_contra_confirmacion'))
                         <p class="text-sm font-medium tracking-tight text-red-600">
-                            {{ $errors->first('new_password_confirmation') }}
+                            {{ $errors->first('usuario_contra_confirmacion') }}
                         </p>
                         @endif
                     </fieldset>

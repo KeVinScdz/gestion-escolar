@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Usuario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UsuarioController
 {
@@ -111,6 +112,7 @@ class UsuarioController
     public function update(Request $request, string $id)
     {
         try {
+            
             $usuario = Usuario::findOrFail($id);
 
             if (!$usuario) {
@@ -118,6 +120,32 @@ class UsuarioController
                     'success' => false,
                     'message' => 'Usuario no encontrado',
                 ], 404);
+            }
+
+            // Validation for password update
+            if ($request->has('usuario_contra')) {
+                $request->validate([
+                    'usuario_contra' => 'required|string|min:8',
+                    'usuario_contra_confirmacion' => 'required|string|same:usuario_contra',
+                    'actual_contra' => 'required|string',
+                ], [
+                    'usuario_contra.required' => 'La nueva contraseña es obligatoria',
+                    'usuario_contra.string' => 'La nueva contraseña debe ser una cadena de texto',
+                    'usuario_contra.min' => 'La nueva contraseña debe tener al menos 8 caracteres',
+                    'usuario_contra_confirmacion.required' => 'La confirmación de la nueva contraseña es obligatoria',
+                    'usuario_contra_confirmacion.string' => 'La confirmación de la nueva contraseña debe ser una cadena de texto',
+                    'usuario_contra_confirmacion.same' => 'La confirmación de la nueva contraseña no coincide',
+                    'actual_contra.required' => 'La contraseña actual es obligatoria',
+                    'actual_contra.string' => 'La contraseña actual debe ser una cadena de texto',
+                ]);
+
+                // Check if the current password is correct
+                if (!Hash::check($request->input('actual_contra'), $usuario->usuario_contra)) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'La contraseña actual es incorrecta',
+                    ], 401);
+                }
             }
 
             $usuario->update($request->all());
