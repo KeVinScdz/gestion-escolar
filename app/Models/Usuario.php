@@ -49,10 +49,10 @@ class Usuario extends Authenticatable
     {
         if (empty($term)) return $query;
         return $query->where(function ($q) use ($term) {
-            $q->where('institucion_nombre', 'like', "%{$term}%")
-                ->orWhere('institucion_correo', 'like', "%{$term}%")
-                ->orWhere('institucion_nit', 'like', "%{$term}%")
-                ->orWhere('institucion_direccion', 'like', "%{$term}%");
+            $q->where('usuario_nombre', 'like', "%{$term}%")
+                ->orWhere('usuario_apellido', 'like', "%{$term}%")
+                ->orWhere('usuario_correo', 'like', "%{$term}%")
+                ->orWhere('usuario_documento', 'like', "%{$term}%");
         });
     }
 }

@@ -41,7 +41,7 @@
             <tbody>
                 @forelse($usuarios as $usuario)
                 <tr>
-                    <td class="px-6 py-4">{{ $usuario->usuario_nombre }}</td>
+                    <td class="px-6 py-4">{{ $usuario->usuario_nombre }} {{ $usuario->usuario_apellido }}</td>
                     <td class="px-6 py-4">{{ $usuario->usuario_correo }}</td>
                     <td class="px-6 py-4">{{ $usuario->rol->rol_nombre ?? '' }}</td>
                     <td class="px-6 py-4 flex gap-2">
@@ -57,27 +57,100 @@
             </tbody>
         </table>
     </div>
+
     {{ $usuarios->links('components.pagination') }}
+
     <dialog id="create-user" class="modal">
         <div class="modal-box">
             <h3 class="text-lg font-bold mb-4">Crear Nuevo Usuario</h3>
             <form class="upload-form space-y-2" data-target="/api/users" data-method="post" data-reload="true" data-show-alert="true">
-                <fieldset class="w-full fieldset mb-2">
+                <fieldset class="w-full fieldset">
                     <label class="fieldset-label after:content-['*'] after:text-red-500" for="usuario_nombre">Nombre:</label>
                     <input id="usuario_nombre" name="usuario_nombre" class="input input-bordered w-full" value="{{ old('usuario_nombre') }}">
                 </fieldset>
-                <fieldset class="w-full fieldset mb-2">
-                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="usuario_correo">Correo:</label>
-                    <input id="usuario_correo" name="usuario_correo" class="input input-bordered w-full" value="{{ old('usuario_correo') }}">
+                <fieldset class="w-full fieldset">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="usuario_apellido">Apellido:</label>
+                    <input id="usuario_apellido" name="usuario_apellido" class="input input-bordered w-full" value="{{ old('usuario_apellido') }}">
                 </fieldset>
-                <fieldset class="w-full fieldset mb-2">
+                <fieldset class="w-full fieldset">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="usuario_correo">Correo:</label>
+                    <input type="email" id="usuario_correo" name="usuario_correo" class="input input-bordered w-full" value="{{ old('usuario_correo') }}">
+                </fieldset>
+                <fieldset class="w-full fieldset">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="usuario_telefono">Teléfono:</label>
+                    <input type="number" id="usuario_telefono" name="usuario_telefono" class="input input-bordered w-full" value="{{ old('usuario_telefono') }}">
+                </fieldset>
+                <div class="w-full flex gap-2">
+                    <fieldset class="fieldset w-fit">
+                        <label class="fieldset-label after:content-['*'] after:text-red-500" for="usuario_documento_tipo">Tipo de Documento:</label>
+                        <select id="usuario_documento_tipo" name="usuario_documento_tipo" class="select select-bordered w-fit">
+                            <option value="CC">Cédula de Ciudadanía</option>
+                            <option value="TI">Tarjeta de Identidad</option>
+                            <option value="CE">Cédula de Extranjería</option>
+                        </select>
+                    </fieldset>
+                    <fieldset class="w-full fieldset grow">
+                        <label class="fieldset-label after:content-['*'] after:text-red-500" for="usuario_documento">Número de Documento:</label>
+                        <input id="usuario_documento" name="usuario_documento" class="input input-bordered w-full" value="{{ old('usuario_documento') }}">
+                    </fieldset>
+                </div>
+                <fieldset class="w-full fieldset">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="usuario_nacimiento">Fecha de Nacimiento:</label>
+                    <input type="date" id="usuario_nacimiento" name="usuario_nacimiento" class="input input-bordered w-full" value="{{ old('usuario_nacimiento') }}">
+                </fieldset>
+                <fieldset class="w-full fieldset">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="usuario_direccion">Dirección:</label>
+                    <input id="usuario_direccion" name="usuario_direccion" class="input input-bordered w-full" value="{{ old('usuario_direccion') }}">
+                </fieldset>
+                <fieldset class="w-full fieldset">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="usuario_contra">Contraseña:</label>
+                    <input type="password" id="usuario_contra" name="usuario_contra" class="input input-bordered w-full">
+                </fieldset>
+                <fieldset class="w-full fieldset">
                     <label class="fieldset-label after:content-['*'] after:text-red-500" for="rol_id">Rol:</label>
-                    <select id="rol_id" name="rol_id" class="input input-bordered w-full">
+                    <select id="rol_id" name="rol_id" class="select select-bordered w-full" onchange="handleRoleChange(this)">
                         @foreach($roles as $rol)
-                            <option value="{{ $rol->rol_id }}">{{ $rol->rol_nombre }}</option>
+                        <option value="{{ $rol->rol_id }}" data-rol-nombre="{{ $rol->rol_nombre }}">{{ $rol->rol_nombre }}</option>
                         @endforeach
                     </select>
                 </fieldset>
+
+                {{-- Institucion Fields --}}
+                <fieldset id="institucion_fieldset" class="w-full fieldset" style="display: none;">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="institucion_id">Institución:</label>
+                    <select id="institucion_id" name="institucion_id" class="select select-bordered w-full">
+                        @foreach($instituciones as $institucion)
+                        <option value="{{ $institucion->institucion_id }}">{{ $institucion->institucion_nombre }}</option>
+                        @endforeach
+                    </select>
+                </fieldset>
+
+                {{-- Administrativo Fields --}}
+                <fieldset id="administrativo_fieldset" class="w-full fieldset" style="display: none;">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="administrativo_cargo">Cargo:</label>
+                    <input id="administrativo_cargo" name="administrativo_cargo" class="input input-bordered w-full" value="{{ old('administrativo_cargo') }}">
+                </fieldset>
+
+                {{-- Docente Fields --}}
+                <fieldset id="docente_fieldset" class="w-full fieldset space-y-2" style="display: none;">
+                    <fieldset class="w-full fieldset">
+                        <label class="fieldset-label after:content-['*'] after:text-red-500" for="docente_especialidad">Especialidad:</label>
+                        <input id="docente_especialidad" name="docente_especialidad" class="input input-bordered w-full" value="{{ old('docente_especialidad') }}">
+                    </fieldset>
+                </fieldset>
+
+                {{-- Estudiante Fields --}}
+                <fieldset id="estudiante_fieldset" class="w-full fieldset" style="display: none;">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="estudiante_institucion">Estudiante:</label>
+                    <select id="estudiante_institucion" name="estudiante_institucion" class="select select-bordered w-full">
+                        @foreach($estudiantes as $estudiante)
+                        <option value="{{ $estudiante->estudiante_id }}">
+                            {{ $estudiante->usuario->usuario_nombre }} {{ $estudiante->usuario->usuario_apellido  }}
+                        </option>
+                        @endforeach
+                    </select>
+                </fieldset>
+
                 <div class="mt-4 flex justify-end">
                     <button type="submit" class="btn btn-primary">Crear</button>
                 </div>
@@ -87,24 +160,25 @@
             <button>close</button>
         </form>
     </dialog>
+
     <dialog id="edit-user" class="modal">
         <div class="modal-box">
             <h3 class="text-lg font-bold mb-4">Editar Usuario</h3>
             <form id="editUserForm" class="space-y-2">
                 <input type="hidden" id="edit_usuario_id" name="usuario_id">
-                <fieldset class="w-full fieldset mb-2">
+                <fieldset class="w-full fieldset">
                     <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_usuario_nombre">Nombre:</label>
                     <input id="edit_usuario_nombre" name="usuario_nombre" class="input input-bordered w-full">
                 </fieldset>
-                <fieldset class="w-full fieldset mb-2">
+                <fieldset class="w-full fieldset">
                     <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_usuario_correo">Correo:</label>
                     <input id="edit_usuario_correo" name="usuario_correo" class="input input-bordered w-full">
                 </fieldset>
-                <fieldset class="w-full fieldset mb-2">
+                <fieldset class="w-full fieldset">
                     <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_rol_id">Rol:</label>
                     <select id="edit_rol_id" name="rol_id" class="input input-bordered w-full">
                         @foreach($roles as $rol)
-                            <option value="{{ $rol->rol_id }}">{{ $rol->rol_nombre }}</option>
+                        <option value="{{ $rol->rol_id }}">{{ $rol->rol_nombre }}</option>
                         @endforeach
                     </select>
                 </fieldset>
@@ -121,67 +195,76 @@
 @endsection
 
 @section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-function openEditUserModal(id, nombre, correo, rol_id) {
-    document.getElementById('edit_usuario_id').value = id;
-    document.getElementById('edit_usuario_nombre').value = nombre;
-    document.getElementById('edit_usuario_correo').value = correo;
-    document.getElementById('edit_rol_id').value = rol_id;
-    document.getElementById('edit-user').showModal();
-}
-
-document.getElementById('editUserForm').onsubmit = async function(e) {
-    e.preventDefault();
-    const id = document.getElementById('edit_usuario_id').value;
-    const data = {
-        usuario_nombre: document.getElementById('edit_usuario_nombre').value,
-        usuario_correo: document.getElementById('edit_usuario_correo').value,
-        rol_id: document.getElementById('edit_rol_id').value
-    };
-    const response = await fetch(`/api/users/${id}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify(data)
-    });
-    if (response.ok) {
-        location.reload();
-    } else {
-        Swal.fire('Error', 'Error al actualizar el usuario.', 'error');
+    function openEditUserModal(id, nombre, correo, rol_id) {
+        document.getElementById('edit_usuario_id').value = id;
+        document.getElementById('edit_usuario_nombre').value = nombre;
+        document.getElementById('edit_usuario_correo').value = correo;
+        document.getElementById('edit_rol_id').value = rol_id;
+        document.getElementById('edit-user').showModal();
     }
-};
 
-function deleteUser(id) {
-    Swal.fire({
-        title: '¿Estás seguro?',
-        text: 'Esta acción eliminará el usuario de forma permanente.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            fetch(`/api/users/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
-            }).then(response => {
-                if (response.ok) {
-                    Swal.fire('Eliminado', 'El usuario ha sido eliminado.', 'success').then(() => location.reload());
-                } else {
-                    Swal.fire('Error', 'Error al eliminar el usuario.', 'error');
-                }
-            });
+    function handleRoleChange(selectElement) {
+        const rol_id = selectElement.value;
+        if (rol_id == 2 || rol_id == 3 || rol_id == 4) {
+            document.getElementById('institucion_fieldset').style.display = 'block';
+        } else {
+            document.getElementById('institucion_fieldset').style.display = 'none';
+        }
+
+        if (rol_id == 2) {
+            document.getElementById('administrativo_fieldset').style.display = 'block';
+        } else {
+            document.getElementById('administrativo_fieldset').style.display = 'none';
+        }
+
+        if (rol_id == 3) {
+            document.getElementById('docente_fieldset').style.display = 'block';
+        } else {
+            document.getElementById('docente_fieldset').style.display = 'none';
+        }
+
+        if (rol_id == 5) {
+            document.getElementById('estudiante_fieldset').style.display = 'block';
+        } else {
+            document.getElementById('estudiante_fieldset').style.display = 'none';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const rolSelect = document.getElementById('rol_id');
+        if (rolSelect) {
+            handleRoleChange(rolSelect);
         }
     });
-}
+
+    function deleteUser(id) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Esta acción eliminará el usuario de forma permanente.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`/api/users/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        Swal.fire('Eliminado', 'El usuario ha sido eliminado.', 'success').then(() => location.reload());
+                    } else {
+                        Swal.fire('Error', 'Error al eliminar el usuario.', 'error');
+                    }
+                });
+            }
+        });
+    }
 </script>
 @endsection

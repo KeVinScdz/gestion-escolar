@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Administrativo;
+use App\Models\Docente;
+use App\Models\Estudiante;
+use App\Models\Tutor;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -35,9 +39,71 @@ class UsuarioController
     public function store(Request $request)
     {
         try {
-            $user = $request->all();
+            $request->validate([
+                'usuario_nombre' => 'required|string|max:255',
+                'usuario_apellido' => 'required|string|max:255',
+                'usuario_correo' => 'required|string|email|max:255|unique:usuarios,usuario_correo',
+                'usuario_documento_tipo' => 'required|string|in:CC,TI,CE',
+                'usuario_documento' => 'required|string|max:255|unique:usuarios,usuario_documento',
+                'usuario_nacimiento' => 'required|date',
+                'usuario_direccion' => 'required|string|max:255',
+                'usuario_telefono' => 'required|numeric|digits_between:7,12',
+                'usuario_contra' => 'required|string|min:8',
+                'rol_id' => 'required|exists:roles,rol_id',
+            ], [
+                'usuario_nombre.required' => 'El nombre es obligatorio.',
+                'usuario_apellido.required' => 'El apellido es obligatorio.',
+                'usuario_correo.required' => 'El correo electrónico es obligatorio.',
+                'usuario_correo.email' => 'El formato del correo no es válido.',
+                'usuario_correo.unique' => 'El correo electrónico ya está en uso.',
+                'usuario_documento_tipo.required' => 'El tipo de documento es obligatorio.',
+                'usuario_documento_tipo.in' => 'El tipo de documento no es válido.',
+                'usuario_documento.required' => 'El número de documento es obligatorio.',
+                'usuario_documento.unique' => 'El número de documento ya está en uso.',
+                'usuario_nacimiento.required' => 'La fecha de nacimiento es obligatoria.',
+                'usuario_nacimiento.date' => 'El formato de la fecha de nacimiento no es válido.',
+                'usuario_direccion.required' => 'La dirección es obligatoria.',
+                'usuario_telefono.required' => 'El teléfono es obligatorio.',
+                'usuario_telefono.numeric' => 'El teléfono debe ser numérico.',
+                'usuario_telefono.digits_between' => 'El teléfono debe tener entre 7 y 12 dígitos.',
+                'usuario_contra.required' => 'La contraseña es obligatoria.',
+                'usuario_contra.min' => 'La contraseña debe tener al menos 8 caracteres.',
+                'rol_id.required' => 'El rol es obligatorio.',
+                'rol_id.exists' => 'El rol seleccionado no existe.',
+            ]);
 
+            $user = $request->all();
             $usuario = Usuario::create($user);
+
+            if ($usuario->rol_id == 2) {
+                Administrativo::create([
+                    'usuario_id' => $usuario->usuario_id,
+                    'institucion_id' => $request->input('institucion_id'),
+                    'administrativo_cargo' => $request->input('administrativo_cargo'),
+                ]);
+            }
+
+            if ($usuario->rol_id == 3) {
+                Docente::create([
+                    'usuario_id' => $usuario->usuario_id,
+                    'institucion_id' => $request->input('institucion_id'),
+                    'docente_titulo' => $request->input('docente_titulo'),
+                ]);
+            }
+
+            if ($usuario->rol_id == 4) {
+                Estudiante::create([
+                    'usuario_id' => $usuario->usuario_id,
+                    'institucion_id' => $request->input('institucion_id'),
+                ]);
+            }
+
+            if ($usuario->rol_id == 5) {
+                Tutor::create([
+                    'usuario_id' => $usuario->usuario_id,
+                    'estudiante_id' => $request->input('estudiante_id'),
+                ]);
+            }
 
             return response()->json([
                 'success' => true,
@@ -58,7 +124,7 @@ class UsuarioController
     public function update(Request $request, string $id)
     {
         try {
-            
+
             $usuario = Usuario::findOrFail($id);
 
             if (!$usuario) {

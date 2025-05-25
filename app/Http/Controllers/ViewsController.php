@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Estudiante;
 use App\Models\Institucion;
 use App\Models\Rol;
 use App\Models\Usuario;
@@ -52,7 +53,9 @@ class ViewsController
 
         $usuarios = Usuario::search($search ?? '')->paginate(5);
         $roles = Rol::all();
+        $instituciones = Institucion::all();
+        $estudiantes = Estudiante::with('usuario')->get();
 
-        return view('app.admin.users', compact('usuario', 'usuarios', 'roles'));
+        return view('app.admin.users', compact('usuario', 'usuarios', 'roles', 'instituciones', 'estudiantes'));
     }
 }
