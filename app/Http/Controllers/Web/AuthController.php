@@ -38,16 +38,16 @@ class AuthController
             if (!$user) {
                 return redirect()->back()->with('error', 'Usuario no encontrado')->withInput();
             }
-
+            
             if (!Hash::check($credentials['usuario_contra'], $user->usuario_contra)) {
                 return redirect()->back()->with('error', 'Contraseña incorrecta')->withInput();
             }
-
+            
             Auth::login($user);
-
+            
             return redirect()->route('dashboard');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Error al iniciar sesión: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error al iniciar sesión: ' . $e->getMessage())->withInput();
         }
     }
 

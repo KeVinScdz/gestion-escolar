@@ -30,7 +30,7 @@ return new class extends Migration
 
         // Perfil de usuarios
         Schema::create('usuarios', function (Blueprint $table) {
-            $table->uuid('usuario_id');
+            $table->uuid('usuario_id')->primary();
             $table->string('usuario_nombre');
             $table->string('usuario_apellido');
             $table->string('usuario_correo')->unique();
