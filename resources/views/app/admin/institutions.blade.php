@@ -6,8 +6,8 @@
 <div class="container mx-auto px-4 py-6 space-y-5">
     <div class="flex justify-between items-center">
         <h1 class="text-2xl font-bold text-gray-800 flex-1">Instituciones Registradas</h1>
-        <div class="flex items-center gap-2 flex-1">
-            <form method="get">
+        <div class="flex items-center justify-end gap-5">
+            <form method="get" class="flex gap-2">
                 <label class="input">
                     <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <g
@@ -20,20 +20,19 @@
                             <path d="m21 21-4.3-4.3"></path>
                         </g>
                     </svg>
-                    <input type="search" name="search" placeholder="Search" />
+                    <input type="search" name="search" placeholder="Search" value="{{ request('search') }}" />
                 </label>
+                @if(request('search'))
+                <a href="/dashboard/instituciones" class="btn btn-error text-white bg-red-500 btn-sm">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                </a>
+                @endif
             </form>
-            <a href="/dashboard/instituciones/nueva" class="btn btn-primary">
+            <a onclick="document.getElementById('create-institution').showModal()" class="btn btn-primary">
                 + Nueva Institución
             </a>
         </div>
     </div>
-
-    @if(session('success'))
-    <div class="mb-4 p-4 bg-green-100 text-green-800 rounded">
-        {{ session('success') }}
-    </div>
-    @endif
 
     <div class="overflow-x-auto rounded bg-base-200 border border-base-300">
         <table class="min-w-full text-sm text-base-content">

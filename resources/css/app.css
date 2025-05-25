@@ -85,8 +85,8 @@
 
 .menu {
     & :where(li ul) {
-      &::before {
-        @apply bg-neutral-content;
-      }
+        &::before {
+            @apply bg-neutral-content;
+        }
     }
-  }
+}

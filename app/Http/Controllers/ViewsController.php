@@ -33,7 +33,9 @@ class ViewsController
     public function institutions()
     {
         $usuario = Auth::user()->load('rol');
-        $instituciones = Institucion::paginate(2);
+        $search = request('search');
+
+        $instituciones = Institucion::search($search ?? "")->paginate(2);
 
         return view('app.admin.institutions', compact('usuario', 'instituciones'));
     }

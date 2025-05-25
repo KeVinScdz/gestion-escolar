@@ -30,32 +30,6 @@ class UsuarioController
     }
 
     /**
-     * Display a listing of the resource paginated.
-     */
-    public function paginate(Request $request)
-    {
-        try {
-            $page = $request->input('page', 1);
-            $perPage = $request->input('per_page', 10);
-
-            $usuarios = Usuario::paginate($perPage, ['*'], 'page', $page);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Usuarios encontrados',
-                'data' => $usuarios,
-                'limit' => $usuarios->perPage(),
-                'total' => $usuarios->total(),
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error al obtener los usuarios: ' . $e->getMessage(),
-            ], 500);
-        }
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -74,34 +48,6 @@ class UsuarioController
             return response()->json([
                 'success' => false,
                 'message' => 'Error al crear el usuario: ' . $e->getMessage(),
-            ], 500);
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        try {
-            $usuario = Usuario::findOrFail($id);
-
-            if (!$usuario) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Usuario no encontrado',
-                ], 404);
-            }
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Usuario encontrado',
-                'data' => $usuario,
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error al obtener el usuario: ' . $e->getMessage(),
             ], 500);
         }
     }

@@ -36,7 +36,7 @@
                     <div class="avatar avatar-placeholder">
                         <div class="bg-primary text-primary-content w-12 rounded-full">
                             <p class="text-xl">
-                                {{ $usuario->usuario_nombre[0] }}
+                                {{ $usuario->usuario_nombre[0] }}{{ $usuario->usuario_apellido[0]}}
                             </p>
                         </div>
                     </div>
