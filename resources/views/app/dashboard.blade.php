@@ -27,10 +27,12 @@
                 Actualizar Información Personal
             </div>
             <div class="collapse-content">
-                <form action="/user/{{ $usuario->usuario_id }}" method="PUT" class="space-y-2">
-                    @csrf
-                    @method('PUT')
-
+                <form 
+                data-target="/api/users/{{ $usuario->usuario_id }}" 
+                data-method="PUT" 
+                data-show-alert="true"
+                data-reload="true"
+                class="upload-form space-y-2">
                     <fieldset class="w-full fieldset">
                         <label class="fieldset-label after:content-['*'] after:text-red-500" for="usuario_nombre">Nombre</label>
                         <input

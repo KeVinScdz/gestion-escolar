@@ -13,6 +13,7 @@ $forms.forEach(($form) => {
         const $target = $form.getAttribute("data-target");
         const $method = $form.getAttribute("data-method");
         const $showAlert = $form.getAttribute("data-show-alert") === "true";
+        const $reload = $form.getAttribute("data-reload") === "true";
         const $redirect = $form.getAttribute("data-redirect");
         const $callback = $form.getAttribute("data-callback");
 
@@ -57,9 +58,11 @@ $forms.forEach(($form) => {
                 background: "var(--color-base-100)",
                 color: "var(--color-base-content)",
             }).then(() => {
+                if ($reload) window.location.reload();
                 if ($redirect) window.location.href = $redirect;
             });
         } else {
+            if ($reload) window.location.reload();
             if ($redirect) window.location.href = $redirect;
         }
     });

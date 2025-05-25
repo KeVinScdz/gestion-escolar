@@ -22,3 +22,7 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthController::class, 'logout']);
 });
+
+// Admin Dashboard
+// Route::middleware(['auth', 'role:1'])->group(function () {
+// });
