@@ -28,7 +28,7 @@
                 </a>
                 @endif
             </form>
-            <a onclick="document.getElementById('create-institution').showModal()" class="btn btn-primary">
+            <a onclick="document.getElementById('create-institution').show()" class="btn btn-primary">
                 + Nueva Institución
             </a>
         </div>
@@ -71,6 +71,72 @@
             </tbody>
         </table>
     </div>
+
+    <dialog id="create-institution" class="modal">
+        <div class="modal-box">
+            <h3 class="text-lg font-bold mb-4">Crear Nueva Institución</h3>
+            <form class="upload-form space-y-2" data-target="/api/institutions" data-method="post" data-reload="true" data-show-alert="true">
+                <fieldset class="w-full fieldset mb-2">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="institucion_nombre">
+                        Nombre:
+                    </label>
+                    <input
+                        id="institucion_nombre"
+                        name="institucion_nombre"
+                        class="input input-bordered w-full"
+                        value="{{ old('institucion_nombre') }}">
+                </fieldset>
+                <fieldset class="w-full fieldset mb-2">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="institucion_telefono">
+                        Teléfono:
+                    </label>
+                    <input
+                        type="number"
+                        id="institucion_telefono"
+                        name="institucion_telefono"
+                        class="input input-bordered w-full"
+                        value="{{ old('institucion_telefono') }}">
+                </fieldset>
+                <fieldset class="w-full fieldset mb-2">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="institucion_correo">
+                        Correo:
+                    </label>
+                    <input
+                        id="institucion_correo"
+                        name="institucion_correo"
+                        class="input input-bordered w-full"
+                        value="{{ old('institucion_correo') }}">
+                </fieldset>
+                <fieldset class="w-full fieldset mb-2">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="institucion_direccion">
+                        Dirección:
+                    </label>
+                    <input
+                        id="institucion_direccion"
+                        name="institucion_direccion"
+                        class="input input-bordered w-full"
+                        value="{{ old('institucion_direccion') }}">
+                </fieldset>
+                <fieldset class="w-full fieldset mb-2">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="institucion_nit">
+                        NIT:
+                    </label>
+                    <input
+                        id="institucion_nit"
+                        name="institucion_nit"
+                        type="text"
+                        class="input input-bordered w-full"
+                        value="{{ old('institucion_nit') }}">
+                </fieldset>
+                <div class="mt-4 flex justify-end">
+                    <button type="submit" class="btn btn-primary">Crear</button>
+                </div>
+            </form>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
     {{ $instituciones->links('components.pagination') }}
 </div>
 @endsection
