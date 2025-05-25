@@ -3,7 +3,7 @@
 @section('title', 'Instituciones')
 
 @section('content')
-<div class="container mx-auto px-4 py-6 space-y-5">
+<section class="container mx-auto px-4 py-6 space-y-5">
     <div class="flex justify-between items-center">
         <h1 class="text-2xl font-bold text-gray-800 flex-1">Instituciones Registradas</h1>
         <div class="flex items-center justify-end gap-5">
@@ -51,14 +51,12 @@
                     <td class="px-6 py-4">{{ $institucion->institucion_nit }}</td>
                     <td class="px-6 py-4">{{ $institucion->institucion_direccion }}</td>
                     <td class="px-6 py-4 flex gap-2">
-                        <a href="/dashboard/instituciones/editar/{{ $institucion -> institucion_id }}" class="btn btn-sm py-1 btn-primary">
+                        <button onclick="openEditModal( '{{ $institucion->institucion_id }}', '{{ addslashes($institucion->institucion_nombre) }}', '{{ addslashes($institucion->institucion_telefono) }}', '{{ addslashes($institucion->institucion_correo) }}', '{{ addslashes($institucion->institucion_direccion) }}', '{{ addslashes($institucion->institucion_nit) }}')" class="btn btn-sm py-1 btn-primary">
                             Editar
-                        </a>
-                        <form data-target="institutions/{{ $institucion -> institucion_id }}" data-method="delete">
-                            <button type="submit" class="btn btn-sm py-1 btn-error">
-                                Eliminar
-                            </button>
-                        </form>
+                        </button>
+                        <button onclick="deleteInstitution( '{{ $institucion->institucion_id }}' )" class="btn btn-sm py-1 btn-error">
+                            Eliminar
+                        </button>
                     </td>
                 </tr>
                 @empty
@@ -71,6 +69,8 @@
             </tbody>
         </table>
     </div>
+
+    {{ $instituciones->links('components.pagination') }}
 
     <dialog id="create-institution" class="modal">
         <div class="modal-box">
@@ -137,6 +137,76 @@
             <button>close</button>
         </form>
     </dialog>
-    {{ $instituciones->links('components.pagination') }}
-</div>
+
+    <dialog id="edit-institution" class="modal">
+        <div class="modal-box">
+            <h3 class="text-lg font-bold mb-4">Editar Institución</h3>
+            <form data-target="/api/institutions/{id}" data-method="put" data-reload="true" data-show-alert="true" class="upload-form space-y-2">
+                <input type="hidden" id="edit_institucion_id" name="institucion_id">
+                <fieldset class="w-full fieldset mb-2">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_institucion_nombre">Nombre:</label>
+                    <input id="edit_institucion_nombre" name="institucion_nombre" class="input input-bordered w-full">
+                </fieldset>
+                <fieldset class="w-full fieldset mb-2">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_institucion_telefono">Teléfono:</label>
+                    <input type="number" id="edit_institucion_telefono" name="institucion_telefono" class="input input-bordered w-full">
+                </fieldset>
+                <fieldset class="w-full fieldset mb-2">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_institucion_correo">Correo:</label>
+                    <input id="edit_institucion_correo" name="institucion_correo" class="input input-bordered w-full">
+                </fieldset>
+                <fieldset class="w-full fieldset mb-2">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_institucion_direccion">Dirección:</label>
+                    <input id="edit_institucion_direccion" name="institucion_direccion" class="input input-bordered w-full">
+                </fieldset>
+                <fieldset class="w-full fieldset mb-2">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_institucion_nit">NIT:</label>
+                    <input id="edit_institucion_nit" name="institucion_nit" class="input input-bordered w-full">
+                </fieldset>
+                <div class="mt-4 flex justify-end">
+                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                </div>
+            </form>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+
+    <form id="delete-form" class="upload-form hidden" data-target="/api/institutions/{id}" data-method="delete" data-show-alert="true" data-reload="true">
+        <button type="submit"></button>
+    </form>
+</section>
+@endsection
+
+@section('scripts')
+<script>
+    function openEditModal(id, nombre, telefono, correo, direccion, nit) {
+        document.querySelector('#edit-institution form').dataset.target = `/api/institutions/${id}`;
+        document.getElementById('edit_institucion_id').value = id;
+        document.getElementById('edit_institucion_nombre').value = nombre;
+        document.getElementById('edit_institucion_telefono').value = telefono;
+        document.getElementById('edit_institucion_correo').value = correo;
+        document.getElementById('edit_institucion_direccion').value = direccion;
+        document.getElementById('edit_institucion_nit').value = nit;
+        document.getElementById('edit-institution').show();
+    }
+
+    function deleteInstitution(id) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "Esta acción no se puede deshacer.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar'
+        }).then((result) => {
+            if (!result.isConfirmed) return;
+            console.log(id);
+            document.getElementById('delete-form').dataset.target = `/api/institutions/${id}`;
+            document.querySelector('#delete-form button').click();
+        })
+    }
+</script>
 @endsection
