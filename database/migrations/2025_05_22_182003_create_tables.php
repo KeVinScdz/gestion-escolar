@@ -38,7 +38,7 @@ return new class extends Migration
             $table->string('usuario_documento')->unique();
             $table->date('usuario_nacimiento');
             $table->string('usuario_direccion');
-            $table->string('usuario_telefono');
+            $table->decimal('usuario_telefono', 12, 0);
             $table->string('usuario_contra');
             $table->unsignedBigInteger('rol_id');
             $table->timestamps();
@@ -73,6 +73,8 @@ return new class extends Migration
         Schema::create('instituciones', function (Blueprint $table) {
             $table->uuid('institucion_id');
             $table->string('institucion_nombre');
+            $table->decimal('institucion_telefono', 10, 0);
+            $table->string('institucion_correo')->unique();
             $table->string('institucion_direccion');
             $table->string('institucion_nit')->unique();
             $table->timestamps();
@@ -180,14 +182,6 @@ return new class extends Migration
             $table->date('observacion_fecha');
             $table->timestamps();
         });
-
-        Schema::create('logs', function (Blueprint $table) {
-            $table->id('log_id');
-            $table->unsignedBigInteger('usuario_id');
-            $table->string('log_accion');
-            $table->text('log_descripcion');
-            $table->timestamps();
-        });
     }
 
     /**
@@ -230,6 +224,5 @@ return new class extends Migration
 
         // Complementarias
         Schema::dropIfExists('observaciones');
-        Schema::dropIfExists('logs');
     }
 };

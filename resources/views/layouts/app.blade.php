@@ -55,25 +55,10 @@
                     {{-- Administrador --}}
                     @if($usuario->rol_id == 1)
                     <li>
+                        <a href="/dashboard/instituciones" class="hover:bg-primary/50 {{ request()->is('dashboard/instituciones') ? 'bg-primary' : '' }}">Instituciones</a>
+                    </li>
+                    <li>
                         <a href="/dashboard/usuarios" class="hover:bg-primary/50 {{ request()->is('dashboard/usuarios') ? 'bg-primary' : '' }}">Gestión de Usuarios</a>
-                    </li>
-                    <li>
-                        <a href="/dashboard/matriculas" class="hover:bg-primary/50 {{ request()->is('dashboard/matriculas') ? 'bg-primary' : '' }}">Matrículas</a>
-                    </li>
-                    <li>
-                        <a href="/dashboard/notas" class="hover:bg-primary/50 {{ request()->is('dashboard/notas') ? 'bg-primary' : '' }}">Notas</a>
-                    </li>
-                    <li>
-                        <a href="/dashboard/asignaciones" class="hover:bg-primary/50 {{ request()->is('dashboard/asignaciones') ? 'bg-primary' : '' }}">Asignaciones</a>
-                    </li>
-                    <li>
-                        <a href="/dashboard/inasistencias" class="hover:bg-primary/50 {{ request()->is('dashboard/inasistencias') ? 'bg-primary' : '' }}">Inasistencias</a>
-                    </li>
-                    <li>
-                        <a href="/dashboard/observaciones" class="hover:bg-primary/50 {{ request()->is('dashboard/observaciones') ? 'bg-primary' : '' }}">Observaciones</a>
-                    </li>
-                    <li>
-                        <a href="/dashboard/pagos" class="hover:bg-primary/50 {{ request()->is('dashboard/pagos') ? 'bg-primary' : '' }}">Pagos</a>
                     </li>
                     <li>
                         <details>
