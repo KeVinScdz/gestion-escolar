@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
+// Models
 use App\Models\Administrativo;
 use App\Models\Docente;
 use App\Models\Estudiante;
 use App\Models\Tutor;
 use App\Models\Usuario;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class UsuarioController
 {
@@ -39,6 +42,8 @@ class UsuarioController
     public function store(Request $request)
     {
         try {
+            DB::beginTransaction();
+
             $request->validate([
                 'usuario_nombre' => 'required|string|max:255',
                 'usuario_apellido' => 'required|string|max:255',
@@ -73,6 +78,8 @@ class UsuarioController
             ]);
 
             $user = $request->all();
+
+
             $usuario = Usuario::create($user);
 
             if ($usuario->rol_id == 2) {
@@ -105,12 +112,15 @@ class UsuarioController
                 ]);
             }
 
+            DB::commit();
+
             return response()->json([
                 'success' => true,
                 'message' => 'Usuario creado correctamente',
                 'data' => $usuario,
             ], 201);
         } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json([
                 'success' => false,
                 'message' => 'Error al crear el usuario: ' . $e->getMessage(),

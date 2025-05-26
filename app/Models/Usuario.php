@@ -46,6 +46,26 @@ class Usuario extends Authenticatable
         $this->attributes['usuario_contra'] = Hash::make($value);
     }
 
+    public function administrativo()
+    {
+        return $this->hasOne(Administrativo::class, 'usuario_id', 'usuario_id');
+    }
+
+    public function docente()
+    {
+        return $this->hasOne(Docente::class, 'usuario_id', 'usuario_id');
+    }
+
+    public function estudiante()
+    {
+        return $this->hasOne(Estudiante::class, 'usuario_id', 'usuario_id');
+    }
+
+    public function tutor()
+    {
+        return $this->hasOne(Tutor::class, 'usuario_id', 'usuario_id');
+    }
+
     public function scopeSearch($query, $term)
     {
         if (empty($term)) return $query;

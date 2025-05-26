@@ -26,6 +26,11 @@ class Estudiante extends Model
         return $this->belongsTo(Usuario::class, 'usuario_id', 'usuario_id');
     }
 
+    public function tutor()
+    {
+        return $this->hasOne(Tutor::class, 'estudiante_id', 'estudiante_id');
+    }
+
     public function matriculas()
     {
         return $this->hasMany(Matricula::class, 'estudiante_id', 'estudiante_id');

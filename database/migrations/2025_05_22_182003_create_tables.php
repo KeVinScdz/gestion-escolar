@@ -65,6 +65,7 @@ return new class extends Migration
 
         Schema::create('administrativos', function (Blueprint $table) {
             $table->uuid('administrativo_id');
+            $table->uuid('institucion_id');
             $table->uuid('usuario_id');
             $table->string('administrativo_cargo');
         });

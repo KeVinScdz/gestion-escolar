@@ -19,10 +19,16 @@ class Administrativo extends Model
         // 'administrativo_id',
         'usuario_id',
         'administrativo_cargo',
+        'institucion_id'
     ];
 
     public function usuario()
     {
         return $this->belongsTo(Usuario::class, 'usuario_id', 'usuario_id');
+    }
+
+    public function institucion()
+    {
+        return $this->belongsTo(Institucion::class, 'institucion_id', 'institucion_id');
     }
 }

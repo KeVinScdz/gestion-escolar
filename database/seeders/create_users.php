@@ -51,6 +51,7 @@ class create_users extends Seeder
             [
                 'usuario_id' => 'bc2e8ed8-8682-4ffe-b1ac-e8d5f03670be',
                 'administrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
+                'institucion_id' => '205117f9-fa69-4003-9446-b747e6655ec9',
                 'administrativo_cargo' => 'Coordinador',
             ]
         ]);
