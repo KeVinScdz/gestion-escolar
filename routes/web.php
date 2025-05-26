@@ -28,3 +28,8 @@ Route::middleware(['auth', 'role:1'])->group(function () {
     Route::get("/dashboard/instituciones", [ViewsController::class, 'institutions']);
     Route::get("/dashboard/usuarios", [ViewsController::class, 'users']);
 });
+
+Route::middleware(['auth', 'role:2'])->group(function () {
+    Route::get("/dashboard/personal", [ViewsController::class, 'personal']);
+    Route::get("/dashboard/matriculas", [ViewsController::class, 'students']);
+});

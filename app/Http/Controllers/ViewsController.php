@@ -47,15 +47,30 @@ class ViewsController
 
     public function users()
     {
-        $usuarioSesion = Auth::user()->load('rol');
+        $usuario = Auth::user()->load('rol');
         $search = request('search');
         $showAll = request('showAll') === 'true';
 
         $usuarios = Usuario::search($search ?? '')->paginate(5);
         $roles = Rol::all();
         $instituciones = Institucion::all();
-        $estudiantes = Estudiante::with('usuario')->get();
+        $estudiantes = Estudiante::with('usuario', 'tutor')->get();
 
-        return view('app.admin.users', compact('usuarioSesion', 'usuarios', 'roles', 'instituciones', 'estudiantes'));
+        return view('app.admin.users', compact('usuario', 'usuarios', 'roles', 'instituciones', 'estudiantes'));
+    }
+
+    public function students()
+    {
+        $usuario = Auth::user()->load('rol', 'administrativo', 'administrativo.institucion');
+        $search = request('search');
+
+        $estudiantes = Usuario::with('estudiante', 'estudiante.tutor', 'rol')
+            ->where('rol_id', 4)
+            ->whereHas('estudiante', function ($query) use ($usuario) {
+                $query->where('institucion_id', $usuario->administrativo->institucion_id);
+            })
+            ->search($search ?? '')->paginate(10);
+
+        return view('app.administrative.students', compact('usuario', 'estudiantes'));
     }
 }

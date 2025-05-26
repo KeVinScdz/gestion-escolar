@@ -158,9 +158,11 @@ $usuarioSesion = $usuario;
                     <label class="fieldset-label after:content-['*'] after:text-red-500" for="estudiante_id">Estudiante:</label>
                     <select id="estudiante_id" name="estudiante_id" class="select select-bordered w-full">
                         @foreach($estudiantes as $estudiante)
+                        @if(is_null($estudiante->tutor))
                         <option value="{{ $estudiante->estudiante_id }}">
-                            {{ $estudiante->usuario->usuario_nombre }} {{ $estudiante->usuario->usuario_apellido  }}
+                            {{ $estudiante->usuario->usuario_documento_tipo}} {{ $estudiante->usuario->usuario_documento}} - {{ $estudiante->usuario->usuario_nombre }} {{ $estudiante->usuario->usuario_apellido  }}
                         </option>
+                        @endif
                         @endforeach
                     </select>
                 </fieldset>
