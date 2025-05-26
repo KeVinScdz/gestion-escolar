@@ -134,7 +134,6 @@ class UsuarioController
     public function update(Request $request, string $id)
     {
         try {
-
             $usuario = Usuario::findOrFail($id);
 
             if (!$usuario) {
@@ -191,17 +190,73 @@ class UsuarioController
     public function destroy(string $id)
     {
         try {
+            DB::beginTransaction();
+
             $usuario = Usuario::findOrFail($id);
 
             if (!$usuario) {
+                DB::rollBack();
                 return response()->json([
                     'success' => false,
                     'message' => 'Usuario no encontrado',
                 ], 404);
             }
 
+            if ($usuario->rol_id == 2) {
+                $administrativo = Administrativo::where('usuario_id', $usuario->usuario_id)->first();
+                if ($administrativo) {
+                    $administrativo->delete();
+                } else {
+                    DB::rollBack();
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Administrativo no encontrado',
+                    ], 404);
+                }
+            }
+
+            if ($usuario->rol_id == 3) {
+                $docente = Docente::where('usuario_id', $usuario->usuario_id)->first();
+                if ($docente) {
+                    $docente->delete();
+                } else {
+                    DB::rollBack();
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Docente no encontrado',
+                    ], 404);
+                }
+            }
+
+            if ($usuario->rol_id == 4) {
+                $estudiante = Estudiante::where('usuario_id', $usuario->usuario_id)->first();
+                if ($estudiante) {
+                    $estudiante->delete();
+                } else {
+                    DB::rollBack();
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Estudiante no encontrado',
+                    ], 404);
+                }
+            }
+
+            if ($usuario->rol_id == 5) {
+                $tutor = Tutor::where('usuario_id', $usuario->usuario_id)->first();
+                if ($tutor) {
+                    $tutor->delete();
+                } else {
+                    DB::rollBack();
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Tutor no encontrado',
+                    ], 404);
+                }
+            }
+
             $usuario->delete();
 
+            DB::commit();
             return response()->json([
                 'success' => true,
                 'message' => 'Usuario eliminado correctamente',

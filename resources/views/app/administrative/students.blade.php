@@ -67,7 +67,7 @@
                         </button>
                         @endif
                         <button class="btn btn-sm py-1 btn-primary">Editar</button>
-                        <button class="btn btn-sm py-1 btn-error">Eliminar</button>
+                        <button onclick="eliminarUsuario('{{ $estudiante->usuario_id }}')" class="btn btn-sm py-1 btn-error">Eliminar</button>
                     </td>
                 </tr>
                 @empty
@@ -202,6 +202,9 @@
         </form>
     </dialog>
 
+    <form class="upload-form hidden" id="delete-user-form" data-target="/api/users/{id}" data-method="delete" data-reload="true" data-show-alert="true">
+        <button type="submit"></button>
+    </form>
 </section>
 @endsection
 
@@ -211,6 +214,24 @@
         document.getElementById('create-tutor').show();
         document.getElementById('estudiante_id').value = id;
         document.getElementById('tutor-title').innerText = `Asignar tutor a ${name}`;
+    }
+
+    function eliminarUsuario(id) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Esta acción no se puede deshacer.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (!result.isConfirmed) return;
+
+            document.getElementById('delete-user-form').dataset.target = `/api/users/${id}`;
+            document.querySelector('#delete-user-form button').click();
+        })
     }
 </script>
 @endsection
