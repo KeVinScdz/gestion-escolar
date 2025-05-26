@@ -2,6 +2,10 @@
 
 @section('title', 'Usuarios')
 
+@php
+$usuarioSesion = $usuario;
+@endphp
+
 @section('content')
 <section class="container mx-auto px-4 py-6 space-y-5">
     <div class="flex justify-between items-center">
@@ -151,8 +155,8 @@
 
                 {{-- Estudiante Fields --}}
                 <fieldset id="estudiante_fieldset" class="w-full fieldset" style="display: none;">
-                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="estudiante_institucion">Estudiante:</label>
-                    <select id="estudiante_institucion" name="estudiante_institucion" class="select select-bordered w-full">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="estudiante_id">Estudiante:</label>
+                    <select id="estudiante_id" name="estudiante_id" class="select select-bordered w-full">
                         @foreach($estudiantes as $estudiante)
                         <option value="{{ $estudiante->estudiante_id }}">
                             {{ $estudiante->usuario->usuario_nombre }} {{ $estudiante->usuario->usuario_apellido  }}
@@ -219,43 +223,6 @@
                     <input type="password" id="edit_usuario_contra" name="usuario_contra" class="input input-bordered w-full">
                 </fieldset>
 
-                {{-- Institucion Fields (for Edit) --}}
-                <fieldset id="edit_institucion_fieldset" class="w-full fieldset" style="display: none;">
-                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_institucion_id">Institución:</label>
-                    <select id="edit_institucion_id" name="institucion_id" class="select select-bordered w-full">
-                        @foreach($instituciones as $institucion)
-                        <option value="{{ $institucion->institucion_id }}">{{ $institucion->institucion_nombre }}</option>
-                        @endforeach
-                    </select>
-                </fieldset>
-
-                {{-- Administrativo Fields (for Edit) --}}
-                <fieldset id="edit_administrativo_fieldset" class="w-full fieldset" style="display: none;">
-                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_administrativo_cargo">Cargo:</label>
-                    <input id="edit_administrativo_cargo" name="administrativo_cargo" class="input input-bordered w-full">
-                </fieldset>
-
-                {{-- Docente Fields (for Edit) --}}
-                <fieldset id="edit_docente_fieldset" class="w-full fieldset space-y-2" style="display: none;">
-                    <fieldset class="w-full fieldset">
-                        <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_docente_especialidad">Especialidad:</label>
-                        <input id="edit_docente_especialidad" name="docente_especialidad" class="input input-bordered w-full">
-                    </fieldset>
-                </fieldset>
-
-                {{-- Estudiante Fields (for Edit) - Assuming you might need this --}}
-                <fieldset id="edit_estudiante_fieldset" class="w-full fieldset" style="display: none;">
-                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_estudiante_id">Estudiante (Asociado):</label>
-                    <select id="edit_estudiante_id" name="estudiante_id" class="select select-bordered w-full">
-                        {{-- Populate this with students, perhaps filtered or all --}}
-                        @foreach($estudiantes as $estudiante) {{-- Make sure $estudiantes is available --}}
-                        <option value="{{ $estudiante->estudiante_id }}">
-                            {{ $estudiante->usuario->usuario_nombre ?? 'Estudiante sin nombre' }} {{ $estudiante->usuario->usuario_apellido ?? '' }}
-                        </option>
-                        @endforeach
-                    </select>
-                </fieldset>
-
                 <div class="mt-4 flex justify-end">
                     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                 </div>
@@ -265,6 +232,10 @@
             <button>close</button>
         </form>
     </dialog>
+
+    <form id="delete-user-form" class="upload-form hidden" data-target="/users/{id}" data-method="delete" data-show-alert="true" data-reload="true">
+        <button type="submit"></button>
+    </form>
 </section>
 @endsection
 
@@ -331,21 +302,13 @@
             confirmButtonText: 'Sí, eliminar',
             cancelButtonText: 'Cancelar'
         }).then((result) => {
-            if (result.isConfirmed) {
-                fetch(`/api/users/${id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    }
-                }).then(response => {
-                    if (response.ok) {
-                        Swal.fire('Eliminado', 'El usuario ha sido eliminado.', 'success').then(() => location.reload());
-                    } else {
-                        Swal.fire('Error', 'Error al eliminar el usuario.', 'error');
-                    }
-                });
-            }
+            if (!result.isConfirmed) return;
+
+            const $form = document.getElementById('delete-user-form');
+            const $button = $form.querySelector('button');
+
+            $form.dataset.target = '/api/users/' + id;
+            $button.click();
         });
     }
 </script>
