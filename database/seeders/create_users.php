@@ -29,14 +29,29 @@ class create_users extends Seeder
                 'rol_id' => 1,
                 'created_at' => now(),
                 'updated_at' => null,
+            ],
+            [
+                'usuario_id' => 'bc2e8ed8-8682-4ffe-b1ac-e8d5f03670be',
+                'usuario_nombre' => 'Nestor',
+                'usuario_apellido' => 'Gomez Cruz',
+                'usuario_correo' => 'nGomez@gmail.com',
+                'usuario_documento_tipo' => 'CC',
+                'usuario_documento' => '1033808584',
+                'usuario_nacimiento' => '1777-03-12',
+                'usuario_direccion' => 'Tv. 70 #65b-75, Bogotá',
+                'usuario_telefono' => '3201234545',
+                'usuario_contra' => Hash::make('12345678'),
+                'rol_id' => 2,
+                'created_at' => now(),
+                'updated_at' => null,
             ]
         ]);
 
         DB::table('administrativos')->insert([
             [
-                'usuario_id' => 'd436d563-a041-46ef-a951-1ca5ff0067ab',
+                'usuario_id' => 'bc2e8ed8-8682-4ffe-b1ac-e8d5f03670be',
                 'administrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
-                'administrativo_cargo' => 'Director TI',
+                'administrativo_cargo' => 'Coordinador',
             ]
         ]);
 

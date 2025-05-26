@@ -3,12 +3,23 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class Administrativo extends Model
 {
+    use HasUuids;
+
     protected $table = 'administrativos';
     protected $primaryKey = 'administrativo_id';
+    public $incrementing = false;
+    protected $keyType = 'string';
     public $timestamps = false;
+
+    protected $fillable = [
+        // 'administrativo_id',
+        'usuario_id',
+        'administrativo_cargo',
+    ];
 
     public function usuario()
     {

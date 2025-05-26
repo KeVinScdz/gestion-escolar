@@ -135,7 +135,7 @@ class UsuarioController
             }
 
             // Validation for password update
-            if ($request->has('usuario_contra')) {
+            if ($request->has('usuario_contra') && $request->has('actual_contra') && $request->input('usuario_contra') !== "" && $request->input('usuario_contra') !== null) {
                 $request->validate([
                     'usuario_contra' => 'required|string|min:8',
                     'usuario_contra_confirmacion' => 'required|string|same:usuario_contra',

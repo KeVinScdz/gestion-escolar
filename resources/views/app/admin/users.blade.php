@@ -45,8 +45,18 @@
                     <td class="px-6 py-4">{{ $usuario->usuario_correo }}</td>
                     <td class="px-6 py-4">{{ $usuario->rol->rol_nombre ?? '' }}</td>
                     <td class="px-6 py-4 flex gap-2">
-                        <button onclick="openEditUserModal('{{ $usuario->usuario_id }}', '{{ addslashes($usuario->usuario_nombre) }}', '{{ addslashes($usuario->usuario_correo) }}', '{{ addslashes($usuario->rol_id) }}')" class="btn btn-sm py-1 btn-primary">Editar</button>
-                        <button onclick="deleteUser('{{ $usuario->usuario_id }}')" class="btn btn-sm py-1 btn-error">Eliminar</button>
+                        <button
+                            onclick="openEditUserModal('{{ $usuario->usuario_id }}', '{{ json_encode($usuario) }}')"
+                            {{ $usuario->usuario_id == $usuarioSesion->usuario_id ? 'disabled' : '' }}
+                            class="btn btn-sm py-1 btn-primary">
+                            Editar
+                        </button>
+                        <button
+                            onclick="deleteUser('{{ $usuario->usuario_id }}')"
+                            {{ $usuario->usuario_id == $usuarioSesion->usuario_id ? 'disabled' : '' }}
+                            class="btn btn-sm py-1 btn-error">
+                            Eliminar
+                        </button>
                     </td>
                 </tr>
                 @empty
@@ -63,7 +73,7 @@
     <dialog id="create-user" class="modal">
         <div class="modal-box">
             <h3 class="text-lg font-bold mb-4">Crear Nuevo Usuario</h3>
-            <form class="upload-form space-y-2" data-target="/api/users" data-method="post" data-reload="true" data-show-alert="true">
+            <form class="upload-form space-y-2" data-target="/api/users" data-reset="true" data-method="post" data-reload="true" data-show-alert="true">
                 <fieldset class="w-full fieldset">
                     <label class="fieldset-label after:content-['*'] after:text-red-500" for="usuario_nombre">Nombre:</label>
                     <input id="usuario_nombre" name="usuario_nombre" class="input input-bordered w-full" value="{{ old('usuario_nombre') }}">
@@ -164,26 +174,90 @@
     <dialog id="edit-user" class="modal">
         <div class="modal-box">
             <h3 class="text-lg font-bold mb-4">Editar Usuario</h3>
-            <form id="editUserForm" class="space-y-2">
+            <form id="editUserForm" class="upload-form space-y-2" data-target="/api/users/{id}" data-method="put" data-reload="true" data-show-alert="true">
                 <input type="hidden" id="edit_usuario_id" name="usuario_id">
                 <fieldset class="w-full fieldset">
                     <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_usuario_nombre">Nombre:</label>
                     <input id="edit_usuario_nombre" name="usuario_nombre" class="input input-bordered w-full">
                 </fieldset>
                 <fieldset class="w-full fieldset">
-                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_usuario_correo">Correo:</label>
-                    <input id="edit_usuario_correo" name="usuario_correo" class="input input-bordered w-full">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_usuario_apellido">Apellido:</label>
+                    <input id="edit_usuario_apellido" name="usuario_apellido" class="input input-bordered w-full">
                 </fieldset>
                 <fieldset class="w-full fieldset">
-                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_rol_id">Rol:</label>
-                    <select id="edit_rol_id" name="rol_id" class="input input-bordered w-full">
-                        @foreach($roles as $rol)
-                        <option value="{{ $rol->rol_id }}">{{ $rol->rol_nombre }}</option>
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_usuario_correo">Correo:</label>
+                    <input type="email" id="edit_usuario_correo" name="usuario_correo" class="input input-bordered w-full">
+                </fieldset>
+                <fieldset class="w-full fieldset">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_usuario_telefono">Teléfono:</label>
+                    <input type="number" id="edit_usuario_telefono" name="usuario_telefono" class="input input-bordered w-full">
+                </fieldset>
+                <div class="w-full flex gap-2">
+                    <fieldset class="fieldset w-fit">
+                        <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_usuario_documento_tipo">Tipo de Documento:</label>
+                        <select id="edit_usuario_documento_tipo" name="usuario_documento_tipo" class="select select-bordered w-fit">
+                            <option value="CC">Cédula de Ciudadanía</option>
+                            <option value="TI">Tarjeta de Identidad</option>
+                            <option value="CE">Cédula de Extranjería</option>
+                        </select>
+                    </fieldset>
+                    <fieldset class="w-full fieldset grow">
+                        <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_usuario_documento">Número de Documento:</label>
+                        <input id="edit_usuario_documento" name="usuario_documento" class="input input-bordered w-full">
+                    </fieldset>
+                </div>
+                <fieldset class="w-full fieldset">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_usuario_nacimiento">Fecha de Nacimiento:</label>
+                    <input type="date" id="edit_usuario_nacimiento" name="usuario_nacimiento" class="input input-bordered w-full">
+                </fieldset>
+                <fieldset class="w-full fieldset">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_usuario_direccion">Dirección:</label>
+                    <input id="edit_usuario_direccion" name="usuario_direccion" class="input input-bordered w-full">
+                </fieldset>
+                <fieldset class="w-full fieldset">
+                    <label class="fieldset-label" for="edit_usuario_contra">Nueva Contraseña (dejar en blanco para no cambiar):</label>
+                    <input type="password" id="edit_usuario_contra" name="usuario_contra" class="input input-bordered w-full">
+                </fieldset>
+
+                {{-- Institucion Fields (for Edit) --}}
+                <fieldset id="edit_institucion_fieldset" class="w-full fieldset" style="display: none;">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_institucion_id">Institución:</label>
+                    <select id="edit_institucion_id" name="institucion_id" class="select select-bordered w-full">
+                        @foreach($instituciones as $institucion)
+                        <option value="{{ $institucion->institucion_id }}">{{ $institucion->institucion_nombre }}</option>
                         @endforeach
                     </select>
                 </fieldset>
+
+                {{-- Administrativo Fields (for Edit) --}}
+                <fieldset id="edit_administrativo_fieldset" class="w-full fieldset" style="display: none;">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_administrativo_cargo">Cargo:</label>
+                    <input id="edit_administrativo_cargo" name="administrativo_cargo" class="input input-bordered w-full">
+                </fieldset>
+
+                {{-- Docente Fields (for Edit) --}}
+                <fieldset id="edit_docente_fieldset" class="w-full fieldset space-y-2" style="display: none;">
+                    <fieldset class="w-full fieldset">
+                        <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_docente_especialidad">Especialidad:</label>
+                        <input id="edit_docente_especialidad" name="docente_especialidad" class="input input-bordered w-full">
+                    </fieldset>
+                </fieldset>
+
+                {{-- Estudiante Fields (for Edit) - Assuming you might need this --}}
+                <fieldset id="edit_estudiante_fieldset" class="w-full fieldset" style="display: none;">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_estudiante_id">Estudiante (Asociado):</label>
+                    <select id="edit_estudiante_id" name="estudiante_id" class="select select-bordered w-full">
+                        {{-- Populate this with students, perhaps filtered or all --}}
+                        @foreach($estudiantes as $estudiante) {{-- Make sure $estudiantes is available --}}
+                        <option value="{{ $estudiante->estudiante_id }}">
+                            {{ $estudiante->usuario->usuario_nombre ?? 'Estudiante sin nombre' }} {{ $estudiante->usuario->usuario_apellido ?? '' }}
+                        </option>
+                        @endforeach
+                    </select>
+                </fieldset>
+
                 <div class="mt-4 flex justify-end">
-                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                 </div>
             </form>
         </div>
@@ -196,12 +270,20 @@
 
 @section('scripts')
 <script>
-    function openEditUserModal(id, nombre, correo, rol_id) {
+    function openEditUserModal(id, stringJson) {
+        const usuario = JSON.parse(stringJson);
+
         document.getElementById('edit_usuario_id').value = id;
-        document.getElementById('edit_usuario_nombre').value = nombre;
-        document.getElementById('edit_usuario_correo').value = correo;
-        document.getElementById('edit_rol_id').value = rol_id;
-        document.getElementById('edit-user').showModal();
+        document.getElementById('edit_usuario_nombre').value = usuario.usuario_nombre;
+        document.getElementById('edit_usuario_apellido').value = usuario.usuario_apellido;
+        document.getElementById('edit_usuario_correo').value = usuario.usuario_correo;
+        document.getElementById('edit_usuario_telefono').value = usuario.usuario_telefono;
+        document.getElementById('edit_usuario_documento_tipo').value = usuario.usuario_documento_tipo;
+        document.getElementById('edit_usuario_documento').value = usuario.usuario_documento;
+        document.getElementById('edit_usuario_nacimiento').value = usuario.usuario_nacimiento;
+        document.getElementById('edit_usuario_direccion').value = usuario.usuario_direccion;
+        document.querySelector('#edit-user form').dataset.target = '/api/users/' + id;
+        document.getElementById('edit-user').show();
     }
 
     function handleRoleChange(selectElement) {

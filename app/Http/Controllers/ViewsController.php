@@ -47,7 +47,7 @@ class ViewsController
 
     public function users()
     {
-        $usuario = Auth::user()->load('rol');
+        $usuarioSesion = Auth::user()->load('rol');
         $search = request('search');
         $showAll = request('showAll') === 'true';
 
@@ -56,6 +56,6 @@ class ViewsController
         $instituciones = Institucion::all();
         $estudiantes = Estudiante::with('usuario')->get();
 
-        return view('app.admin.users', compact('usuario', 'usuarios', 'roles', 'instituciones', 'estudiantes'));
+        return view('app.admin.users', compact('usuarioSesion', 'usuarios', 'roles', 'instituciones', 'estudiantes'));
     }
 }

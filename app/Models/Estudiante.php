@@ -3,12 +3,23 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class Estudiante extends Model
 {
+    use HasUuids;
+
     protected $table = 'estudiantes';
     protected $primaryKey = 'estudiante_id';
+    public $incrementing = false;
+    protected $keyType = 'string';
     public $timestamps = false;
+
+    protected $fillable = [
+        // 'estudiante_id',
+        'institucion_id',
+        'usuario_id',
+    ];
 
     public function usuario()
     {

@@ -16,13 +16,12 @@ class Usuario extends Authenticatable
     protected $table = 'usuarios';
     protected $primaryKey = 'usuario_id';
     protected $keyType = 'string';
-    public $incrementing = false;
-    public $timestamps = false;
+    public $incrementing = true;
 
     protected $hidden = ['usuario_contra'];
 
     protected $fillable = [
-        'usuario_id',
+        // 'usuario_id',
         'usuario_nombre',
         'usuario_apellido',
         'usuario_correo',
@@ -33,6 +32,8 @@ class Usuario extends Authenticatable
         'usuario_telefono',
         'usuario_contra',
         'rol_id',
+        'created_at',
+        'updated_at',
     ];
 
     public function rol()

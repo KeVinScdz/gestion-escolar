@@ -18,7 +18,7 @@ class Tutor extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'tutor_id',
+        // 'tutor_id',
         'usuario_id',
         'estudiante_id',
     ];

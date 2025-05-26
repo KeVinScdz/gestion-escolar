@@ -14,6 +14,7 @@ $forms.forEach(($form) => {
         const $method = $form.getAttribute("data-method");
         const $showAlert = $form.getAttribute("data-show-alert") === "true";
         const $reload = $form.getAttribute("data-reload") === "true";
+        const $reset = $form.getAttribute("data-reset") === "true";
         const $redirect = $form.getAttribute("data-redirect");
         const $callback = $form.getAttribute("data-callback");
 
@@ -49,6 +50,8 @@ $forms.forEach(($form) => {
             if (callback && typeof callback === "function")
                 callback(responseData);
         }
+
+        if ($reset) $form.reset();
 
         if ($showAlert) {
             Swal.fire({
