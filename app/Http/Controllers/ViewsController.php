@@ -30,7 +30,7 @@ class ViewsController
 
     public function dashboard()
     {
-        $usuario = Auth::user()->load('rol');
+        $usuario = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
 
         return view('app.dashboard', compact('usuario'));
     }
@@ -62,10 +62,10 @@ class ViewsController
 
     public function students()
     {
-        $usuario = Auth::user()->load('rol', 'administrativo', 'administrativo.institucion');
+        $usuario = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos', 'administrativo.institucion');
         $search = request('search');
 
-        $estudiantes = Usuario::with('estudiante', 'estudiante.tutor', 'rol')
+        $estudiantes = Usuario::with('estudiante', 'estudiante.tutor', 'estudiante.matriculas', 'rol')
             ->where('rol_id', 4)
             ->whereHas('estudiante', function ($query) use ($usuario) {
                 $query->where('institucion_id', $usuario->administrativo->institucion_id);

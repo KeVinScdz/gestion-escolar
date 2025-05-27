@@ -34,7 +34,7 @@ class create_users extends Seeder
                 'usuario_id' => 'bc2e8ed8-8682-4ffe-b1ac-e8d5f03670be',
                 'usuario_nombre' => 'Nestor',
                 'usuario_apellido' => 'Gomez Cruz',
-                'usuario_correo' => 'nGomez@gmail.com',
+                'usuario_correo' => 'ngomez@gmail.com',
                 'usuario_documento_tipo' => 'CC',
                 'usuario_documento' => 1033808584,
                 'usuario_nacimiento' => '1777-03-12',
@@ -127,14 +127,6 @@ class create_users extends Seeder
             [
                 'administrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
                 'permiso_id' => 11,
-            ],
-            [
-                'administrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
-                'permiso_id' => 12,
-            ],
-            [
-                'administrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
-                'permiso_id' => 13,
             ],
         ]);
     }

@@ -30,18 +30,15 @@ Route::middleware(['auth', 'rol:1'])->group(function () {
 });
 
 Route::middleware(['auth', 'rol:2'])->group(function () {
-    Route::middleware('permiso:1')->get("/dashboard/institucion", [ViewsController::class, 'institucion']);
-    Route::middleware('permiso:2')->get("/dashboard/estudiantes", [ViewsController::class, 'students']);
-    Route::middleware('permiso:3')->get("/dashboard/docentes", [ViewsController::class, 'docentes']);
-    Route::middleware('permiso:4')->get("/dashboard/administrativos", [ViewsController::class, 'administrativos']);
-    Route::middleware('permiso:5')->get("/dashboard/matriculas", [ViewsController::class, 'matriculas']);
-    Route::middleware('permiso:6')->get("/dashboard/permisos", [ViewsController::class, 'permisos']);
-    Route::middleware('permiso:7')->get("/dashboard/cursos", [ViewsController::class, 'cursos']);
-    Route::middleware('permiso:8')->get("/dashboard/materias", [ViewsController::class, 'materias']);
-    Route::middleware('permiso:9')->get("/dashboard/horarios", [ViewsController::class, 'horarios']);
-    Route::middleware('permiso:10')->get("/dashboard/periodos", [ViewsController::class, 'periodos']);
-    Route::middleware('permiso:11')->get("/dashboard/inasistencias", [ViewsController::class, 'inasistencias']);
-    Route::middleware('permiso:12')->get("/dashboard/observaciones", [ViewsController::class, 'observaciones']);
-    Route::middleware('permiso:13')->get("/dashboard/pagos", [ViewsController::class, 'pagos']);
-    
+    Route::middleware('permiso:1')->get("/dashboard/institucion", [ViewsController::class, 'institution']);
+    Route::middleware('permiso:2')->get("/dashboard/administrativos", [ViewsController::class, 'administrative']);
+    Route::middleware('permiso:3')->get("/dashboard/docentes", [ViewsController::class, 'teachers']);
+    Route::middleware('permiso:4')->get("/dashboard/estudiantes", [ViewsController::class, 'students']);
+    Route::middleware('permiso:5')->get("/dashboard/cursos", [ViewsController::class, 'classes']);
+    Route::middleware('permiso:6')->get("/dashboard/materias", [ViewsController::class, 'subjects']);
+    Route::middleware('permiso:7')->get("/dashboard/horarios", [ViewsController::class, 'schedules']);
+    Route::middleware('permiso:8')->get("/dashboard/periodos", [ViewsController::class, 'periods']);
+    Route::middleware('permiso:9')->get("/dashboard/inasistencias", [ViewsController::class, 'absences']);
+    Route::middleware('permiso:10')->get("/dashboard/observaciones", [ViewsController::class, 'observations']);
+    Route::middleware('permiso:11')->get("/dashboard/pagos", [ViewsController::class, 'payments']);
 });

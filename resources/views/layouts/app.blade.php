@@ -60,38 +60,65 @@
                     <li>
                         <a href="/dashboard/usuarios" class="hover:bg-primary/50 {{ request()->is('dashboard/usuarios') ? 'bg-primary' : '' }}">Gestión de Usuarios</a>
                     </li>
-                    <li>
-                        <details>
-                            <summary class="hover:primary/50 {{ request()->is('dashboard/roles') || request()->is('dashboard/permisos') ? bg-primary : '' }}">Roles y Permisos</summary>
-                            <ul>
-                                <li>
-                                    <a href="/dashboard/roles" class="hover:bg-primary/50 {{ request()->is('dashboard/roles') ? 'bg-primary' : '' }}">Gestión de Roles</a>
-                                </li>
-                                <li>
-                                    <a href="/dashboard/permisos" class="hover:bg-primary/50 {{ request()->is('dashboard/permisos') ? 'bg-primary' : '' }}">Gestión de Permisos</a>
-                                </li>
-                            </ul>
-                        </details>
-                    </li>
                     @endif
 
-                    {{-- Docente --}}
+                    {{-- Administrativo --}}
                     @if($usuario->rol_id == 2)
+                    @if ($usuario->administrativo->permisos->contains('permiso_id', 1))
                     <li>
-                        <a href="/dashboard/estudiantes" class="hover:bg-primary/50 {{ request()->is('dashboard/estudiantes') ? 'bg-primary' : '' }}">Mis Estudiantes</a>
+                        <a href="/dashboard/institucion" class="hover:bg-primary/50 {{ request()->is('dashboard/instituciones')? 'bg-primary' : '' }}">Gestionar Institucion</a>
                     </li>
+                    @endif
+                    @if ($usuario->administrativo->permisos->contains('permiso_id', 2))
                     <li>
-                        <a href="/dashboard/notas" class="hover:bg-primary/50 {{ request()->is('dashboard/notas') ? 'bg-primary' : '' }}">Gestionar Notas</a>
+                        <a href="/dashboard/administrativo" class="hover:bg-primary/50 {{ request()->is('dashboard/administrativo')? 'bg-primary' : '' }}">Gestión de Administrativos</a>
                     </li>
+                    @endif
+                    @if ($usuario->administrativo->permisos->contains('permiso_id', 3))
                     <li>
-                        <a href="/dashboard/asignaciones" class="hover:bg-primary/50 {{ request()->is('dashboard/asignaciones') ? 'bg-primary' : '' }}">Asignaciones</a>
+                        <a href="/dashboard/docentes" class="hover:bg-primary/50 {{ request()->is('dashboard/docentes')? 'bg-primary' : '' }}">Gestión de Docentes</a>
                     </li>
+                    @endif
+                    @if ($usuario->administrativo->permisos->contains('permiso_id', 4))
                     <li>
-                        <a href="/dashboard/inasistencias" class="hover:bg-primary/50 {{ request()->is('dashboard/inasistencias') ? 'bg-primary' : '' }}">Inasistencias</a>
+                        <a href="/dashboard/estudiantes" class="hover:bg-primary/50 {{ request()->is('dashboard/estudiantes') ? 'bg-primary' : '' }}">Gestión de Estudiantes</a>
                     </li>
+                    @endif
+                    @if ($usuario->administrativo->permisos->contains('permiso_id', 5))
                     <li>
-                        <a href="/dashboard/observaciones" class="hover:bg-primary/50 {{ request()->is('dashboard/observaciones') ? 'bg-primary' : '' }}">Observaciones</a>
+                        <a href="/dashboard/cursos" class="hover:bg-primary/50 {{ request()->is('dashboard/cursos') ? 'bg-primary' : '' }}">Gestión de Cursos</a>
                     </li>
+                    @endif
+                    @if ($usuario->administrativo->permisos->contains('permiso_id', 6))
+                    <li>
+                        <a href="/dashboard/materias" class="hover:bg-primary/50 {{ request()->is('dashboard/materias')? 'bg-primary' : '' }}">Gestión de Materias</a>
+                    </li>
+                    @endif
+                    @if ($usuario->administrativo->permisos->contains('permiso_id', 7))
+                    <li>
+                        <a href="/dashboard/horarios" class="hover:bg-primary/50 {{ request()->is('dashboard/horarios')? 'bg-primary' : '' }}">Gestión de Horarios</a>
+                    </li>
+                    @endif
+                    @if ($usuario->administrativo->permisos->contains('permiso_id', 8))
+                    <li>
+                        <a href="/dashboard/periodos" class="hover:bg-primary/50 {{ request()->is('dashboard/periodos')? 'bg-primary' : '' }}">Gestión de Periodos</a>
+                    </li>
+                    @endif
+                    @if ($usuario->administrativo->permisos->contains('permiso_id', 9))
+                    <li>
+                        <a href="/dashboard/inasistencias" class="hover:bg-primary/50 {{ request()->is('dashboard/inasistencias')? 'bg-primary' : '' }}">Gestión de Inasistencias</a>
+                    </li>
+                    @endif
+                    @if ($usuario->administrativo->permisos->contains('permiso_id', 10))
+                    <li>
+                        <a href="/dashboard/observaciones" class="hover:bg-primary/50 {{ request()->is('dashboard/observaciones')? 'bg-primary' : '' }}">Gestión de Observaciones</a>
+                    </li>
+                    @endif
+                    @if ($usuario->administrativo->permisos->contains('permiso_id', 11))
+                    <li>
+                        <a href="/dashboard/pagos" class="hover:bg-primary/50 {{ request()->is('dashboard/pagos')? 'bg-primary' : '' }}">Gestión de Pagos</a>
+                    </li>
+                    @endif
                     @endif
 
                     {{-- Estudiante --}}

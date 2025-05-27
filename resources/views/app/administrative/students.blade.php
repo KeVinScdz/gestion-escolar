@@ -39,6 +39,7 @@
                     <th class="px-6 py-3 text-left font-semibold">Correo</th>
                     <th class="px-6 py-3 text-left font-semibold">Documento</th>
                     <th class="px-6 py-3 text-left font-semibold">Tutor</th>
+                    <th class="px-6 py-3 text-left font-semibold">Estado</th>
                     <th class="px-6 py-3 text-left font-semibold">Acciones</th>
                 </tr>
             </thead>
@@ -57,6 +58,25 @@
                         Sin tutor asignado
                         @endif
                     </td>
+                    <td class="px-6 py-4">
+                        @if($estudiante->matriculas && $estudiante->matriculas->count() > 0)
+                        <!-- Buscar la matricula con el año actual, si no hay dice uqe no se ha renovado -->
+
+                        @php
+                        $matriculaActual = $estudiante->matriculas->where('matricula_año', date('Y'))->first();
+                        $ultimaMatricula = $estudiante->matriculas->sortByDesc('matricula_año')->first();
+                        @endphp
+
+                        @if($matriculaActual)
+                        <span class="badge badge-success">Matriculado</span>
+                        @else
+                        <span class="badge badge-error">No renovado desde {{ $ultimaMatricula->matricula_año }}</span>
+                        @endif
+
+                        @else
+                        No se le ha asignado ninguna matricula
+                        @endif
+                    </td>
                     <td class="px-6 py-4 flex flex-wrap gap-2">
                         {{-- Add actions like edit/delete if needed --}}
                         @if($estudiante->estudiante && !$estudiante->estudiante->tutor)
@@ -66,7 +86,7 @@
                             Asignar Tutor
                         </button>
                         @endif
-                        <button class="btn btn-sm py-1 btn-primary btn-outline">Asignar matricula</button>
+                        <button onclick="asignarMatricula('{{ $estudiante->estudiante->estudiante_id }}')" class="btn btn-sm py-1 btn-primary btn-outline">Asignar matricula</button>
                         <button onclick="editarUsuario('{{ $estudiante->usuario_id }}', '{{ json_encode($estudiante) }}')" class="btn btn-sm py-1 btn-primary">Editar</button>
                         <button onclick="eliminarUsuario('{{ $estudiante->usuario_id }}')" class="btn btn-sm py-1 btn-error">Eliminar</button>
                     </td>
@@ -261,6 +281,38 @@
         </form>
     </dialog>
 
+    <!-- Modal Asignar Matrícula -->
+    <dialog id="asignar-matricula" class="modal">
+        <div class="modal-box">
+            <h3 class="text-lg font-bold mb-4">Asignar Matrícula</h3>
+            <form class="upload-form space-y-2" data-target="/api/matriculas" data-method="post" data-reload="true" data-show-alert="true">
+                <input type="hidden" name="estudiante_id" id="matricula_estudiante_id">
+
+                <fieldset class="w-full fieldset">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="matricula_anio">Año:</label>
+                    <input type="number" min="2000" max="2100" id="matricula_anio" name="matricula_anio"
+                        class="input input-bordered w-full" value="{{ date('Y') }}">
+                </fieldset>
+
+                <fieldset class="w-full fieldset">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="grupo_id">Salón:</label>
+                    <select id="grupo_id" name="grupo_id" class="select select-bordered w-full">
+                        @foreach ([] as $grupo)
+                        <option value="{{ $grupo->id }}">{{ $grupo->nombre }}</option>
+                        @endforeach
+                    </select>
+                </fieldset>
+
+                <div class="modal-action">
+                    <button type="submit" class="btn btn-primary">Asignar Matrícula</button>
+                </div>
+            </form>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>cerrar</button>
+        </form>
+    </dialog>
+
     <form class="upload-form hidden" id="delete-user-form" data-target="/api/users/{id}" data-method="delete" data-reload="true" data-show-alert="true">
         <button type="submit"></button>
     </form>
@@ -307,6 +359,11 @@
         document.getElementById('editar_estudiante_documento').value = usuario.usuario_documento;
         document.getElementById('editar_estudiante_nacimiento').value = usuario.usuario_nacimiento;
         document.getElementById('editar_estudiante_direccion').value = usuario.usuario_direccion;
+    }
+
+    function asignarMatricula(estudianteId) {
+        document.getElementById('asignar-matricula').show();
+        document.getElementById('matricula_estudiante_id').value = estudianteId;
     }
 </script>
 @endsection

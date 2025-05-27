@@ -27,30 +27,24 @@ class create_info extends Seeder
             ['permiso_id' => 1, 'permiso_nombre' => 'gestionar_institucion'],
 
             // Gestión de usuarios
-            ['permiso_id' => 2, 'permiso_nombre' => 'gestionar_estudiantes'],
+            ['permiso_id' => 2, 'permiso_nombre' => 'gestionar_administrativos'],
             ['permiso_id' => 3, 'permiso_nombre' => 'gestionar_docentes'],
-            ['permiso_id' => 4, 'permiso_nombre' => 'gestionar_administrativos'],
-
-            // Matrículas
-            ['permiso_id' => 5, 'permiso_nombre' => 'gestionar_matriculas'],
-
-            // Gestión de roles y permisos
-            ['permiso_id' => 6, 'permiso_nombre' => 'gestionar_permisos'],
+            ['permiso_id' => 4, 'permiso_nombre' => 'gestionar_estudiantes'],
 
             // Gestión académica
-            ['permiso_id' => 7, 'permiso_nombre' => 'gestionar_cursos'],
-            ['permiso_id' => 8, 'permiso_nombre' => 'gestionar_materias'],
-            ['permiso_id' => 9, 'permiso_nombre' => 'gestionar_horarios'],
-            ['permiso_id' => 10, 'permiso_nombre' => 'gestionar_periodos'],
+            ['permiso_id' => 5, 'permiso_nombre' => 'gestionar_cursos'],
+            ['permiso_id' => 6, 'permiso_nombre' => 'gestionar_materias'],
+            ['permiso_id' => 7, 'permiso_nombre' => 'gestionar_horarios'],
+            ['permiso_id' => 8, 'permiso_nombre' => 'gestionar_periodos'],
 
             // Inasistencias
-            ['permiso_id' => 11, 'permiso_nombre' => 'gestionar_inasistencias'],
+            ['permiso_id' => 9, 'permiso_nombre' => 'gestionar_inasistencias'],
 
             // Observaciones
-            ['permiso_id' => 12, 'permiso_nombre' => 'gestionar_observaciones'],
+            ['permiso_id' => 10, 'permiso_nombre' => 'gestionar_observaciones'],
 
             // Pagos y Finanzas
-            ['permiso_id' => 13, 'permiso_nombre' => 'gestionar_pagos'],
+            ['permiso_id' => 11, 'permiso_nombre' => 'gestionar_pagos'],
         ]);
 
         DB::table('instituciones')->insert([
