@@ -83,11 +83,22 @@ class UsuarioController
             $usuario = Usuario::create($user);
 
             if ($usuario->rol_id == 2) {
-                Administrativo::create([
+                $administrativo = Administrativo::create([
                     'usuario_id' => $usuario->usuario_id,
                     'institucion_id' => $request->input('institucion_id'),
                     'administrativo_cargo' => $request->input('administrativo_cargo'),
                 ]);
+
+                if (!$request->has('permisos') || empty($request->input('permisos'))) {
+                    DB::rollBack();
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'El administrador debe tener al menos un permiso',
+                    ], 400);
+                }
+
+                $permisos = $request->input('permisos', []);
+                $administrativo->permisos()->sync($permisos);
             }
 
             if ($usuario->rol_id == 3) {

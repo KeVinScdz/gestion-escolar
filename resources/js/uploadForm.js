@@ -9,6 +9,14 @@ $forms.forEach(($form) => {
         const formdata = new FormData($form);
         const data = Object.fromEntries(formdata);
 
+        for (const key in data) {
+            if (key.endsWith("[]")) {
+                const values = formdata.getAll(key);
+                delete data[key];
+                data[key.replace("[]", "")] = [...values];
+            }
+        }
+
         // get data-* attributes
         const $target = $form.getAttribute("data-target");
         const $method = $form.getAttribute("data-method");
