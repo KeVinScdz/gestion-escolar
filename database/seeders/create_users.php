@@ -66,7 +66,7 @@ class create_users extends Seeder
             [
                 'usuario_id' => 'bc2e8ed8-8682-4ffe-b1ac-e8d5f03670be',
                 'administrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
-                'institucion_id' => '205117f9-fa69-4003-9446-b747e6655ec9',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
                 'administrativo_cargo' => 'Coordinador',
             ]
         ]);
@@ -77,7 +77,7 @@ class create_users extends Seeder
             [
                 'estudiante_id' => '358f6923-408f-4156-b689-0cd4c62330b5',
                 'usuario_id' => 'acc7f7c7-3b60-4a5d-bb2b-433d18d4bca4',
-                'institucion_id' => '205117f9-fa69-4003-9446-b747e6655ec9',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
             ]
         ]);
 

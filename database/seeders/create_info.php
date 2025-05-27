@@ -49,6 +49,16 @@ class create_info extends Seeder
 
         DB::table('instituciones')->insert([
             [
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'institucion_nombre' => 'Instituto Liceo Moderno Betania de Bogotá',
+                'institucion_telefono' => 3103436767,
+                'institucion_correo' => 'Licbetania@yahoo.com',
+                'institucion_nit' => '41723418-7',
+                'institucion_direccion' => 'Kr 87 51 B 36 Sur, Bogotá, Bogotá DC.',
+                'created_at' => now(),
+                'updated_at' => null,
+            ],
+            [
                 'institucion_id' => '205117f9-fa69-4003-9446-b747e6655ec9',
                 'institucion_nombre' => 'Colegio Angela Restrepo Moreno IED',
                 'institucion_telefono' => 3007070248,
