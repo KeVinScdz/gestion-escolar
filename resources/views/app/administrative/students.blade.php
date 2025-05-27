@@ -45,7 +45,7 @@
             <tbody>
                 @forelse($estudiantes as $estudiante)
                 <tr>
-                    <td class="px-6 py-4">{{ $estudiante->usuario_id }}</td>
+                    <td class="px-6 py-4">{{ explode("-", $estudiante->usuario_id)[0] }}</td>
                     <td class="px-6 py-4">{{ $estudiante->usuario_nombre }} {{ $estudiante->usuario_apellido }}</td>
                     <td class="px-6 py-4">{{ $estudiante->usuario_correo }}</td>
                     <td class="px-6 py-4">{{ $estudiante->usuario_documento_tipo }}: {{ $estudiante->usuario_documento }}</td>
@@ -66,7 +66,7 @@
                             Asignar Tutor
                         </button>
                         @endif
-                        <button class="btn btn-sm py-1 btn-primary">Editar</button>
+                        <button onclick="editarUsuario('{{ $estudiante->usuario_id }}', '{{ json_encode($estudiante) }}')" class="btn btn-sm py-1 btn-primary">Editar</button>
                         <button onclick="eliminarUsuario('{{ $estudiante->usuario_id }}')" class="btn btn-sm py-1 btn-error">Eliminar</button>
                     </td>
                 </tr>
@@ -141,6 +141,63 @@
         </form>
     </dialog>
 
+    <!-- Edit Student Modal -->
+    <dialog id="edit-student" class="modal">
+        <div class="modal-box">
+            <h3 class="text-lg font-bold mb-4">Editar estudiante</h3>
+            <form class="upload-form space-y-2" data-target="/api/users/{id}" data-reset="true" data-method="put" data-reload="true" data-show-alert="true">
+                <fieldset class="w-full fieldset">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="editar_estudiante_nombre">Nombre:</label>
+                    <input id="editar_estudiante_nombre" name="usuario_nombre" class="input input-bordered w-full" value="{{ old('usuario_nombre') }}">
+                </fieldset>
+                <fieldset class="w-full fieldset">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="editar_estudiante_apellido">Apellido:</label>
+                    <input id="editar_estudiante_apellido" name="usuario_apellido" class="input input-bordered w-full" value="{{ old('usuario_apellido') }}">
+                </fieldset>
+                <fieldset class="w-full fieldset">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="editar_estudiante_correo">Correo:</label>
+                    <input type="email" id="editar_estudiante_correo" name="usuario_correo" class="input input-bordered w-full" value="{{ old('usuario_correo') }}">
+                </fieldset>
+                <fieldset class="w-full fieldset">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="editar_estudiante_telefono">Teléfono:</label>
+                    <input type="number" id="editar_estudiante_telefono" name="usuario_telefono" class="input input-bordered w-full" value="{{ old('usuario_telefono') }}">
+                </fieldset>
+                <div class="w-full flex gap-2">
+                    <fieldset class="fieldset w-fit">
+                        <label class="fieldset-label after:content-['*'] after:text-red-500" for="editar_estudiante_documento_tipo">Tipo de Documento:</label>
+                        <select id="editar_estudiante_documento_tipo" name="usuario_documento_tipo" class="select select-bordered w-fit">
+                            <option value="CC">Cédula de Ciudadanía</option>
+                            <option value="TI">Tarjeta de Identidad</option>
+                            <option value="CE">Cédula de Extranjería</option>
+                        </select>
+                    </fieldset>
+                    <fieldset class="w-full fieldset grow">
+                        <label class="fieldset-label after:content-['*'] after:text-red-500" for="editar_estudiante_documento">Número de Documento:</label>
+                        <input id="editar_estudiante_documento" name="usuario_documento" class="input input-bordered w-full" value="{{ old('usuario_documento') }}">
+                    </fieldset>
+                </div>
+                <fieldset class="w-full fieldset">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="editar_estudiante_nacimiento">Fecha de Nacimiento:</label>
+                    <input type="date" id="editar_estudiante_nacimiento" name="usuario_nacimiento" class="input input-bordered w-full" value="{{ old('usuario_nacimiento') }}">
+                </fieldset>
+                <fieldset class="w-full fieldset">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="editar_estudiante_direccion">Dirección:</label>
+                    <input id="editar_estudiante_direccion" name="usuario_direccion" class="input input-bordered w-full" value="{{ old('usuario_direccion') }}">
+                </fieldset>
+                <fieldset class="w-full fieldset">
+                    <label class="fieldset-label" for="editar_estudiante_contra">Contraseña (Dejar vacio si no se actualiza):</label>
+                    <input type="password" id="editar_estudiante_contra" name="usuario_contra" class="input input-bordered w-full">
+                </fieldset>
+                <div class="modal-action">
+                    <button type="submit" class="btn btn-primary">Actualizar estudiante</button>
+                </div>
+            </form>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+
     <!-- Crear un nuevo tutor para un usuario -->
     <dialog id="create-tutor" class="modal">
         <div class="modal-box">
@@ -195,6 +252,7 @@
                     <button type="submit" class="btn btn-primary">
                         Asignar Tutor
                     </button>
+                </div>
             </form>
         </div>
         <form method="dialog" class="modal-backdrop">
@@ -232,6 +290,22 @@
             document.getElementById('delete-user-form').dataset.target = `/api/users/${id}`;
             document.querySelector('#delete-user-form button').click();
         })
+    }
+
+    function editarUsuario(id, usuarioJsonString) {
+        const usuario = JSON.parse(usuarioJsonString);
+
+        document.getElementById('edit-student').show();
+        document.querySelector('#edit-student form').dataset.target = `/api/users/${id}`;
+
+        document.getElementById('editar_estudiante_nombre').value = usuario.usuario_nombre;
+        document.getElementById('editar_estudiante_apellido').value = usuario.usuario_apellido;
+        document.getElementById('editar_estudiante_correo').value = usuario.usuario_correo;
+        document.getElementById('editar_estudiante_telefono').value = usuario.usuario_telefono;
+        document.getElementById('editar_estudiante_documento_tipo').value = usuario.usuario_documento_tipo;
+        document.getElementById('editar_estudiante_documento').value = usuario.usuario_documento;
+        document.getElementById('editar_estudiante_nacimiento').value = usuario.usuario_nacimiento;
+        document.getElementById('editar_estudiante_direccion').value = usuario.usuario_direccion;
     }
 </script>
 @endsection

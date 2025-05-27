@@ -71,6 +71,7 @@ class Usuario extends Authenticatable
         if (empty($term)) return $query;
         return $query->where(function ($q) use ($term) {
             $q->where('usuario_nombre', 'like', "%{$term}%")
+                ->orWhere('usuario_id', 'like', "%{$term}%")
                 ->orWhere('usuario_apellido', 'like', "%{$term}%")
                 ->orWhere('usuario_correo', 'like', "%{$term}%")
                 ->orWhere('usuario_documento', 'like', "%{$term}%");

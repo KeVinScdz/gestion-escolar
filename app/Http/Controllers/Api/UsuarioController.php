@@ -143,6 +143,10 @@ class UsuarioController
                 ], 404);
             }
 
+            if ($request->has('usuario_contra') && $request->input('usuario_contra') === "" || $request->input('usuario_contra') === null) {
+                $request->request->remove('usuario_contra');
+            }
+
             // Validation for password update
             if ($request->has('usuario_contra') && $request->has('actual_contra') && $request->input('usuario_contra') !== "" && $request->input('usuario_contra') !== null) {
                 $request->validate([
