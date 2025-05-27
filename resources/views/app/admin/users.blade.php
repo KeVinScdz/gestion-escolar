@@ -141,8 +141,20 @@ $usuarioSesion = $usuario;
 
                 {{-- Administrativo Fields --}}
                 <fieldset id="administrativo_fieldset" class="w-full fieldset" style="display: none;">
-                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="administrativo_cargo">Cargo:</label>
-                    <input id="administrativo_cargo" name="administrativo_cargo" class="input input-bordered w-full" value="{{ old('administrativo_cargo') }}">
+                    <fieldset class="w-full fieldset">
+
+                        <label class="fieldset-label after:content-['*'] after:text-red-500" for="administrativo_cargo">Cargo:</label>
+                        <input id="administrativo_cargo" name="administrativo_cargo" class="input input-bordered w-full" value="{{ old('administrativo_cargo') }}">
+                    </fieldset>
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="administrativo_permisos">Permisos:</label>
+                    <div class="grid grid-cols-2 gap-1">
+                        @foreach($permisos as $permiso)
+                        <label class="label">
+                            <input type="checkbox" name="permisos[]" value="{{ $permiso->permiso_id }}" class="checkbox checkbox-sm" />
+                            {{ $permiso->permiso_nombre }}
+                        </label>
+                        @endforeach
+                    </div>
                 </fieldset>
 
                 {{-- Docente Fields --}}
@@ -227,10 +239,10 @@ $usuarioSesion = $usuario;
 
                 <fieldset id="edit_administrativo_fieldset" class="w-full fieldset hidden">
                     <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_administrativo_cargo">Permisos:</label>
-                    <div class="grid grid-cols-2">
+                    <div class="grid grid-cols-2 gap-1">
                         @foreach($permisos as $permiso)
                         <label class="label">
-                            <input type="checkbox" name="permisos[]" value="{{ $permiso->permiso_id }}" class="checkbox" />
+                            <input type="checkbox" name="permisos[]" value="{{ $permiso->permiso_id }}" class="checkbox checkbox-sm" />
                             {{ $permiso->permiso_nombre }}
                         </label>
                         @endforeach
