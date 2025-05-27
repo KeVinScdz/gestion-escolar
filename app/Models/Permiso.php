@@ -10,8 +10,8 @@ class Permiso extends Model
     protected $primaryKey = 'permiso_id';
     public $timestamps = false;
 
-    public function roles()
-    {
-        return $this->belongsToMany(Rol::class, 'roles_permisos', 'permiso_id', 'rol_id');
-    }
+    protected $fillable = [
+        'permiso_id',
+        'permiso_nombre',
+    ];
 }

@@ -134,6 +134,7 @@ class UsuarioController
     public function update(Request $request, string $id)
     {
         try {
+            DB::beginTransaction();
             $usuario = Usuario::findOrFail($id);
 
             if (!$usuario) {
@@ -173,14 +174,32 @@ class UsuarioController
                 }
             }
 
+            if ($usuario->rol_id == 2) {
+                $administrativo = Administrativo::where('usuario_id', $usuario->usuario_id)->first();
+
+                if (!$administrativo) {
+                    DB::rollBack();
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Administrativo no encontrado',
+                    ]);
+                }
+
+                $permisos = $request->input('permisos', []);
+
+                $administrativo->permisos()->sync($permisos);
+            }
+
             $usuario->update($request->all());
 
+            DB::commit();
             return response()->json([
                 'success' => true,
                 'message' => 'Usuario actualizado correctamente',
                 'data' => $usuario,
             ]);
         } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json([
                 'success' => false,
                 'message' => 'Error al actualizar el usuario: ' . $e->getMessage(),

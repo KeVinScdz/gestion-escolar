@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Estudiante;
 use App\Models\Institucion;
+use App\Models\Permiso;
 use App\Models\Rol;
 use App\Models\Usuario;
 use Illuminate\Contracts\Database\Eloquent\Builder;
@@ -49,14 +50,14 @@ class ViewsController
     {
         $usuario = Auth::user()->load('rol');
         $search = request('search');
-        $showAll = request('showAll') === 'true';
 
-        $usuarios = Usuario::search($search ?? '')->paginate(5);
+        $usuarios = Usuario::with('administrativo', 'administrativo.permisos', 'estudiante', 'docente', 'tutor')->search($search ?? '')->paginate(5);
         $roles = Rol::all();
         $instituciones = Institucion::all();
         $estudiantes = Estudiante::with('usuario', 'tutor')->get();
+        $permisos = Permiso::all();
 
-        return view('app.admin.users', compact('usuario', 'usuarios', 'roles', 'instituciones', 'estudiantes'));
+        return view('app.admin.users', compact('usuario', 'usuarios', 'roles', 'instituciones', 'estudiantes', 'permisos'));
     }
 
     public function students()

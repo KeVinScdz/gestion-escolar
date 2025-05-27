@@ -85,55 +85,55 @@ class create_users extends Seeder
 
         DB::table('administrativos_permisos')->insert([
             [
-                'adminsitrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
+                'administrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
                 'permiso_id' => 1,
             ],
             [
-                'adminsitrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
+                'administrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
                 'permiso_id' => 2,
             ],
             [
-                'adminsitrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
+                'administrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
                 'permiso_id' => 3,
             ],
             [
-                'adminsitrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
+                'administrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
                 'permiso_id' => 4,
             ],
             [
-                'adminsitrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
+                'administrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
                 'permiso_id' => 5,
             ],
             [
-                'adminsitrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
+                'administrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
                 'permiso_id' => 6,
             ],
             [
-                'adminsitrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
+                'administrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
                 'permiso_id' => 7,
             ],
             [
-                'adminsitrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
+                'administrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
                 'permiso_id' => 8,
             ],
             [
-                'adminsitrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
+                'administrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
                 'permiso_id' => 9,
             ],
             [
-                'adminsitrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
+                'administrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
                 'permiso_id' => 10,
             ],
             [
-                'adminsitrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
+                'administrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
                 'permiso_id' => 11,
             ],
             [
-                'adminsitrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
+                'administrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
                 'permiso_id' => 12,
             ],
             [
-                'adminsitrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
+                'administrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
                 'permiso_id' => 13,
             ],
         ]);

@@ -225,6 +225,18 @@ $usuarioSesion = $usuario;
                     <input type="password" id="edit_usuario_contra" name="usuario_contra" class="input input-bordered w-full">
                 </fieldset>
 
+                <fieldset id="edit_administrativo_fieldset" class="w-full fieldset hidden">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_administrativo_cargo">Permisos:</label>
+                    <div class="grid grid-cols-2">
+                        @foreach($permisos as $permiso)
+                        <label class="label">
+                            <input type="checkbox" name="permisos[]" value="{{ $permiso->permiso_id }}" class="checkbox" />
+                            {{ $permiso->permiso_nombre }}
+                        </label>
+                        @endforeach
+                    </div>
+                </fieldset>
+
                 <div class="mt-4 flex justify-end">
                     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                 </div>
@@ -256,6 +268,17 @@ $usuarioSesion = $usuario;
         document.getElementById('edit_usuario_nacimiento').value = usuario.usuario_nacimiento;
         document.getElementById('edit_usuario_direccion').value = usuario.usuario_direccion;
         document.querySelector('#edit-user form').dataset.target = '/api/users/' + id;
+
+        if (usuario.rol_id == 2) {
+            const permisos = usuario.administrativo.permisos.map(permiso => permiso.permiso_id);
+            permisos.forEach(permiso_id => {
+                document.querySelector(`#edit-user input[value="${permiso_id}"]`).checked = true;
+            });
+            document.getElementById('edit_administrativo_fieldset').style.display = 'block';
+        } else {
+            document.getElementById('edit_administrativo_fieldset').style.display = 'none';
+        }
+
         document.getElementById('edit-user').show();
     }
 

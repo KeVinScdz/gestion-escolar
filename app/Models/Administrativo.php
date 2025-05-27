@@ -31,4 +31,9 @@ class Administrativo extends Model
     {
         return $this->belongsTo(Institucion::class, 'institucion_id', 'institucion_id');
     }
+
+    public function permisos()
+    {
+        return $this->belongsToMany(Permiso::class, 'administrativos_permisos', 'administrativo_id', 'permiso_id');
+    }
 }
