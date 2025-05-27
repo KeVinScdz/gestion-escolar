@@ -78,7 +78,7 @@
                     {{-- Docente --}}
                     @if($usuario->rol_id == 2)
                     <li>
-                        <a href="/dashboard/matriculas" class="hover:bg-primary/50 {{ request()->is('dashboard/matriculas') ? 'bg-primary' : '' }}">Mis Estudiantes</a>
+                        <a href="/dashboard/estudiantes" class="hover:bg-primary/50 {{ request()->is('dashboard/estudiantes') ? 'bg-primary' : '' }}">Mis Estudiantes</a>
                     </li>
                     <li>
                         <a href="/dashboard/notas" class="hover:bg-primary/50 {{ request()->is('dashboard/notas') ? 'bg-primary' : '' }}">Gestionar Notas</a>

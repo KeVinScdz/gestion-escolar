@@ -7,17 +7,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class RoleMiddleware
+class PermisoMiddleware
 {
     /**
      * Handle an incoming request.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, int $role): Response
+    public function handle(Request $request, Closure $next, $permiso): Response
     {
-        if (Auth::check() && Auth::user()->rol_id !== $role) {
-            return response()->redirectTo('/');
+        $user = Auth::user()->load('administrativo', 'administrativo.permisos');
+
+        if (!$user->administrativo->permisos->contains('permiso_id', $permiso)) {
+            return response()->redirectTo('/dashboard');
         }
 
         return $next($request);

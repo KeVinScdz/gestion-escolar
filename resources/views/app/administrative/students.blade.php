@@ -19,7 +19,7 @@
                     <input type="search" name="search" placeholder="Buscar Estudiante o Tutor" value="{{ request('search') }}" />
                 </label>
                 @if(request('search'))
-                <a href="/dashboard/matriculas" class="btn btn-error text-white bg-red-500 btn-sm">
+                <a href="/dashboard/estudiantes" class="btn btn-error text-white bg-red-500 btn-sm">
                     <i class="fa-solid fa-arrows-rotate"></i>
                 </a>
                 @endif
