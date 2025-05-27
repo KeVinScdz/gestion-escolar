@@ -66,6 +66,7 @@
                             Asignar Tutor
                         </button>
                         @endif
+                        <button class="btn btn-sm py-1 btn-primary btn-outline">Asignar matricula</button>
                         <button onclick="editarUsuario('{{ $estudiante->usuario_id }}', '{{ json_encode($estudiante) }}')" class="btn btn-sm py-1 btn-primary">Editar</button>
                         <button onclick="eliminarUsuario('{{ $estudiante->usuario_id }}')" class="btn btn-sm py-1 btn-error">Eliminar</button>
                     </td>

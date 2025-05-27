@@ -22,10 +22,10 @@ return new class extends Migration
             $table->string('permiso_nombre');
         });
 
-        Schema::create('roles_permisos', function (Blueprint $table) {
-            $table->id('rol_permiso_id');
-            $table->unsignedBigInteger('rol_id');
+        Schema::create('administrativos_permisos', function (Blueprint $table) {
+            $table->uuid('administrativo_id');
             $table->unsignedBigInteger('permiso_id');
+            $table->primary(['administrativo_id', 'permiso_id']);
         });
 
         // Perfil de usuarios
@@ -82,8 +82,10 @@ return new class extends Migration
         });
 
         Schema::create('periodos_academicos', function (Blueprint $table) {
-            $table->id('periodo_academico_id');
+            $table->uuid('periodo_academico_id');
+            $table->uuid('institucion_id');
             $table->string('periodo_academico_nombre');
+            $table->integer('periodo_academico_año');
             $table->date('periodo_academico_inicio');
             $table->date('periodo_academico_fin');
         });
@@ -142,9 +144,9 @@ return new class extends Migration
         // Matriculas
         Schema::create('matriculas', function (Blueprint $table) {
             $table->id('matricula_id');
-            $table->unsignedBigInteger('estudiante_id');
-            $table->unsignedBigInteger('grupo_id');
-            $table->unsignedBigInteger('periodo_academico_id');
+            $table->uuid('estudiante_id');
+            $table->uuid('grupo_id');
+            $table->integer('matricula_año');
             $table->timestamps();
         });
 
@@ -194,7 +196,7 @@ return new class extends Migration
         Schema::dropIfExists('usuarios');
         Schema::dropIfExists('roles');
         Schema::dropIfExists('permisos');
-        Schema::dropIfExists('roles_permisos');
+        Schema::dropIfExists('administrativos_permisos');
 
         // Perfil de usuarios
         Schema::dropIfExists('estudiantes');

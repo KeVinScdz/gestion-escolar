@@ -23,133 +23,34 @@ class create_info extends Seeder
         ]);
 
         DB::table('permisos')->insert([
+            // Configuración institucional
+            ['permiso_id' => 1, 'permiso_nombre' => 'gestionar_institucion'],
+
             // Gestión de usuarios
-            ['permiso_id' => 1, 'permiso_nombre' => 'crear_usuarios'],
-            ['permiso_id' => 2, 'permiso_nombre' => 'editar_usuarios'],
-            ['permiso_id' => 3, 'permiso_nombre' => 'eliminar_usuarios'],
-            ['permiso_id' => 4, 'permiso_nombre' => 'ver_usuarios'],
+            ['permiso_id' => 2, 'permiso_nombre' => 'gestionar_estudiantes'],
+            ['permiso_id' => 3, 'permiso_nombre' => 'gestionar_docentes'],
+            ['permiso_id' => 4, 'permiso_nombre' => 'gestionar_administrativos'],
+
+            // Matrículas
+            ['permiso_id' => 5, 'permiso_nombre' => 'gestionar_matriculas'],
 
             // Gestión de roles y permisos
-            ['permiso_id' => 5, 'permiso_nombre' => 'gestionar_roles'],
             ['permiso_id' => 6, 'permiso_nombre' => 'gestionar_permisos'],
 
             // Gestión académica
-            ['permiso_id' => 7, 'permiso_nombre' => 'crear_grupos'],
-            ['permiso_id' => 8, 'permiso_nombre' => 'asignar_docentes'],
-            ['permiso_id' => 9, 'permiso_nombre' => 'gestionar_materias'],
-            ['permiso_id' => 10, 'permiso_nombre' => 'gestionar_horarios'],
-            ['permiso_id' => 11, 'permiso_nombre' => 'gestionar_periodos'],
-            ['permiso_id' => 12, 'permiso_nombre' => 'ver_estructura_academica'],
-
-            // Matrículas
-            ['permiso_id' => 13, 'permiso_nombre' => 'registrar_matriculas'],
-            ['permiso_id' => 14, 'permiso_nombre' => 'ver_matriculas'],
-
-            // Notas
-            ['permiso_id' => 15, 'permiso_nombre' => 'registrar_notas'],
-            ['permiso_id' => 16, 'permiso_nombre' => 'ver_notas'],
+            ['permiso_id' => 7, 'permiso_nombre' => 'gestionar_cursos'],
+            ['permiso_id' => 8, 'permiso_nombre' => 'gestionar_materias'],
+            ['permiso_id' => 9, 'permiso_nombre' => 'gestionar_horarios'],
+            ['permiso_id' => 10, 'permiso_nombre' => 'gestionar_periodos'],
 
             // Inasistencias
-            ['permiso_id' => 17, 'permiso_nombre' => 'registrar_inasistencias'],
-            ['permiso_id' => 18, 'permiso_nombre' => 'ver_inasistencias'],
+            ['permiso_id' => 11, 'permiso_nombre' => 'gestionar_inasistencias'],
 
             // Observaciones
-            ['permiso_id' => 19, 'permiso_nombre' => 'registrar_observaciones'],
-            ['permiso_id' => 20, 'permiso_nombre' => 'ver_observaciones'],
+            ['permiso_id' => 12, 'permiso_nombre' => 'gestionar_observaciones'],
 
             // Pagos y Finanzas
-            ['permiso_id' => 21, 'permiso_nombre' => 'gestionar_conceptos_pago'],
-            ['permiso_id' => 22, 'permiso_nombre' => 'registrar_pagos'],
-            ['permiso_id' => 23, 'permiso_nombre' => 'ver_pagos'],
-
-            // Logs del sistema
-            ['permiso_id' => 24, 'permiso_nombre' => 'ver_logs'],
-
-            // Configuración institucional
-            ['permiso_id' => 25, 'permiso_nombre' => 'gestionar_institucion'],
-
-            // Datos personales
-            ['permiso_id' => 26, 'permiso_nombre' => 'ver_perfil_personal'],
-            ['permiso_id' => 27, 'permiso_nombre' => 'editar_perfil_personal'],
-        ]);
-
-        DB::table('roles_permisos')->insert([
-            // ADMINISTRADOR (rol_id = 1) - acceso completo
-            ['rol_id' => 1, 'permiso_id' => 1],
-            ['rol_id' => 1, 'permiso_id' => 2],
-            ['rol_id' => 1, 'permiso_id' => 3],
-            ['rol_id' => 1, 'permiso_id' => 4],
-            ['rol_id' => 1, 'permiso_id' => 5],
-            ['rol_id' => 1, 'permiso_id' => 6],
-            ['rol_id' => 1, 'permiso_id' => 7],
-            ['rol_id' => 1, 'permiso_id' => 8],
-            ['rol_id' => 1, 'permiso_id' => 9],
-            ['rol_id' => 1, 'permiso_id' => 10],
-            ['rol_id' => 1, 'permiso_id' => 11],
-            ['rol_id' => 1, 'permiso_id' => 12],
-            ['rol_id' => 1, 'permiso_id' => 13],
-            ['rol_id' => 1, 'permiso_id' => 14],
-            ['rol_id' => 1, 'permiso_id' => 15],
-            ['rol_id' => 1, 'permiso_id' => 16],
-            ['rol_id' => 1, 'permiso_id' => 17],
-            ['rol_id' => 1, 'permiso_id' => 18],
-            ['rol_id' => 1, 'permiso_id' => 19],
-            ['rol_id' => 1, 'permiso_id' => 20],
-            ['rol_id' => 1, 'permiso_id' => 21],
-            ['rol_id' => 1, 'permiso_id' => 22],
-            ['rol_id' => 1, 'permiso_id' => 23],
-            ['rol_id' => 1, 'permiso_id' => 24],
-            ['rol_id' => 1, 'permiso_id' => 25],
-            ['rol_id' => 1, 'permiso_id' => 26],
-            ['rol_id' => 1, 'permiso_id' => 27],
-
-            // ADMINISTRATIVO (rol_id = 2)
-            ['rol_id' => 2, 'permiso_id' => 1],
-            ['rol_id' => 2, 'permiso_id' => 2],
-            ['rol_id' => 2, 'permiso_id' => 3],
-            ['rol_id' => 2, 'permiso_id' => 4],
-            ['rol_id' => 2, 'permiso_id' => 7],
-            ['rol_id' => 2, 'permiso_id' => 8],
-            ['rol_id' => 2, 'permiso_id' => 9],
-            ['rol_id' => 2, 'permiso_id' => 10],
-            ['rol_id' => 2, 'permiso_id' => 11],
-            ['rol_id' => 2, 'permiso_id' => 12],
-            ['rol_id' => 2, 'permiso_id' => 13],
-            ['rol_id' => 2, 'permiso_id' => 14],
-            ['rol_id' => 2, 'permiso_id' => 21],
-            ['rol_id' => 2, 'permiso_id' => 22],
-            ['rol_id' => 2, 'permiso_id' => 23],
-            ['rol_id' => 2, 'permiso_id' => 24],
-            ['rol_id' => 2, 'permiso_id' => 25],
-            ['rol_id' => 2, 'permiso_id' => 26],
-            ['rol_id' => 2, 'permiso_id' => 27],
-
-            // DOCENTE (rol_id = 3)
-            ['rol_id' => 3, 'permiso_id' => 12],
-            ['rol_id' => 3, 'permiso_id' => 15],
-            ['rol_id' => 3, 'permiso_id' => 16],
-            ['rol_id' => 3, 'permiso_id' => 17],
-            ['rol_id' => 3, 'permiso_id' => 18],
-            ['rol_id' => 3, 'permiso_id' => 19],
-            ['rol_id' => 3, 'permiso_id' => 20],
-            ['rol_id' => 3, 'permiso_id' => 26],
-            ['rol_id' => 3, 'permiso_id' => 27],
-
-            // ESTUDIANTE (rol_id = 4)
-            ['rol_id' => 4, 'permiso_id' => 16],
-            ['rol_id' => 4, 'permiso_id' => 18],
-            ['rol_id' => 4, 'permiso_id' => 20],
-            ['rol_id' => 4, 'permiso_id' => 23],
-            ['rol_id' => 4, 'permiso_id' => 26],
-            ['rol_id' => 4, 'permiso_id' => 27],
-
-            // PADRE/MADRE/TUTOR (rol_id = 5)
-            ['rol_id' => 5, 'permiso_id' => 16],
-            ['rol_id' => 5, 'permiso_id' => 18],
-            ['rol_id' => 5, 'permiso_id' => 20],
-            ['rol_id' => 5, 'permiso_id' => 23],
-            ['rol_id' => 5, 'permiso_id' => 26],
-            ['rol_id' => 5, 'permiso_id' => 27],
+            ['permiso_id' => 13, 'permiso_nombre' => 'gestionar_pagos'],
         ]);
 
         DB::table('instituciones')->insert([
