@@ -141,7 +141,7 @@
             </fieldset>
             <div class="modal-action">
                 <button type="submit" class="btn btn-primary">Actualizar</button>
-                <button type="button" class="btn" onclick="document.getElementById('update_period_modal').close()">Cancelar</button>
+                <button type="button" class="btn" onclick="document.getElementById('update-period-modal').close()">Cancelar</button>
             </div>
         </form>
     </div>

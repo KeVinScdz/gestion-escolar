@@ -2,13 +2,29 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 class Grupo extends Model
 {
+    use HasUuids;
+
     protected $table = 'grupos';
-    protected $primaryKey = 'grupo_id';
     public $timestamps = false;
+    protected $primaryKey = 'grupo_id';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
+    protected $fillable = [
+        // 'grupo_id',
+        'grado_id',
+        'institucion_id',
+        'grupo_nombre',
+        'grupo_cupo',
+        'grupo_año',
+        'created_at',
+        'updated_at',
+    ];
 
     public function grado()
     {

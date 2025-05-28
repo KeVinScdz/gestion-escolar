@@ -23,7 +23,7 @@ Route::post('/periods', [AcademicStructureController::class, 'storePeriod']);
 Route::put('/periods/{id}', [AcademicStructureController::class, 'updatePeriod']);
 Route::delete('/periods/{id}', [AcademicStructureController::class, 'destroyPeriod']);
 
-// Courses Routes
-Route::post('/courses', [AcademicStructureController::class, 'storeCourse']);
-Route::put('/courses/{id}', [AcademicStructureController::class, 'updateCourse']);
-Route::delete('/courses/{id}', [AcademicStructureController::class, 'destroyCourse']);
+// Groups Routes
+Route::post('/groups', [AcademicStructureController::class, 'storeGroup']);
+Route::put('/groups/{id}', [AcademicStructureController::class, 'updateGroup']);
+Route::delete('/groups/{id}', [AcademicStructureController::class, 'destroyGroup']);

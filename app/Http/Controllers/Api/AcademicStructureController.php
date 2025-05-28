@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\PeriodoAcademico;
 use Illuminate\Http\Request;
+
+use App\Models\PeriodoAcademico;
+use App\Models\Grupo;
 
 class AcademicStructureController
 {
@@ -108,6 +110,115 @@ class AcademicStructureController
                 'success' => false,
                 'message' => 'Error al eliminar el periodo: ' . $e->getMessage(),
             ]);
+        }
+    }
+
+    public function storeGroup(Request $request)
+    {
+        try {
+            $request->validate(
+                [
+                    'grupo_nombre' => 'required|string',
+                    'grupo_año' => 'required|numeric',
+                    'grupo_cupo' => 'required|numeric',
+                    'grado_id' => 'required|exists:grados,grado_id',
+                    'institucion_id' => 'required|exists:instituciones,institucion_id'
+                ],
+                [
+                    'grupo_nombre.required' => 'El nombre es requerido',
+                    'grupo_nombre.string' => 'El nombre debe ser una cadena de caracteres',
+                    'grupo_año.required' => 'El año es requerido',
+                    'grupo_año.numeric' => 'El año debe ser numérico',
+                    'grupo_cupo.required' => 'El cupo es requerido',
+                    'grupo_cupo.numeric' => 'El cupo debe ser numérico',
+                    'grado_id.required' => 'El grado es requerido',
+                    'grado_id.exists' => 'El grado no existe',
+                    'institucion_id.required' => 'La institución es requerida',
+                    'institucion_id.exists' => 'La institución no existe',
+                ]
+            );
+
+            $group = Grupo::create($request->all());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Grupo creado con éxito',
+                'data' => $group,
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear el grupo: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function updateGroup(Request $request, $id)
+    {
+        try {
+            $request->validate(
+                [
+                    'grupo_nombre' => 'required|string',
+                    'grupo_año' => 'required|numeric',
+                    'grupo_cupo' => 'required|numeric',
+                ],
+                [
+                    'grupo_nombre.required' => 'El nombre es requerido',
+                    'grupo_nombre.string' => 'El nombre debe ser una cadena de caracteres',
+                    'grupo_año.required' => 'El año es requerido',
+                    'grupo_año.numeric' => 'El año debe ser numérico',
+                    'grupo_cupo.required' => 'El cupo es requerido',
+                    'grupo_cupo.numeric' => 'El cupo debe ser numérico',
+                ]
+            );
+
+            $group = Grupo::find($id);
+
+            if (!$group) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Grupo no encontrado',
+                ], 404);
+            }
+
+            $group->update($request->all());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Grupo actualizado con éxito',
+                'data' => $group,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar el grupo: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function destroyGroup($id)
+    {
+        try {
+            $group = Grupo::find($id);
+
+            if (!$group) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Grupo no encontrado',
+                ], 404);
+            }
+
+            $group->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Grupo eliminado con éxito',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al eliminar el grupo: ' . $e->getMessage(),
+            ], 500);
         }
     }
 }
