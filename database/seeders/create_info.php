@@ -198,5 +198,228 @@ class create_info extends Seeder
                 'periodo_academico_fin' => '2026-12-18',
             ]
         ]);
+        DB::table('grupos')->insert([
+            // Transición (grado_id = 1)
+            [
+                'grupo_id' => '019717a9-ddcb-756b-bf6b-280a404e032d',
+                'grado_id' => 1,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Transición A',
+                'grupo_cupo' => 15,
+                'grupo_año' => 2025
+            ],
+            [
+                'grupo_id' => '019717a9-ddce-724e-8178-2d988b69f55f',
+                'grado_id' => 1,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Transición B',
+                'grupo_cupo' => 15,
+                'grupo_año' => 2025
+            ],
+            [
+                'grupo_id' => '019717a9-ddcf-7545-905d-3647eb0cf474',
+                'grado_id' => 1,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Transición C',
+                'grupo_cupo' => 15,
+                'grupo_año' => 2025
+            ],
+            [
+                'grupo_id' => '019717a9-ddef-70a6-9dba-bacbef8ba380',
+                'grado_id' => 1,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Transición D',
+                'grupo_cupo' => 15,
+                'grupo_año' => 2025
+            ],
+
+            // Grados 1° a 11°, con 2 grupos A y B cada uno
+            [
+                'grupo_id' => '019717a9-ddf6-7287-bba3-ce93e987ac2b',
+                'grado_id' => 2,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Primero A',
+                'grupo_cupo' => 30,
+                'grupo_año' => 2025
+            ],
+            [
+                'grupo_id' => '019717a9-ddf7-71ab-adc4-5a6b45175221',
+                'grado_id' => 2,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Primero B',
+                'grupo_cupo' => 30,
+                'grupo_año' => 2025
+            ],
+
+            [
+                'grupo_id' => '019717a9-ddfe-764e-b7fb-a1a6ff1634df',
+                'grado_id' => 3,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Segundo A',
+                'grupo_cupo' => 30,
+                'grupo_año' => 2025
+            ],
+            [
+                'grupo_id' => '019717a9-ddff-7690-8b31-9c35feff43ff',
+                'grado_id' => 3,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Segundo B',
+                'grupo_cupo' => 30,
+                'grupo_año' => 2025
+            ],
+
+            [
+                'grupo_id' => '019717a9-de00-747f-9c24-90348012ca57',
+                'grado_id' => 4,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Tercero A',
+                'grupo_cupo' => 30,
+                'grupo_año' => 2025
+            ],
+            [
+                'grupo_id' => '019717a9-de02-70d9-bdfa-093d67ce628f',
+                'grado_id' => 4,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Tercero B',
+                'grupo_cupo' => 30,
+                'grupo_año' => 2025
+            ],
+
+            [
+                'grupo_id' => '019717a9-de0a-777a-8869-9a1c89204e36',
+                'grado_id' => 5,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Cuarto A',
+                'grupo_cupo' => 30,
+                'grupo_año' => 2025
+            ],
+            [
+                'grupo_id' => '019717a9-de0b-742a-b77a-f800852d10f6',
+                'grado_id' => 5,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Cuarto B',
+                'grupo_cupo' => 30,
+                'grupo_año' => 2025
+            ],
+
+            [
+                'grupo_id' => '019717a9-de12-76dc-91a5-f26437d99993',
+                'grado_id' => 6,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Quinto A',
+                'grupo_cupo' => 30,
+                'grupo_año' => 2025
+            ],
+            [
+                'grupo_id' => '019717a9-de13-76ed-8c6b-1d4b4436b04d',
+                'grado_id' => 6,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Quinto B',
+                'grupo_cupo' => 30,
+                'grupo_año' => 2025
+            ],
+
+            [
+                'grupo_id' => '019717a9-de14-7259-a116-51d70afa72d2',
+                'grado_id' => 7,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Sexto A',
+                'grupo_cupo' => 30,
+                'grupo_año' => 2025
+            ],
+            [
+                'grupo_id' => '019717a9-de16-7076-9d69-5680104206cf',
+                'grado_id' => 7,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Sexto B',
+                'grupo_cupo' => 30,
+                'grupo_año' => 2025
+            ],
+
+            [
+                'grupo_id' => '019717a9-de1d-753d-840f-c43f8c36f45d',
+                'grado_id' => 8,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Séptimo A',
+                'grupo_cupo' => 30,
+                'grupo_año' => 2025
+            ],
+            [
+                'grupo_id' => '019717a9-de1e-73dc-ad93-66084c7385c6',
+                'grado_id' => 8,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Séptimo B',
+                'grupo_cupo' => 30,
+                'grupo_año' => 2025
+            ],
+
+            [
+                'grupo_id' => '019717a9-de20-7259-a382-476bddb1d8d7',
+                'grado_id' => 9,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Octavo A',
+                'grupo_cupo' => 30,
+                'grupo_año' => 2025
+            ],
+            [
+                'grupo_id' => '019717a9-de23-729b-be0d-11af41c5393c',
+                'grado_id' => 9,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Octavo B',
+                'grupo_cupo' => 30,
+                'grupo_año' => 2025
+            ],
+
+            [
+                'grupo_id' => '019717a9-de24-70cf-8543-d280e125083b',
+                'grado_id' => 10,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Noveno A',
+                'grupo_cupo' => 30,
+                'grupo_año' => 2025
+            ],
+            [
+                'grupo_id' => '019717a9-de25-771b-b23a-01097ea71205',
+                'grado_id' => 10,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Noveno B',
+                'grupo_cupo' => 30,
+                'grupo_año' => 2025
+            ],
+
+            [
+                'grupo_id' => '019717a9-de26-722c-a8bb-11a9659618ba',
+                'grado_id' => 11,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Décimo A',
+                'grupo_cupo' => 30,
+                'grupo_año' => 2025
+            ],
+            [
+                'grupo_id' => '019717a9-de28-7289-9c21-53c11de7a4b8',
+                'grado_id' => 11,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Décimo B',
+                'grupo_cupo' => 30,
+                'grupo_año' => 2025
+            ],
+
+            [
+                'grupo_id' => '019717a9-de29-775e-ae2e-5aeb8416dd34',
+                'grado_id' => 12,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Undécimo A',
+                'grupo_cupo' => 30,
+                'grupo_año' => 2025
+            ],
+            [
+                'grupo_id' => '019717a9-de2a-714b-b396-110996b777ee',
+                'grado_id' => 12,
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'grupo_nombre' => 'Undécimo B',
+                'grupo_cupo' => 30,
+                'grupo_año' => 2025
+            ],
+        ]);
     }
 }

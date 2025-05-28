@@ -112,7 +112,7 @@ return new class extends Migration
         });
 
         Schema::create('materias', function (Blueprint $table) {
-            $table->id('materia_id');
+            $table->uuid('materia_id');
             $table->string('materia_nombre');
             $table->uuid('institucion_id');
         });
@@ -121,7 +121,7 @@ return new class extends Migration
         Schema::create('asignaciones', function (Blueprint $table) {
             $table->uuid('asignacion_id');
             $table->uuid('docente_id');
-            $table->unsignedBigInteger('materia_id');
+            $table->uuid('materia_id');
             $table->uuid('grupo_id');
             $table->timestamps();
         });

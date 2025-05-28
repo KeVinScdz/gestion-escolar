@@ -49,15 +49,15 @@
                         <td>{{ $grupo->grupo_año }}</td>
                         <td>{{ $grupo->grupo_cupo }}</td>
                         <td class="space-x-2">
-                            <button class="btn btn-sm btn-warning" onclick="openEditGroupModal('{{ $grupo->grupo_id }}', '{{ json_encode($grupo) }}')">Editar</button>
-                            <button class="btn btn-sm btn-error" onclick="confirmDeleteGroup('{{ $grupo->grupo_id }}')">Eliminar</button>
+                            <button class="btn btn-sm py-1 btn-primary" onclick="openEditGroupModal('{{ $grupo->grupo_id }}', '{{ json_encode($grupo) }}')">Editar</button>
+                            <button class="btn btn-sm py-1 btn-error" onclick="confirmDeleteGroup('{{ $grupo->grupo_id }}')">Eliminar</button>
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-        {{ $grupos->links() }}
+        {{ $grupos->links('components.pagination') }}
         @else
         <p>No hay grupos registrados.</p>
         @endif
