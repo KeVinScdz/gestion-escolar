@@ -2,10 +2,6 @@
 
 @section('title', 'Gestión docentes')
 
-@php
-$usuarioSesion = $usuario;
-@endphp
-
 @section('content')
 <section class="w-full">
     <div class="w-full max-w-[1200px] mx-auto py-10 space-y-10">

@@ -2,10 +2,6 @@
 
 @section('title', 'Usuarios')
 
-@php
-$usuarioSesion = $usuario;
-@endphp
-
 @section('content')
 <section class="container mx-auto px-4 py-6 space-y-5">
     <div class="flex justify-between items-center">
@@ -47,7 +43,16 @@ $usuarioSesion = $usuario;
                 <tr>
                     <td class="px-6 py-4">{{ $usuario->usuario_nombre }} {{ $usuario->usuario_apellido }}</td>
                     <td class="px-6 py-4">{{ $usuario->usuario_correo }}</td>
-                    <td class="px-6 py-4">{{ $usuario->rol->rol_nombre ?? '' }}</td>
+                    <td class="px-6 py-4">
+                    {{ $usuario->rol->rol_nombre ?? '' }}
+                    @if($usuario->rol_id == 2)
+                    del {{ $usuario->administrativo->institucion->institucion_nombre }}
+                    @elseif ($usuario->rol_id == 3)
+                    del {{ $usuario->docente->institucion->institucion_nombre }}
+                    @elseif ($usuario->rol_id == 4)
+                    del {{ $usuario->estudiante->institucion->institucion_nombre }}
+                    @endif
+                    </td>
                     <td class="px-6 py-4 flex gap-2">
                         <button
                             onclick="openEditUserModal('{{ $usuario->usuario_id }}', '{{ json_encode($usuario) }}')"

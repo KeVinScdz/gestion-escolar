@@ -243,27 +243,32 @@ class create_users extends Seeder
             [
                 'usuario_id' => '0822d067-f27e-4f27-b858-11dd9c5b271a',
                 'docente_id' => 'a03da01f-ebd0-4d7d-91c2-d70f8a053348',
-                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'docente_titulo' => 'Docente de Matemáticas'
             ],
             [
                 'usuario_id' => '9b8e34a9-743d-4425-a6f4-ab661d53bd8c',
                 'docente_id' => '9387b98b-1963-4528-8e4d-7efcde01c396',
-                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'docente_titulo' => 'Docente de Lengua Castellana'
             ],
             [
                 'usuario_id' => 'eee75ba6-a7c1-4f11-9d05-524e39d347bc',
                 'docente_id' => 'c163c21f-4204-468e-90a8-9725411d7833',
-                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'docente_titulo' => 'Docente de Ciencias Naturales'
             ],
             [
                 'usuario_id' => 'b6e15a77-215a-4c6c-b487-e3107df4f805',
                 'docente_id' => '0515d9d8-e261-4f83-9c71-3db614d76f6b',
-                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'docente_titulo' => 'Docente de Ciencias Sociales'
             ],
             [
                 'usuario_id' => 'a3d16596-6eb9-44e9-b32f-756285a1e927',
                 'docente_id' => 'cc4d28f9-8d77-4c0e-b9c7-39fbc54d69b8',
-                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'docente_titulo' => 'Docente de Inglés'
             ],
         ]);
 

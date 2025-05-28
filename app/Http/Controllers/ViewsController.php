@@ -30,95 +30,96 @@ class ViewsController
 
     public function dashboard()
     {
-        $usuario = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
+        $usuarioSesion = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
+        $usuario = $usuarioSesion;
 
-        return view('app.dashboard', compact('usuario'));
+        return view('app.dashboard', compact('usuarioSesion', 'usuario'));
     }
 
     // Admin Views
     public function institutions()
     {
-        $usuario = Auth::user()->load('rol');
+        $usuarioSesion = Auth::user()->load('rol');
         $search = request('search');
 
         $instituciones = Institucion::search($search ?? '')->paginate(5);
 
-        return view('app.admin.institutions', compact('usuario', 'instituciones'));
+        return view('app.admin.institutions', compact('usuarioSesion', 'instituciones'));
     }
 
     public function users()
     {
-        $usuario = Auth::user()->load('rol');
+        $usuarioSesion = Auth::user()->load('rol');
         $search = request('search');
 
-        $usuarios = Usuario::with('administrativo', 'administrativo.permisos', 'estudiante', 'docente', 'tutor')->search($search ?? '')->paginate(5);
+        $usuarios = Usuario::with('administrativo', 'administrativo.permisos', 'administrativo.institucion', 'estudiante', 'estudiante.institucion', 'docente', 'docente.institucion', 'tutor')->search($search ?? '')->paginate(5);
         $roles = Rol::all();
         $instituciones = Institucion::all();
         $estudiantes = Estudiante::with('usuario', 'tutor')->get();
         $permisos = Permiso::all();
 
-        return view('app.admin.users', compact('usuario', 'usuarios', 'roles', 'instituciones', 'estudiantes', 'permisos'));
+        return view('app.admin.users', compact('usuarioSesion', 'usuarios', 'roles', 'instituciones', 'estudiantes', 'permisos'));
     }
 
     public function institution()
     {
-        $usuario = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
+        $usuarioSesion = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
 
-        $institucion = Institucion::where('institucion_id', $usuario->administrativo->institucion_id)->first();
+        $institucion = Institucion::where('institucion_id', $usuarioSesion->administrativo->institucion_id)->first();
 
-        return view('app.administrative.institution', compact('usuario', 'institucion'));
+        return view('app.administrative.institution', compact('usuarioSesion', 'institucion'));
     }
 
     public function administratives()
     {
-        $usuario = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
+        $usuarioSesion = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
         $search = request('search');
 
         $administrativos = Usuario::with('administrativo', 'administrativo.permisos', 'administrativo.institucion', 'rol')
             ->search($search ?? '')
-            ->where('rol_id', 2)->whereNot('usuario_id', '=', $usuario->usuario_id)
-            ->whereHas('administrativo', function ($query) use ($usuario) {
-                $query->where('institucion_id', $usuario->administrativo->institucion_id);
+            ->where('rol_id', 2)->whereNot('usuario_id', '=', $usuarioSesion->usuario_id)
+            ->whereHas('administrativo', function ($query) use ($usuarioSesion) {
+                $query->where('institucion_id', $usuarioSesion->administrativo->institucion_id);
             })
             ->paginate(10);
 
         $permisos = Permiso::all();
-        $institucion = Institucion::where('institucion_id', $usuario->administrativo->institucion_id)->first();
+        $institucion = Institucion::where('institucion_id', $usuarioSesion->administrativo->institucion_id)->first();
 
-        return view('app.administrative.administratives', compact('usuario', 'administrativos', 'permisos', 'institucion'));
+        return view('app.administrative.administratives', compact('usuarioSesion', 'administrativos', 'permisos', 'institucion'));
     }
 
     public function teachers()
     {
-        $usuario = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
+        $usuarioSesion = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
         $search = request('search');
 
         $docentes = Usuario::with('docente', 'rol')
             ->search($search ?? '')
             ->where('rol_id', 3)
-            ->whereHas('docente', function ($query) use ($usuario) {
-                $query->where('institucion_id', $usuario->administrativo->institucion_id);
+            ->whereHas('docente', function ($query) use ($usuarioSesion) {
+                $query->where('institucion_id', $usuarioSesion->administrativo->institucion_id);
             })
             ->paginate(10);
 
-        $institucion = Institucion::where('institucion_id', $usuario->administrativo->institucion_id)->first();
+        $institucion = Institucion::where('institucion_id', $usuarioSesion->administrativo->institucion_id)->first();
 
 
-        return view('app.administrative.teachers', compact('usuario', 'docentes', 'institucion'));
+        return view('app.administrative.teachers', compact('usuarioSesion', 'docentes', 'institucion'));
     }
 
     public function students()
     {
-        $usuario = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos', 'administrativo.institucion');
+        $usuarioSesion = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos', 'administrativo.institucion');
         $search = request('search');
 
         $estudiantes = Usuario::with('estudiante', 'estudiante.tutor', 'estudiante.matriculas', 'rol')
             ->where('rol_id', 4)
-            ->whereHas('estudiante', function ($query) use ($usuario) {
-                $query->where('institucion_id', $usuario->administrativo->institucion_id);
+            ->whereHas('estudiante', function ($query) use ($usuarioSesion) {
+                $query->where('institucion_id', $usuarioSesion->administrativo->institucion_id);
             })
             ->search($search ?? '')->paginate(10);
 
-        return view('app.administrative.students', compact('usuario', 'estudiantes'));
+        return view('app.administrative.students', compact('usuarioSesion', 'estudiantes'));
     }
 }

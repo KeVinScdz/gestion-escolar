@@ -16,7 +16,8 @@ class RolMiddleware
      */
     public function handle(Request $request, Closure $next, int $rol): Response
     {
-        if (Auth::user()->rol_id !== $rol) {
+        $usuarioSesion = Auth::user();
+        if ($usuarioSesion->rol_id !== $rol) {
             return response()->redirectTo('/');
         }
 

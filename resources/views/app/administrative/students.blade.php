@@ -108,7 +108,7 @@
                 <h3 class="text-lg font-bold mb-4">Crear Nuevo Estudiante</h3>
                 <form class="upload-form space-y-2" data-target="/api/users" data-reset="true" data-method="post" data-reload="true" data-show-alert="true">
                     <input type="hidden" name="rol_id" value="4">
-                    <input type="hidden" name="institucion_id" value="{{ $usuario->administrativo->institucion_id }}">
+                    <input type="hidden" name="institucion_id" value="{{ $usuarioSesion->administrativo->institucion_id }}">
 
                     <fieldset class="w-full fieldset">
                         <label class="fieldset-label after:content-['*'] after:text-red-500" for="estudiante_nombre">Nombre:</label>

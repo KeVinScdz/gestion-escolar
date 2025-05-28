@@ -12,7 +12,7 @@
         <div class="drawer-content w-full h-screen overflow-y-auto">
             <!-- Page content here -->
             <header class="w-full bg-neutral text-neutral-content p-4 border-b border-neutral-700 flex justify-between items-center sticky top-0 z-50">
-                <h1 class="text-xl font-medium">Panel de {{ $usuario->rol->rol_nombre }}</h1>
+                <h1 class="text-xl font-medium">Panel de {{ $usuarioSesion->rol->rol_nombre }}</h1>
                 <label for="my-drawer-2" class="btn btn-primary drawer-button py-1.5 px-2 lg:hidden">
                     <i class="fa-solid fa-bars"></i>
                 </label>
@@ -36,14 +36,22 @@
                     <div class="avatar avatar-placeholder">
                         <div class="bg-primary text-primary-content w-12 rounded-full">
                             <p class="text-xl">
-                                {{ $usuario->usuario_nombre[0] }}{{ $usuario->usuario_apellido[0]}}
+                                {{ $usuarioSesion->usuario_nombre[0] }}{{ $usuarioSesion->usuario_apellido[0]}}
                             </p>
                         </div>
                     </div>
                     <div class="flex-col text-sm">
-                        <p class="font-medium">{{ $usuario->usuario_correo }}</p>
-                        <p class="text-xs">{{ $usuario->usuario_nombre }} {{ $usuario->usuario_apellido }}</p>
-                        <p class="text-xs text-neutral-content/60">{{ $usuario->rol->rol_nombre }}</p>
+                        <p class="font-medium">{{ $usuarioSesion->usuario_correo }}</p>
+                        <p class="text-xs">{{ $usuarioSesion->usuario_nombre }} {{ $usuarioSesion->usuario_apellido }}</p>
+                        <p class="text-xs text-neutral-content/60">
+                            @if($usuarioSesion->rol_id == 2 && $usuarioSesion->administrativo)
+                            {{ $usuarioSesion->administrativo->administrativo_cargo }}
+                            @elseif($usuarioSesion->rol_id == 3 && $usuarioSesion->docente)
+                            {{ $usuarioSesion->docente->docente_titulo }}
+                            @else
+                            {{ $usuarioSesion->rol->rol_nombre }}
+                            @endif
+                        </p>
                     </div>
                 </div>
                 <hr class="border-neutral-content/60 my-6">
@@ -53,7 +61,7 @@
                     </li>
 
                     {{-- Administrador --}}
-                    @if($usuario->rol_id == 1)
+                    @if($usuarioSesion->rol_id == 1)
                     <li>
                         <a href="/dashboard/instituciones" class="hover:bg-primary/50 {{ request()->is('dashboard/instituciones') ? 'bg-primary' : '' }}">Instituciones</a>
                     </li>
@@ -63,58 +71,58 @@
                     @endif
 
                     {{-- Administrativo --}}
-                    @if($usuario->rol_id == 2)
-                    @if ($usuario->administrativo->permisos->contains('permiso_id', 1))
+                    @if($usuarioSesion->rol_id == 2)
+                    @if ($usuarioSesion->administrativo->permisos->contains('permiso_id', 1))
                     <li>
                         <a href="/dashboard/institucion" class="hover:bg-primary/50 {{ request()->is('dashboard/instituciones')? 'bg-primary' : '' }}">Gestionar Institucion</a>
                     </li>
                     @endif
-                    @if ($usuario->administrativo->permisos->contains('permiso_id', 2))
+                    @if ($usuarioSesion->administrativo->permisos->contains('permiso_id', 2))
                     <li>
                         <a href="/dashboard/administrativos" class="hover:bg-primary/50 {{ request()->is('dashboard/administrativos')? 'bg-primary' : '' }}">Gestión de Administrativos</a>
                     </li>
                     @endif
-                    @if ($usuario->administrativo->permisos->contains('permiso_id', 3))
+                    @if ($usuarioSesion->administrativo->permisos->contains('permiso_id', 3))
                     <li>
                         <a href="/dashboard/docentes" class="hover:bg-primary/50 {{ request()->is('dashboard/docentes')? 'bg-primary' : '' }}">Gestión de Docentes</a>
                     </li>
                     @endif
-                    @if ($usuario->administrativo->permisos->contains('permiso_id', 4))
+                    @if ($usuarioSesion->administrativo->permisos->contains('permiso_id', 4))
                     <li>
                         <a href="/dashboard/estudiantes" class="hover:bg-primary/50 {{ request()->is('dashboard/estudiantes') ? 'bg-primary' : '' }}">Gestión de Estudiantes</a>
                     </li>
                     @endif
-                    @if ($usuario->administrativo->permisos->contains('permiso_id', 5))
+                    @if ($usuarioSesion->administrativo->permisos->contains('permiso_id', 5))
                     <li>
                         <a href="/dashboard/cursos" class="hover:bg-primary/50 {{ request()->is('dashboard/cursos') ? 'bg-primary' : '' }}">Gestión de Cursos</a>
                     </li>
                     @endif
-                    @if ($usuario->administrativo->permisos->contains('permiso_id', 6))
+                    @if ($usuarioSesion->administrativo->permisos->contains('permiso_id', 6))
                     <li>
                         <a href="/dashboard/materias" class="hover:bg-primary/50 {{ request()->is('dashboard/materias')? 'bg-primary' : '' }}">Gestión de Materias</a>
                     </li>
                     @endif
-                    @if ($usuario->administrativo->permisos->contains('permiso_id', 7))
+                    @if ($usuarioSesion->administrativo->permisos->contains('permiso_id', 7))
                     <li>
                         <a href="/dashboard/horarios" class="hover:bg-primary/50 {{ request()->is('dashboard/horarios')? 'bg-primary' : '' }}">Gestión de Horarios</a>
                     </li>
                     @endif
-                    @if ($usuario->administrativo->permisos->contains('permiso_id', 8))
+                    @if ($usuarioSesion->administrativo->permisos->contains('permiso_id', 8))
                     <li>
                         <a href="/dashboard/periodos" class="hover:bg-primary/50 {{ request()->is('dashboard/periodos')? 'bg-primary' : '' }}">Gestión de Periodos</a>
                     </li>
                     @endif
-                    @if ($usuario->administrativo->permisos->contains('permiso_id', 9))
+                    @if ($usuarioSesion->administrativo->permisos->contains('permiso_id', 9))
                     <li>
                         <a href="/dashboard/inasistencias" class="hover:bg-primary/50 {{ request()->is('dashboard/inasistencias')? 'bg-primary' : '' }}">Gestión de Inasistencias</a>
                     </li>
                     @endif
-                    @if ($usuario->administrativo->permisos->contains('permiso_id', 10))
+                    @if ($usuarioSesion->administrativo->permisos->contains('permiso_id', 10))
                     <li>
                         <a href="/dashboard/observaciones" class="hover:bg-primary/50 {{ request()->is('dashboard/observaciones')? 'bg-primary' : '' }}">Gestión de Observaciones</a>
                     </li>
                     @endif
-                    @if ($usuario->administrativo->permisos->contains('permiso_id', 11))
+                    @if ($usuarioSesion->administrativo->permisos->contains('permiso_id', 11))
                     <li>
                         <a href="/dashboard/pagos" class="hover:bg-primary/50 {{ request()->is('dashboard/pagos')? 'bg-primary' : '' }}">Gestión de Pagos</a>
                     </li>
@@ -122,7 +130,7 @@
                     @endif
 
                     {{-- Estudiante --}}
-                    @if($usuario->rol_id == 3)
+                    @if($usuarioSesion->rol_id == 3)
                     <li>
                         <a href="/dashboard/matriculas" class="hover:bg-primary/50 {{ request()->is('dashboard/matriculas') ? 'bg-primary' : '' }}">Mi Matrícula</a>
                     </li>
@@ -138,7 +146,7 @@
                     @endif
 
                     {{-- Padre/Madre/Tutor --}}
-                    @if($usuario->rol_id == 5)
+                    @if($usuarioSesion->rol_id == 5)
                     <li>
                         <a href="/dashboard/matriculas" class="hover:bg-primary/50 {{ request()->is('dashboard/matriculas') ? 'bg-primary' : '' }}">Información Académica</a>
                     </li>

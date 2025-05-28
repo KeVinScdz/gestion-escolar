@@ -27,6 +27,11 @@ class Docente extends Model
         return $this->belongsTo(Usuario::class, 'usuario_id', 'usuario_id');
     }
 
+    public function institucion()
+    {
+        return $this->belongsTo(Institucion::class, 'institucion_id', 'institucion_id');
+    }
+
     public function asignaciones()
     {
         return $this->hasMany(Asignacion::class, 'docente_id', 'docente_id');
