@@ -60,6 +60,18 @@ class ViewsController
         return view('app.admin.users', compact('usuario', 'usuarios', 'roles', 'instituciones', 'estudiantes', 'permisos'));
     }
 
+    public function administratives()
+    {
+        $usuario = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
+        $search = request('search');
+
+        $administrativos = Usuario::with('administrativo', 'administrativo.permisos', 'administrativo.institucion', 'rol')->search($search ?? '')->where('rol_id', 2)->whereNot('usuario_id', '=', $usuario->usuario_id)->paginate(10);
+        $permisos = Permiso::all();
+        $institucion = Institucion::where('institucion_id', $usuario->administrativo->institucion_id)->first();
+
+        return view('app.administrative.administratives', compact('usuario', 'administrativos', 'permisos', 'institucion'));
+    }
+
     public function students()
     {
         $usuario = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos', 'administrativo.institucion');

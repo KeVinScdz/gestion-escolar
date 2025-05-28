@@ -31,7 +31,7 @@ Route::middleware(['auth', 'rol:1'])->group(function () {
 
 Route::middleware(['auth', 'rol:2'])->group(function () {
     Route::middleware('permiso:1')->get("/dashboard/institucion", [ViewsController::class, 'institution']);
-    Route::middleware('permiso:2')->get("/dashboard/administrativos", [ViewsController::class, 'administrative']);
+    Route::middleware('permiso:2')->get("/dashboard/administrativos", [ViewsController::class, 'administratives']);
     Route::middleware('permiso:3')->get("/dashboard/docentes", [ViewsController::class, 'teachers']);
     Route::middleware('permiso:4')->get("/dashboard/estudiantes", [ViewsController::class, 'students']);
     Route::middleware('permiso:5')->get("/dashboard/cursos", [ViewsController::class, 'classes']);

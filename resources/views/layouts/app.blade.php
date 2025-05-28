@@ -71,7 +71,7 @@
                     @endif
                     @if ($usuario->administrativo->permisos->contains('permiso_id', 2))
                     <li>
-                        <a href="/dashboard/administrativo" class="hover:bg-primary/50 {{ request()->is('dashboard/administrativo')? 'bg-primary' : '' }}">Gestión de Administrativos</a>
+                        <a href="/dashboard/administrativos" class="hover:bg-primary/50 {{ request()->is('dashboard/administrativos')? 'bg-primary' : '' }}">Gestión de Administrativos</a>
                     </li>
                     @endif
                     @if ($usuario->administrativo->permisos->contains('permiso_id', 3))
