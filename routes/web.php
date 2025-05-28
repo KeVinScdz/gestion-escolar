@@ -34,7 +34,7 @@ Route::middleware(['auth', 'rol:2'])->group(function () {
     Route::middleware('permiso:2')->get("/dashboard/administrativos", [ViewsController::class, 'administratives']);
     Route::middleware('permiso:3')->get("/dashboard/docentes", [ViewsController::class, 'teachers']);
     Route::middleware('permiso:4')->get("/dashboard/estudiantes", [ViewsController::class, 'students']);
-    Route::middleware('permiso:5')->get("/dashboard/cursos", [ViewsController::class, 'classes']);
+    Route::middleware('permiso:5')->get("/dashboard/cursos", [ViewsController::class, 'groups']);
     Route::middleware('permiso:6')->get("/dashboard/materias", [ViewsController::class, 'subjects']);
     Route::middleware('permiso:7')->get("/dashboard/horarios", [ViewsController::class, 'schedules']);
     Route::middleware('permiso:8')->get("/dashboard/periodos", [ViewsController::class, 'periods']);

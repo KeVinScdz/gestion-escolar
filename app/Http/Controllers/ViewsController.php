@@ -151,4 +151,31 @@ class ViewsController
 
         return view('app.administrative.periods', compact('usuarioSesion', 'periodos', 'availableYears', 'selectedYear'));
     }
+
+    public function groups()
+    {
+        $usuarioSesion = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
+        $institucion_id = $usuarioSesion->administrativo->institucion_id;
+
+
+        $grupos = Grupo::with('grado', 'grado.nivel')
+            ->where('institucion_id', $institucion_id)
+            ->paginate(10);
+
+        $availableYears = PeriodoAcademico::where('institucion_id', $institucion_id)
+            ->select('periodo_academico_año as year')
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year');
+
+        $selectedYear = request('year_filter');
+
+        if ($selectedYear) {
+            $grupos = $grupos->where('grupo_año', $selectedYear);
+        }
+
+        $grados = Grado::with('nivel')->get();
+
+        return view('app.administrative.groups', compact('usuarioSesion', 'grupos', 'grados', 'availableYears', 'selectedYear'));
+    }
 }
