@@ -47,6 +47,28 @@ class create_info extends Seeder
             ['permiso_id' => 11, 'permiso_nombre' => 'gestionar_pagos'],
         ]);
 
+        DB::table('niveles')->insert([
+            ['nivel_id' => 1, 'nivel_nombre' => 'Preescolar'],
+            ['nivel_id' => 2, 'nivel_nombre' => 'Primaria'],
+            ['nivel_id' => 3, 'nivel_nombre' => 'Secundaria'],
+            ['nivel_id' => 4, 'nivel_nombre' => 'bachillerato'],
+        ]);
+
+        DB::table('grados')->insert([
+            ['grado_id' => 1, 'grado_nombre' => 'Preescolar', 'nivel_id' => 1],
+            ['grado_id' => 2, 'grado_nombre' => 'primero', 'nivel_id' => 2],
+            ['grado_id' => 3, 'grado_nombre' => 'segundo', 'nivel_id' => 2],
+            ['grado_id' => 4, 'grado_nombre' => 'tercero', 'nivel_id' => 2],
+            ['grado_id' => 5, 'grado_nombre' => 'cuarto', 'nivel_id' => 2],
+            ['grado_id' => 6, 'grado_nombre' => 'quinto', 'nivel_id' => 2],
+            ['grado_id' => 7, 'grado_nombre' => 'sexto', 'nivel_id' => 3],
+            ['grado_id' => 8, 'grado_nombre' => 'séptimo', 'nivel_id' => 3],
+            ['grado_id' => 9, 'grado_nombre' => 'octavo', 'nivel_id' => 3],
+            ['grado_id' => 10, 'grado_nombre' => 'noveno', 'nivel_id' => 3],
+            ['grado_id' => 11, 'grado_nombre' => 'décimo', 'nivel_id' => 4],
+            ['grado_id' => 12, 'grado_nombre' => 'undécimo', 'nivel_id' => 4],
+        ]);
+
         DB::table('instituciones')->insert([
             [
                 'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
@@ -108,6 +130,73 @@ class create_info extends Seeder
                 'created_at' => now(),
                 'updated_at' => null,
             ],
+        ]);
+
+        DB::table('periodos_academicos')->insert([
+            [
+                'periodo_academico_id' => '01971778-0bd8-73ea-8a02-3f88f0dee1c1',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'periodo_academico_nombre' => '2025-I',
+                'periodo_academico_año' => 2025,
+                'periodo_academico_inicio' => '2025-01-06',
+                'periodo_academico_fin' => '2025-03-28',
+            ],
+            [
+                'periodo_academico_id' => '01971778-0c07-76cf-a465-ed1fe44f04eb',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'periodo_academico_nombre' => '2025-II',
+                'periodo_academico_año' => 2025,
+                'periodo_academico_inicio' => '2025-04-07',
+                'periodo_academico_fin' => '2025-06-27',
+            ],
+            [
+                'periodo_academico_id' => '01971778-0c0f-74db-ba8f-360c46f4b9f5',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'periodo_academico_nombre' => '2025-III',
+                'periodo_academico_año' => 2025,
+                'periodo_academico_inicio' => '2025-07-14',
+                'periodo_academico_fin' => '2025-10-03',
+            ],
+            [
+                'periodo_academico_id' => '01971778-0c18-7515-a91e-8dbbb53f3dcb',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'periodo_academico_nombre' => '2025-IV',
+                'periodo_academico_año' => 2025,
+                'periodo_academico_inicio' => '2025-10-13',
+                'periodo_academico_fin' => '2025-12-19',
+            ],
+            [
+                'periodo_academico_id' => '0197177c-0232-7788-8f7f-839a61991958',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'periodo_academico_nombre' => '2026-I',
+                'periodo_academico_año' => 2026,
+                'periodo_academico_inicio' => '2026-01-05',
+                'periodo_academico_fin' => '2026-03-27',
+            ],
+            [
+                'periodo_academico_id' => '0197177c-0231-720f-ba01-b758b68052c2',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'periodo_academico_nombre' => '2026-II',
+                'periodo_academico_año' => 2026,
+                'periodo_academico_inicio' => '2026-04-06',
+                'periodo_academico_fin' => '2026-06-26',
+            ],
+            [
+                'periodo_academico_id' => '0197177c-022b-71ed-a538-3fef329797e1',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'periodo_academico_nombre' => '2026-III',
+                'periodo_academico_año' => 2026,
+                'periodo_academico_inicio' => '2026-07-13',
+                'periodo_academico_fin' => '2026-10-02',
+            ],
+            [
+                'periodo_academico_id' => '0197177c-01f7-7149-af9c-b105e08debf5',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'periodo_academico_nombre' => '2026-IV',
+                'periodo_academico_año' => 2026,
+                'periodo_academico_inicio' => '2026-10-13',
+                'periodo_academico_fin' => '2026-12-18',
+            ]
         ]);
     }
 }

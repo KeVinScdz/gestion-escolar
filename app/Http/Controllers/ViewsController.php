@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Estudiante;
 use App\Models\Institucion;
+use App\Models\PeriodoAcademico;
 use App\Models\Permiso;
 use App\Models\Rol;
 use App\Models\Usuario;
@@ -121,5 +122,35 @@ class ViewsController
             ->search($search ?? '')->paginate(10);
 
         return view('app.administrative.students', compact('usuarioSesion', 'estudiantes'));
+    }
+
+    public function periods()
+    {
+        $usuarioSesion = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
+
+        $institucion_id = $usuarioSesion->administrativo->institucion_id;
+
+        // Obtener todos los años únicos de los periodos académicos para el filtro
+        $availableYears = PeriodoAcademico::where('institucion_id', $institucion_id)
+            ->select('periodo_academico_año as year') // Seleccionar directamente la columna
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year');
+
+        $selectedYear = request('year_filter');
+
+        $query = PeriodoAcademico::where('institucion_id', $institucion_id);
+
+        if ($selectedYear) {
+            // Filtrar directamente por la columna 'periodo_academico_año'
+            $query->where('periodo_academico_año', $selectedYear);
+        }
+
+        // Ordenar por año y luego por fecha de inicio para un orden más lógico si hay múltiples periodos en un año
+        $periodos = $query->orderBy('periodo_academico_año', 'desc')
+                           ->orderBy('periodo_academico_inicio', 'asc') 
+                           ->get();
+
+        return view('app.administrative.periods', compact('usuarioSesion', 'periodos', 'availableYears', 'selectedYear'));
     }
 }
