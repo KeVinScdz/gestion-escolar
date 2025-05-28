@@ -60,6 +60,15 @@ class ViewsController
         return view('app.admin.users', compact('usuario', 'usuarios', 'roles', 'instituciones', 'estudiantes', 'permisos'));
     }
 
+    public function institution()
+    {
+        $usuario = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
+
+        $institucion = Institucion::where('institucion_id', $usuario->administrativo->institucion_id)->first();
+
+        return view('app.administrative.institution', compact('usuario', 'institucion'));
+    }
+
     public function administratives()
     {
         $usuario = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');

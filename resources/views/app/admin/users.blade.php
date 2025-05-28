@@ -9,7 +9,7 @@ $usuarioSesion = $usuario;
 @section('content')
 <section class="container mx-auto px-4 py-6 space-y-5">
     <div class="flex justify-between items-center">
-        <h1 class="text-2xl font-bold text-gray-800 flex-1">Usuarios Registrados</h1>
+        <h1 class="text-2xl font-bold flex-1">Usuarios Registrados</h1>
         <div class="flex items-center justify-end gap-5">
             <form method="get" class="flex gap-2">
                 <label class="input">
@@ -65,7 +65,7 @@ $usuarioSesion = $usuario;
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="4" class="text-center px-6 py-4 text-gray-500">No hay usuarios registrados.</td>
+                    <td colspan="4" class="text-center px-6 py-4 text-base-content/50">No hay usuarios registrados.</td>
                 </tr>
                 @endforelse
             </tbody>

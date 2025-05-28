@@ -1,6 +1,6 @@
 @if ($paginator->hasPages())
 <div class="flex items-center justify-between bg-base-200 border border-base-300 rounded-lg px-4 py-2 mt-4">
-    <div class="text-sm text-gray-700">
+    <div class="text-sm">
         @php
         $from = ($paginator->currentPage() - 1) * $paginator->perPage() + 1;
         $to = min($paginator->currentPage() * $paginator->perPage(), $paginator->total());

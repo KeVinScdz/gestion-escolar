@@ -74,7 +74,7 @@ return new class extends Migration
         Schema::create('instituciones', function (Blueprint $table) {
             $table->uuid('institucion_id');
             $table->string('institucion_nombre');
-            $table->decimal('institucion_telefono', 10, 0);
+            $table->decimal('institucion_telefono', 10, 0)->unique();
             $table->string('institucion_correo')->unique();
             $table->string('institucion_direccion');
             $table->string('institucion_nit')->unique();
