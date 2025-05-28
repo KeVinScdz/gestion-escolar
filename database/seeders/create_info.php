@@ -198,6 +198,7 @@ class create_info extends Seeder
                 'periodo_academico_fin' => '2026-12-18',
             ]
         ]);
+
         DB::table('grupos')->insert([
             // Transición (grado_id = 1)
             [
@@ -419,6 +420,134 @@ class create_info extends Seeder
                 'grupo_nombre' => 'Undécimo B',
                 'grupo_cupo' => 30,
                 'grupo_año' => 2025
+            ],
+        ]);
+
+        DB::table('materias')->insert([
+            [
+                'materia_id' => '019717d5-0046-772b-b23f-e9c9b2336a63',
+                'materia_nombre' => 'Matemáticas',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+            ],
+            [
+                'materia_id' => '019717d5-00b3-7770-b526-9279e5056c62',
+                'materia_nombre' => 'Álgebra',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+            ],
+            [
+                'materia_id' => '019717d5-00c9-716c-bdb8-4bb32d70217e',
+                'materia_nombre' => 'Geometría',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+            ],
+            [
+                'materia_id' => '019717d5-00cf-7320-a363-d3a254fdf7e1',
+                'materia_nombre' => 'Trigonometría',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+            ],
+            [
+                'materia_id' => '019717d5-00dd-773d-b09a-b3c1df947445',
+                'materia_nombre' => 'Cálculo',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+            ],
+            [
+                'materia_id' => '019717d5-00df-752a-91a0-1c251cc69836',
+                'materia_nombre' => 'Español y Literatura',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+            ],
+            [
+                'materia_id' => '019717d5-00e3-7452-9163-e6c495bacb5c',
+                'materia_nombre' => 'Inglés',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+            ],
+            [
+                'materia_id' => '019717d5-00f5-703b-8c23-e0f2bdaab74a',
+                'materia_nombre' => 'Física',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+            ],
+            [
+                'materia_id' => '019717d5-0101-745a-aeff-a5bf6dde15e4',
+                'materia_nombre' => 'Química',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+            ],
+            [
+                'materia_id' => '019717d5-0110-71ca-bf4c-0d3141f41e07',
+                'materia_nombre' => 'Biología',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+            ],
+            [
+                'materia_id' => '019717d5-0112-7371-b580-863a91da32c6',
+                'materia_nombre' => 'Ciencias Naturales',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+            ],
+            [
+                'materia_id' => '019717d5-0114-7069-898b-47696dd7a6e8',
+                'materia_nombre' => 'Ciencias Sociales',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+            ],
+            [
+                'materia_id' => '019717d5-012f-726c-a168-3cc4e5063aca',
+                'materia_nombre' => 'Historia',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+            ],
+            [
+                'materia_id' => '019717d5-0132-7279-9860-266f43ea7c13',
+                'materia_nombre' => 'Geografía',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+            ],
+            [
+                'materia_id' => '019717d5-0153-73cc-ac95-eb6a089210c0',
+                'materia_nombre' => 'Filosofía',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+            ],
+            [
+                'materia_id' => '019717d5-0167-7158-adb6-19f8e70498a9',
+                'materia_nombre' => 'Ética y Valores',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+            ],
+            [
+                'materia_id' => '019717d5-0169-708b-9fa1-484cd44f3e81',
+                'materia_nombre' => 'Religión',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+            ],
+            [
+                'materia_id' => '019717d5-016b-764f-9722-d2b4df7494aa',
+                'materia_nombre' => 'Educación Física',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+            ],
+            [
+                'materia_id' => '019717d5-016d-7649-a82d-7c291118fde3',
+                'materia_nombre' => 'Educación Artística',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+            ],
+            [
+                'materia_id' => '019717d5-0181-74b8-9c0f-ec8b1f203860',
+                'materia_nombre' => 'Música',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+            ],
+            [
+                'materia_id' => '019717d5-019e-736d-925d-46c5def67350',
+                'materia_nombre' => 'Tecnología e Informática',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+            ],
+            [
+                'materia_id' => '019717d5-01ac-702d-9452-a663b1a9fe3c',
+                'materia_nombre' => 'Cátedra para la Paz',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+            ],
+            [
+                'materia_id' => '019717d5-01ae-77e8-8513-50098114301d',
+                'materia_nombre' => 'Lectura Crítica',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+            ],
+            [
+                'materia_id' => '019717d5-01af-75bc-bc9d-9757e89f8df5',
+                'materia_nombre' => 'Gestión Empresarial',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
+            ],
+            [
+                'materia_id' => '019717d5-01b2-700d-af91-f0f91548c706',
+                'materia_nombre' => 'Ciencias Políticas y Económicas',
+                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137'
             ],
         ]);
     }

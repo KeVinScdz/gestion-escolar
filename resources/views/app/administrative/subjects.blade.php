@@ -34,7 +34,7 @@
                 </tbody>
             </table>
         </div>
-        {{ $materias->links() }}
+        {{ $materias->links('components.pagination') }}
         @else
         <p>No hay materias registradas para esta institución.</p>
         @endif
