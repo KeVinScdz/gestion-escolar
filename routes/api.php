@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\UsuarioController;
 use App\Http\Controllers\Api\InstitucionController;
+use App\Http\Controllers\Api\AcademicStructureController;
 
 // User Routes
 Route::get('/users', [UsuarioController::class, 'index']);
@@ -16,3 +17,13 @@ Route::delete('/users/{id}', [UsuarioController::class, 'destroy']);
 Route::post('/institutions', [InstitucionController::class, 'store']);
 Route::put('/institutions/{id}', [InstitucionController::class, 'update']);
 Route::delete('/institutions/{id}', [InstitucionController::class, 'destroy']);
+
+// Periods Routes
+Route::post('/periods', [AcademicStructureController::class, 'storePeriod']);
+Route::put('/periods/{id}', [AcademicStructureController::class, 'updatePeriod']);
+Route::delete('/periods/{id}', [AcademicStructureController::class, 'destroyPeriod']);
+
+// Courses Routes
+Route::post('/courses', [AcademicStructureController::class, 'storeCourse']);
+Route::put('/courses/{id}', [AcademicStructureController::class, 'updateCourse']);
+Route::delete('/courses/{id}', [AcademicStructureController::class, 'destroyCourse']);

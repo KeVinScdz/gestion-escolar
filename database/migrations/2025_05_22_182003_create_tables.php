@@ -106,6 +106,7 @@ return new class extends Migration
             $table->unsignedBigInteger('grado_id');
             $table->uuid('institucion_id');
             $table->string('grupo_nombre');
+            $table->numeric('grupo_cupo');
             $table->unsignedBigInteger('grupo_año');
             $table->timestamps();
         });
