@@ -27,3 +27,8 @@ Route::delete('/periods/{id}', [AcademicStructureController::class, 'destroyPeri
 Route::post('/groups', [AcademicStructureController::class, 'storeGroup']);
 Route::put('/groups/{id}', [AcademicStructureController::class, 'updateGroup']);
 Route::delete('/groups/{id}', [AcademicStructureController::class, 'destroyGroup']);
+
+// Subjects Routes
+Route::post('/subjects', [AcademicStructureController::class, 'storeSubject']);
+Route::put('/subjects/{id}', [AcademicStructureController::class, 'updateSubject']);
+Route::delete('/subjects/{id}', [AcademicStructureController::class, 'destroySubject']);

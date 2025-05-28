@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\PeriodoAcademico;
 use App\Models\Grupo;
+use App\Models\Materia;
 
 class AcademicStructureController
 {
@@ -218,6 +219,90 @@ class AcademicStructureController
             return response()->json([
                 'success' => false,
                 'message' => 'Error al eliminar el grupo: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function storeSubject(Request $request)
+    {
+        try {
+            $request->validate(
+                [
+                    'materia_nombre' => 'required|string',
+                    'institucion_id' => 'required|exists:instituciones,institucion_id',
+                ]
+            );
+
+            $subject = Materia::create($request->all());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Materia creada con éxito',
+                'data' => $subject,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear la materia: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function updateSubject(Request $request, $id)
+    {
+        try {
+            $request->validate(
+                [
+                    'materia_nombre' => 'required|string',
+                ]
+            );
+
+            $subject = Materia::find($id);
+
+            if (!$subject) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Materia no encontrada',
+                ], 404);
+            }
+
+            $subject->update($request->all());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Materia actualizada con éxito',
+                'data' => $subject,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar la materia: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function destroySubject($id)
+    {
+        try {
+            $subject = Materia::find($id);
+
+            if (!$subject) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Materia no encontrada',
+                ], 404);
+            }
+
+            $subject->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Materia eliminada con éxito',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al eliminar la materia: ' . $e->getMessage(),
             ], 500);
         }
     }

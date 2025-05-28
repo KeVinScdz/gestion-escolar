@@ -9,6 +9,7 @@ use App\Models\Estudiante;
 use App\Models\Grado;
 use App\Models\Grupo;
 use App\Models\Institucion;
+use App\Models\Materia;
 use App\Models\PeriodoAcademico;
 use App\Models\Permiso;
 use App\Models\Rol;
@@ -177,5 +178,15 @@ class ViewsController
         $grados = Grado::with('nivel')->get();
 
         return view('app.administrative.groups', compact('usuarioSesion', 'grupos', 'grados', 'availableYears', 'selectedYear'));
+    }
+
+    public function subjects()
+    {
+        $usuarioSesion = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
+        $institucion_id = $usuarioSesion->administrativo->institucion_id;
+
+        $materias = Materia::where('institucion_id', $institucion_id)->paginate(10);
+
+        return view('app.administrative.subjects', compact('usuarioSesion', 'materias'));
     }
 }
