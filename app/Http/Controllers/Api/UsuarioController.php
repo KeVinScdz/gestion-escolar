@@ -196,11 +196,33 @@ class UsuarioController
                     ]);
                 }
 
-                $permisos = $request->input('permisos', []);
+                if ($request->has('administrativo_cargo')) {
+                    $administrativo->update([
+                        'administrativo_cargo' => $request->input('administrativo_cargo'),
+                    ]);
+                }
 
+                $permisos = $request->input('permisos', []);
                 $administrativo->permisos()->sync($permisos);
             }
 
+            if ($usuario->rol_id == 3) {
+                $docente = Docente::where('usuario_id', $usuario->usuario_id)->first(); 
+
+                if (!$docente) {
+                    DB::rollBack();
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Docente no encontrado',
+                    ]);
+                }
+
+                if ($request->has('docente_titulo')) {
+                    $docente->update([
+                        'docente_titulo' => $request->input('docente_titulo'),
+                    ]);
+                }
+            }
             $usuario->update($request->all());
 
             DB::commit();

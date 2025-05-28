@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Gestión administrativos')
+@section('title', 'Gestión docentes')
 
 @php
 $usuarioSesion = $usuario;
@@ -10,7 +10,7 @@ $usuarioSesion = $usuario;
 <section class="w-full">
     <div class="w-full max-w-[1200px] mx-auto py-10 space-y-10">
         <div class="flex justify-between items-center gap-10">
-            <h1 class="text-2xl font-bold flex-1 tracking-tight">Administrativos {{ $institucion -> institucion_nombre }} </h1>
+            <h1 class="text-2xl font-bold flex-1 tracking-tight">Docentes {{ $institucion -> institucion_nombre }} </h1>
             <div class="flex items-center justify-end gap-5">
                 <form method="get" class="flex gap-2">
                     <label class="input">
@@ -23,13 +23,13 @@ $usuarioSesion = $usuario;
                         <input type="search" name="search" placeholder="Buscar" value="{{ request('search') }}" />
                     </label>
                     @if(request('search'))
-                    <a href="/dashboard/administrativos" class="btn btn-error text-white bg-red-500 btn-sm">
+                    <a href="/dashboard/docentes" class="btn btn-error text-white bg-red-500 btn-sm">
                         <i class="fa-solid fa-arrows-rotate"></i>
                     </a>
                     @endif
                 </form>
                 <a onclick="document.getElementById('create-user').show()" class="btn btn-primary">
-                    + Nuevo Administrador
+                    + Nuevo Docente
                 </a>
             </div>
         </div>
@@ -45,22 +45,22 @@ $usuarioSesion = $usuario;
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($administrativos as $administrativo)
+                    @forelse($docentes as $docente)
                     <tr>
-                        <td class="px-6 py-4">{{ $administrativo->usuario_nombre }} {{ $administrativo->usuario_apellido }}</td>
-                        <td class="px-6 py-4">{{ $administrativo->usuario_correo }}</td>
-                        <td class="px-6 py-4">{{ $administrativo->rol->rol_nombre }}</td>
-                        <td class="px-6 py-4 capitalize">{{ $administrativo->administrativo->administrativo_cargo }}</td>
+                        <td class="px-6 py-4">{{ $docente->usuario_nombre }} {{ $docente->usuario_apellido }}</td>
+                        <td class="px-6 py-4">{{ $docente->usuario_correo }}</td>
+                        <td class="px-6 py-4">{{ $docente->rol->rol_nombre }}</td>
+                        <td class="px-6 py-4 capitalize">{{ $docente->docente->docente_titulo }}</td>
                         <td class="px-6 py-4 flex gap-2">
                             <button
-                                onclick="openEditUserModal('{{ $administrativo->usuario_id }}', '{{ json_encode($administrativo) }}')"
-                                {{ $administrativo->usuario_id == $usuarioSesion->usuario_id ? 'disabled' : '' }}
+                                onclick="openEditUserModal('{{ $docente->usuario_id }}', '{{ json_encode($docente) }}')"
+                                {{ $docente->usuario_id == $usuarioSesion->usuario_id ? 'disabled' : '' }}
                                 class="btn btn-sm py-1 btn-primary">
                                 Editar
                             </button>
                             <button
-                                onclick="deleteUser('{{ $administrativo->usuario_id }}')"
-                                {{ $administrativo->usuario_id == $usuarioSesion->usuario_id ? 'disabled' : '' }}
+                                onclick="deleteUser('{{ $docente->usuario_id }}')"
+                                {{ $docente->usuario_id == $usuarioSesion->usuario_id ? 'disabled' : '' }}
                                 class="btn btn-sm py-1 btn-error">
                                 Eliminar
                             </button>
@@ -75,13 +75,13 @@ $usuarioSesion = $usuario;
             </table>
         </div>
 
-        {{ $administrativos->links('components.pagination') }}
+        {{ $docentes->links('components.pagination') }}
 
         <dialog id="create-user" class="modal">
             <div class="modal-box">
-                <h3 class="text-lg font-bold mb-4">Crear Nuevo Administrativo</h3>
+                <h3 class="text-lg font-bold mb-4">Crear Nuevo Docente</h3>
                 <form class="upload-form space-y-2" data-target="/api/users" data-reset="true" data-method="post" data-reload="true" data-show-alert="true">
-                    <input type="hidden" name="rol_id" value="2">
+                    <input type="hidden" name="rol_id" value="3">
                     <input type="hidden" name="institucion_id" value="{{ $institucion->institucion_id }}">
 
                     {{-- User Fields --}}
@@ -128,23 +128,11 @@ $usuarioSesion = $usuario;
                         <input type="password" id="usuario_contra" name="usuario_contra" class="input input-bordered w-full">
                     </fieldset>
 
-                    {{-- Administrativo Fields --}}
+                    {{-- Docente Fields --}}
                     <fieldset class="w-full fieldset">
-                        <label class="fieldset-label after:content-['*'] after:text-red-500" for="administrativo_cargo">Cargo:</label>
-                        <input id="administrativo_cargo" name="administrativo_cargo" class="input input-bordered w-full" value="{{ old('administrativo_cargo') }}">
+                        <label class="fieldset-label after:content-['*'] after:text-red-500" for="docente_titulo">Especialidad:</label>
+                        <input id="docente_titulo" name="docente_titulo" class="input input-bordered w-full" value="{{ old('docente_titulo') }}">
                     </fieldset>
-
-                    <div class="w-full fieldset">
-                        <label class="fieldset-label after:content-['*'] after:text-red-500" for="administrativo_permisos">Permisos:</label>
-                        <div class="grid grid-cols-2 gap-1">
-                            @foreach($permisos as $permiso)
-                            <label class="label">
-                                <input type="checkbox" name="permisos[]" value="{{ $permiso->permiso_id }}" class="checkbox checkbox-sm" />
-                                {{ $permiso->permiso_nombre }}
-                            </label>
-                            @endforeach
-                        </div>
-                    </div>
 
                     <div class="mt-4 flex justify-end">
                         <button type="submit" class="btn btn-primary">Crear</button>
@@ -204,21 +192,10 @@ $usuarioSesion = $usuario;
                         <input type="password" id="edit_usuario_contra" name="usuario_contra" class="input input-bordered w-full">
                     </fieldset>
 
-                    {{-- Administrativo Fields --}}
-                    <fieldset id="edit_administrativo_fieldset" class="w-full fieldset">
-                        <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_administrativo_cargo">Cargo:</label>
-                        <input id="edit_administrativo_cargo" name="administrativo_cargo" class="input input-bordered w-full">
-                    </fieldset>
-                    <fieldset id="edit_administrativo_fieldset" class="w-full fieldset">
-                        <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_administrativo_cargo">Permisos:</label>
-                        <div class="grid grid-cols-2 gap-1">
-                            @foreach($permisos as $permiso)
-                            <label class="label">
-                                <input type="checkbox" name="permisos[]" value="{{ $permiso->permiso_id }}" class="checkbox checkbox-sm" />
-                                {{ $permiso->permiso_nombre }}
-                            </label>
-                            @endforeach
-                        </div>
+                    {{-- Docente Fields --}}
+                    <fieldset class="w-full fieldset">
+                        <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_docente_titulo">Especialidad:</label>
+                        <input id="edit_docente_titulo" name="docente_titulo" class="input input-bordered w-full">
                     </fieldset>
 
                     <div class="mt-4 flex justify-end">
@@ -252,15 +229,9 @@ $usuarioSesion = $usuario;
         document.getElementById('edit_usuario_documento').value = usuario.usuario_documento;
         document.getElementById('edit_usuario_nacimiento').value = usuario.usuario_nacimiento;
         document.getElementById('edit_usuario_direccion').value = usuario.usuario_direccion;
-        document.getElementById('edit_administrativo_cargo').value = usuario.administrativo.administrativo_cargo;
+        document.getElementById('edit_docente_titulo').value = usuario.docente.docente_titulo;
 
         document.querySelector('#edit-user form').dataset.target = '/api/users/' + id;
-
-        const permisos = usuario.administrativo.permisos.map(permiso => permiso.permiso_id);
-        permisos.forEach(permiso_id => {
-            document.querySelector(`#edit-user input[value="${permiso_id}"]`).checked = true;
-        });
-
         document.getElementById('edit-user').show();
     }
 

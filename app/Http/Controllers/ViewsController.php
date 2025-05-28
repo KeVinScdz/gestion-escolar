@@ -74,11 +74,37 @@ class ViewsController
         $usuario = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
         $search = request('search');
 
-        $administrativos = Usuario::with('administrativo', 'administrativo.permisos', 'administrativo.institucion', 'rol')->search($search ?? '')->where('rol_id', 2)->whereNot('usuario_id', '=', $usuario->usuario_id)->paginate(10);
+        $administrativos = Usuario::with('administrativo', 'administrativo.permisos', 'administrativo.institucion', 'rol')
+            ->search($search ?? '')
+            ->where('rol_id', 2)->whereNot('usuario_id', '=', $usuario->usuario_id)
+            ->whereHas('administrativo', function ($query) use ($usuario) {
+                $query->where('institucion_id', $usuario->administrativo->institucion_id);
+            })
+            ->paginate(10);
+
         $permisos = Permiso::all();
         $institucion = Institucion::where('institucion_id', $usuario->administrativo->institucion_id)->first();
 
         return view('app.administrative.administratives', compact('usuario', 'administrativos', 'permisos', 'institucion'));
+    }
+
+    public function teachers()
+    {
+        $usuario = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
+        $search = request('search');
+
+        $docentes = Usuario::with('docente', 'rol')
+            ->search($search ?? '')
+            ->where('rol_id', 3)
+            ->whereHas('docente', function ($query) use ($usuario) {
+                $query->where('institucion_id', $usuario->administrativo->institucion_id);
+            })
+            ->paginate(10);
+
+        $institucion = Institucion::where('institucion_id', $usuario->administrativo->institucion_id)->first();
+
+
+        return view('app.administrative.teachers', compact('usuario', 'docentes', 'institucion'));
     }
 
     public function students()
