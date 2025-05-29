@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Asignacion;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use App\Models\Docente;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Estudiante;
@@ -160,10 +160,13 @@ class ViewsController
         $usuarioSesion = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
         $institucion_id = $usuarioSesion->administrativo->institucion_id;
 
-
-        $grupos = Grupo::with('grado', 'grado.nivel')
+        $grupos = Grupo::with('grado', 'grado.nivel', 'asignaciones')
             ->where('institucion_id', $institucion_id)
             ->paginate(10);
+
+        $materias = Materia::where('institucion_id', $institucion_id)->get();
+
+        $docentes = Docente::where('institucion_id', $institucion_id)->get();
 
         $availableYears = PeriodoAcademico::where('institucion_id', $institucion_id)
             ->select('periodo_academico_año as year')
@@ -179,7 +182,7 @@ class ViewsController
 
         $grados = Grado::with('nivel')->get();
 
-        return view('app.administrative.groups', compact('usuarioSesion', 'grupos', 'grados', 'availableYears', 'selectedYear'));
+        return view('app.administrative.groups', compact('usuarioSesion', 'grupos', 'grados', 'materias', 'docentes', 'availableYears', 'selectedYear'));
     }
 
     public function subjects()

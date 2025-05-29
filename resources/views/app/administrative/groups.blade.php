@@ -51,6 +51,7 @@
                         <td class="space-x-2">
                             <button class="btn btn-sm py-1 btn-primary" onclick="openEditGroupModal('{{ $grupo->grupo_id }}', '{{ json_encode($grupo) }}')">Editar</button>
                             <button class="btn btn-sm py-1 btn-error" onclick="confirmDeleteGroup('{{ $grupo->grupo_id }}')">Eliminar</button>
+                            <button class="btn btn-sm py-1 btn-primary btn-outline" onclick="openAssignSubjectsModal('{{ $grupo->grupo_id,  }}', '{{ json_encode($grupo) }}')">Asignar Materias</button>
                         </td>
                     </tr>
                     @endforeach
@@ -147,6 +148,49 @@
 <form id="delete-group-form" class="upload-form hidden" data-target="/api/groups/{id}" data-method="delete" data-reload="true" data-show-alert="true">
     <button type="submit">Eliminar</button>
 </form>
+
+<!-- Assing Subjects Modal -->
+<dialog id="assing-subjects-modal" class="modal" data-method="put" data-debug="true" data-reload="true">
+    <div class="modal-box max-w-2xl">
+        <h3 class="font-bold text-xl mb-4">Asignar Materias al Grupo</h3>
+
+        <form data-target="/api/groups/{id}/assignments" class="upload-form space-y-4" data-method="put" data-debug="true" data-show-alert="true" data-reload="true">
+            <div id="materia_asignaciones"></div>
+
+            <div class="flex justify-between items-center">
+                <button type="button" class="btn btn-secondary" onclick="agregarAsignacion()">+ Otra Materia</button>
+                <div>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn" onclick="document.getElementById('assing-subjects-modal').close()">Cancelar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <form method="dialog" class="modal-backdrop"><button>close</button></form>
+</dialog>
+
+<template id="asignacion-template">
+    <div class="asignacion flex gap-3 items-center mb-2">
+        <select name="materias[]" class="select select-bordered w-full" required>
+            <option value="">Selecciona una materia</option>
+            @foreach($materias as $materia)
+            <option value="{{ $materia->materia_id }}">{{ $materia->materia_nombre }}</option>
+            @endforeach
+        </select>
+
+        <select name="docentes[]" class="select select-bordered w-full" required>
+            <option value="">Selecciona un docente</option>
+            @foreach($docentes as $docente)
+            <option value="{{ $docente->docente_id }}">
+                {{ substr($docente->usuario->usuario_documento, 0, 5) }} - {{ $docente->usuario->usuario_nombre }} {{ $docente->usuario->usuario_apellido }}
+            </option>
+            @endforeach
+        </select>
+
+        <button type="button" class="btn btn-sm btn-error" onclick="eliminarAsignacion(this)">✕</button>
+    </div>
+</template>
+
 @endsection
 
 @section('scripts')
@@ -180,6 +224,73 @@
 
             document.querySelector('#delete-group-form').setAttribute('data-target', `/api/groups/${grupoId}`);
             document.querySelector('#delete-group-form button').click();
+        });
+    }
+
+    function openAssignSubjectsModal(grupoId, grupoJSONString) {
+        const $form = document.querySelector('#assing-subjects-modal form');
+        $form.setAttribute('data-target', `/api/groups/${grupoId}/assignments`);
+
+        const grupo = JSON.parse(grupoJSONString);
+        const assignments = grupo.asignaciones || [];
+
+        const $contenedor = document.getElementById('materia_asignaciones');
+        $contenedor.innerHTML = '';
+
+        if (assignments.length > 0) {
+            assignments.forEach(assignment => {
+                const nuevaAsignacion = agregarAsignacion(assignment.materia_id, assignment.docente_id);
+            });
+        } else {
+            agregarAsignacion();
+        }
+
+        document.getElementById('assing-subjects-modal').show();
+    }
+
+    function agregarAsignacion(materiaId, docenteId) {
+        const $contenedor = document.getElementById('materia_asignaciones');
+        const nuevaAsignacion = document.getElementById('asignacion-template').content.cloneNode(true);
+
+        if (materiaId && docenteId) {
+            nuevaAsignacion.querySelector('select[name="materias[]"]').value = materiaId;
+            nuevaAsignacion.querySelector('select[name="docentes[]"]').value = docenteId;
+        }
+
+        $contenedor.appendChild(nuevaAsignacion);
+        actualizarOpcionesMaterias();
+    }
+
+    function eliminarAsignacion(btn) {
+        const $contenedor = document.getElementById('materia_asignaciones');
+        if ($contenedor.children.length > 1) {
+            btn.parentElement.remove();
+        }
+    }
+
+    document.addEventListener('change', function(e) {
+        if (e.target && e.target.name === 'materias[]') {
+            actualizarOpcionesMaterias();
+        }
+    });
+
+    function actualizarOpcionesMaterias() {
+        const selects = document.querySelectorAll('select[name="materias[]"]');
+        const seleccionadas = Array.from(selects)
+            .map(select => select.value)
+            .filter(val => val !== '');
+
+        selects.forEach(select => {
+            const opciones = select.querySelectorAll('option');
+            opciones.forEach(opcion => {
+                if (opcion.value === '') return;
+
+                opcion.hidden = false;
+
+                if (seleccionadas.includes(opcion.value) && opcion.value !== select.value) {
+                    opcion.hidden = true;
+                }
+            });
         });
     }
 </script>

@@ -23,8 +23,11 @@ $forms.forEach(($form) => {
         const $showAlert = $form.getAttribute("data-show-alert") === "true";
         const $reload = $form.getAttribute("data-reload") === "true";
         const $reset = $form.getAttribute("data-reset") === "true";
+        const $debug = $form.getAttribute("data-debug") === "true";
         const $redirect = $form.getAttribute("data-redirect");
         const $callback = $form.getAttribute("data-callback");
+
+        if ($debug) console.log(data);
 
         // send request
         const response = await fetch($target, {
