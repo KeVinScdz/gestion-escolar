@@ -40,4 +40,9 @@ class Grupo extends Model
     {
         return $this->hasMany(Horario::class, 'grupo_id', 'grupo_id');
     }
+
+    public function asignaciones()
+    {
+        return $this->hasMany(Asignacion::class, 'grupo_id', 'grupo_id');
+    }
 }

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 use App\Models\PeriodoAcademico;
 use App\Models\Grupo;
 use App\Models\Materia;
+use App\Models\Asignacion;
 
 class AcademicStructureController
 {
@@ -194,6 +196,80 @@ class AcademicStructureController
                 'success' => false,
                 'message' => 'Error al actualizar el grupo: ' . $e->getMessage(),
             ], 500);
+        }
+    }
+
+    public function updateGroupAssignments(Request $request, $id)
+    {
+        try {
+            DB::beginTransaction();
+
+            $group = Grupo::find($id);
+
+            if (!$group) {
+                DB::rollBack();
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Grupo no encontrado',
+                ], 404);
+            }
+
+            $materias = $request->input('materias');
+            $docentes = $request->input('docentes');
+
+            $nuevasAsignaciones = [];
+
+            foreach ($materias as $index => $materia_id) {
+                $docente_id = $docentes[$index];
+
+                $nuevasAsignaciones[] = [
+                    'materia_id' => $materia_id,
+                    'docente_id' => $docente_id,
+                ];
+
+                Asignacion::updateOrCreate(
+                    [
+                        'grupo_id' => $group->grupo_id,
+                        'materia_id' => $materia_id,
+                    ],
+                    [
+                        'docente_id' => $docente_id,
+                    ]
+                );
+            }
+
+            // Obtener asignaciones actuales
+            $asignacionesActuales = Asignacion::where('grupo_id', $group->grupo_id)->get();
+
+            foreach ($asignacionesActuales as $asignacion) {
+                $existe = collect($nuevasAsignaciones)->contains(function ($nueva) use ($asignacion) {
+                    return $nueva['materia_id'] == $asignacion->materia_id;
+                });
+
+                if (!$existe) {
+                    // Verifica si esta asignación tiene dependencias (como horarios)
+                    $tieneHorarios = $asignacion->horarios()->exists(); // Asegúrate de tener esta relación en el modelo
+
+                    if (!$tieneHorarios) {
+                        $asignacion->delete();
+                    }
+                }
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Asignaciones actualizadas con éxito',
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar el grupo: ' . $e->getMessage(),
+            ]);
         }
     }
 
