@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Asignacion;
-use App\Models\Docente;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Estudiante;
 use App\Models\Grado;
 use App\Models\Grupo;
-use App\Models\Horario;
+use App\Models\Asignacion;
+use App\Models\Bloque;
+use App\Models\Docente;
 use App\Models\Institucion;
 use App\Models\Materia;
 use App\Models\PeriodoAcademico;
@@ -200,12 +200,10 @@ class ViewsController
         $usuarioSesion = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
         $institucion_id = $usuarioSesion->administrativo->institucion_id;
 
-        $asignaciones = Asignacion::with('docente', 'materia', 'grupo')->get();
-        $horarios = Horario::all();
-        $docentes = Usuario::with('docente')->where('rol_id', 3)->get();
-        $materias = Materia::where('institucion_id', $institucion_id)->get();
-        $grupos = Grupo::where('institucion_id', $institucion_id)->get();
+        $bloques = Bloque::where('institucion_id', $institucion_id)->get();
 
-        return view('app.administrative.schedules', compact('usuarioSesion', 'asignaciones', 'horarios', 'docentes', 'materias', 'grupos'));
+        $asignaciones = Asignacion::with('docente', 'docente.usuario', 'materia', 'grupo')->get();
+
+        return view('app.administrative.schedules', compact('usuarioSesion', 'asignaciones', 'bloques'));
     }
 }
