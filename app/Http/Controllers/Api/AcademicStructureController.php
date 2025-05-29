@@ -9,6 +9,8 @@ use App\Models\PeriodoAcademico;
 use App\Models\Grupo;
 use App\Models\Materia;
 use App\Models\Asignacion;
+use App\Models\Horario;
+use App\Models\Bloque;
 
 class AcademicStructureController
 {
@@ -369,6 +371,13 @@ class AcademicStructureController
                 ], 404);
             }
 
+            if ($subject->asignaciones()->exists()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No se puede eliminar la materia porque tiene asignaciones activas.',
+                ], 409);
+            }
+
             $subject->delete();
 
             return response()->json([
@@ -379,6 +388,213 @@ class AcademicStructureController
             return response()->json([
                 'success' => false,
                 'message' => 'Error al eliminar la materia: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function storeBlock(Request $request)
+    {
+        try {
+            $request->validate([
+                'bloque_dia' => 'required|string|max:255',
+                'bloque_inicio' => 'required|date_format:H:i',
+                'bloque_fin' => 'required|date_format:H:i|after:bloque_inicio',
+                'institucion_id' => 'required|exists:instituciones,institucion_id',
+            ], [
+                'bloque_dia.required' => 'El día del bloque es requerido',
+                'bloque_dia.string' => 'El día del bloque debe ser una cadena de caracteres',
+                'bloque_dia.max' => 'El día del bloque no puede exceder los 255 caracteres',
+                'bloque_inicio.required' => 'La hora de inicio es requerida',
+                'bloque_inicio.date_format' => 'La hora de inicio debe tener el formato HH:mm',
+                'bloque_fin.required' => 'La hora de fin es requerida',
+                'bloque_fin.date_format' => 'La hora de fin debe tener el formato HH:mm',
+                'bloque_fin.after' => 'La hora de fin debe ser posterior a la hora de inicio',
+                'institucion_id.required' => 'La institución es requerida',
+                'institucion_id.exists' => 'La institución no existe',
+            ]);
+
+            $block = Bloque::create($request->all());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Bloque creado con éxito',
+                'data' => $block,
+            ], 201);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error de validación: ' . $e->getMessage(),
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear el bloque: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function updateBlock(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'bloque_dia' => 'sometimes|required|string|max:255',
+                'bloque_inicio' => 'sometimes|required|date_format:H:i',
+                'bloque_fin' => 'sometimes|required|date_format:H:i|after:bloque_inicio',
+            ]);
+
+            $block = Bloque::find($id);
+
+            if (!$block) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Bloque no encontrado',
+                ], 404);
+            }
+
+            $block->update($request->all());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Bloque actualizado con éxito',
+                'data' => $block,
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error de validación: ' . $e->getMessage(),
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar el bloque: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function destroyBlock($id)
+    {
+        try {
+            $block = Bloque::find($id);
+
+            if (!$block) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Bloque no encontrado',
+                ], 404);
+            }
+
+            if ($block->horarios()->exists()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No se puede eliminar el bloque porque está en uso en horarios.',
+                ], 409);
+            }
+
+            $block->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Bloque eliminado con éxito',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al eliminar el bloque: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function storeSchedule(Request $request)
+    {
+        try {
+            $request->validate([
+                'asignacion_id' => 'required|exists:asignaciones,asignacion_id',
+                'institucion_id' => 'required|exists:instituciones,institucion_id',
+            ]);
+
+            $schedule = Horario::create($request->all());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Horario creado con éxito',
+                'data' => $schedule,
+            ], 201);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error de validación: ' . $e->getMessage(),
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear el horario: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function updateSchedule(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'asignacion_id' => 'sometimes|required|exists:asignaciones,asignacion_id',
+                'horario_dia' => 'sometimes|required|date',
+            ]);
+
+            $schedule = Horario::find($id);
+
+            if (!$schedule) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Horario no encontrado',
+                ], 404);
+            }
+
+            $schedule->update($request->all());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Horario actualizado con éxito',
+                'data' => $schedule,
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error de validación: ' . $e->getMessage(),
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar el horario: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function destroySchedule($id)
+    {
+        try {
+            $schedule = Horario::find($id);
+
+            if (!$schedule) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Horario no encontrado',
+                ], 404);
+            }
+
+            $schedule->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Horario eliminado con éxito',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al eliminar el horario: ' . $e->getMessage(),
             ], 500);
         }
     }

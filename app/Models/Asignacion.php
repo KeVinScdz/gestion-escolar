@@ -31,4 +31,9 @@ class Asignacion extends Model
     {
         return $this->belongsTo(Materia::class, 'materia_id', 'materia_id');
     }
+
+    public function grupo()
+    {
+        return $this->belongsTo(Grupo::class, 'grupo_id', 'grupo_id');
+    }
 }

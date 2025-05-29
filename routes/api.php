@@ -33,3 +33,12 @@ Route::delete('/groups/{id}', [AcademicStructureController::class, 'destroyGroup
 Route::post('/subjects', [AcademicStructureController::class, 'storeSubject']);
 Route::put('/subjects/{id}', [AcademicStructureController::class, 'updateSubject']);
 Route::delete('/subjects/{id}', [AcademicStructureController::class, 'destroySubject']);
+
+// Schedules Routes
+Route::post('blocks', [AcademicStructureController::class, 'storeBlock']);
+Route::put('/blocks/{id}', [AcademicStructureController::class, 'updateBlock']);
+Route::delete('/blocks/{id}', [AcademicStructureController::class, 'destroyBlock']);
+
+Route::post('/schedules', [AcademicStructureController::class, 'storeSchedule']);
+Route::put('/schedules/{id}', [AcademicStructureController::class, 'updateSchedule']);
+Route::delete('/schedules/{id}', [AcademicStructureController::class, 'destroySchedule']);
