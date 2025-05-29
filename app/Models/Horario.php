@@ -2,13 +2,24 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 class Horario extends Model
 {
+    use HasUuids;
+
     protected $table = 'horarios';
-    protected $primaryKey = 'horario_id';
     public $timestamps = false;
+    protected $primaryKey = 'horario_id';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
+    protected $fillable = [
+        // 'horario_id',
+        'bloque_id',
+        'asignacion_id',
+    ];
 
     public function grupo()
     {

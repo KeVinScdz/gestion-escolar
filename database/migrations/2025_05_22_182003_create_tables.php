@@ -13,12 +13,12 @@ return new class extends Migration
     {
         // Gestion usuarios
         Schema::create('roles', function (Blueprint $table) {
-            $table->id('rol_id');
+            $table->id('rol_id')->primary();
             $table->string('rol_nombre');
         });
 
         Schema::create('permisos', function (Blueprint $table) {
-            $table->id('permiso_id');
+            $table->id('permiso_id')->primary();
             $table->string('permiso_nombre');
         });
 
@@ -45,26 +45,26 @@ return new class extends Migration
         });
 
         Schema::create('estudiantes', function (Blueprint $table) {
-            $table->uuid('estudiante_id');
+            $table->uuid('estudiante_id')->primary();
             $table->uuid('institucion_id');
             $table->uuid('usuario_id');
         });
 
         Schema::create('tutores', function (Blueprint $table) {
-            $table->uuid('tutor_id');
+            $table->uuid('tutor_id')->primary();
             $table->uuid('usuario_id');
             $table->uuid('estudiante_id');
         });
 
         Schema::create('docentes', function (Blueprint $table) {
-            $table->uuid('docente_id');
+            $table->uuid('docente_id')->primary();
             $table->uuid('usuario_id');
             $table->uuid('institucion_id');
             $table->string('docente_titulo');
         });
 
         Schema::create('administrativos', function (Blueprint $table) {
-            $table->uuid('administrativo_id');
+            $table->uuid('administrativo_id')->primary();
             $table->uuid('institucion_id');
             $table->uuid('usuario_id');
             $table->string('administrativo_cargo');
@@ -72,7 +72,7 @@ return new class extends Migration
 
         // Estructura academica
         Schema::create('instituciones', function (Blueprint $table) {
-            $table->uuid('institucion_id');
+            $table->uuid('institucion_id')->primary();
             $table->string('institucion_nombre');
             $table->decimal('institucion_telefono', 10, 0)->unique();
             $table->string('institucion_correo')->unique();
@@ -82,7 +82,7 @@ return new class extends Migration
         });
 
         Schema::create('periodos_academicos', function (Blueprint $table) {
-            $table->uuid('periodo_academico_id');
+            $table->uuid('periodo_academico_id')->primary();
             $table->uuid('institucion_id');
             $table->string('periodo_academico_nombre');
             $table->integer('periodo_academico_año');
@@ -91,18 +91,18 @@ return new class extends Migration
         });
 
         Schema::create('niveles', function (Blueprint $table) {
-            $table->id('nivel_id');
+            $table->id('nivel_id')->primary();
             $table->string('nivel_nombre');
         });
 
         Schema::create('grados', function (Blueprint $table) {
-            $table->id('grado_id');
+            $table->id('grado_id')->primary();
             $table->unsignedBigInteger('nivel_id');
             $table->string('grado_nombre');
         });
 
         Schema::create('grupos', function (Blueprint $table) {
-            $table->uuid('grupo_id');
+            $table->uuid('grupo_id')->primary();
             $table->unsignedBigInteger('grado_id');
             $table->uuid('institucion_id');
             $table->string('grupo_nombre');
@@ -112,7 +112,7 @@ return new class extends Migration
         });
 
         Schema::create('materias', function (Blueprint $table) {
-            $table->uuid('materia_id');
+            $table->uuid('materia_id')->primary();
             $table->string('materia_nombre');
             $table->uuid('institucion_id');
         });
@@ -123,19 +123,25 @@ return new class extends Migration
             $table->uuid('docente_id');
             $table->uuid('materia_id');
             $table->uuid('grupo_id');
-            $table->timestamps();
+            $table->primary(['asignacion_id', 'materia_id', 'grupo_id']);
+        });
+
+        Schema::create('bloques', function (Blueprint $table) {
+            $table->uuid('bloque_id')->primary();
+            $table->uuid('institucion_id');
+            $table->string('bloque_dia');
+            $table->time('bloque_inicio');
+            $table->time('bloque_fin');
         });
 
         Schema::create('horarios', function (Blueprint $table) {
-            $table->uuid('horario_id');
+            $table->uuid('horario_id')->primary();
+            $table->uuid('bloque_id');
             $table->uuid('asignacion_id');
-            $table->date('horario_dia');
-            $table->time('horario_inicio');
-            $table->time('horario_fin');
         });
 
         Schema::create('notas', function (Blueprint $table) {
-            $table->uuid('nota_id');
+            $table->uuid('nota_id')->primary();
             $table->uuid('estudiante_id');
             $table->uuid('asignacion_id');
             $table->float('nota_valor');
@@ -144,7 +150,7 @@ return new class extends Migration
 
         // Matriculas
         Schema::create('matriculas', function (Blueprint $table) {
-            $table->id('matricula_id');
+            $table->id('matricula_id')->primary();
             $table->uuid('estudiante_id');
             $table->uuid('grupo_id');
             $table->integer('matricula_año');
@@ -152,7 +158,7 @@ return new class extends Migration
         });
 
         Schema::create('inasistencias', function (Blueprint $table) {
-            $table->id('inasistencia_id');
+            $table->id('inasistencia_id')->primary();
             $table->unsignedBigInteger('matricula_id');
             $table->date('inasistencia_fecha');
             $table->string('inasistencia_justificada')->nullable();
@@ -161,14 +167,14 @@ return new class extends Migration
 
         // Financiero
         Schema::create('conceptos_pago', function (Blueprint $table) {
-            $table->id('concepto_pago_id');
+            $table->id('concepto_pago_id')->primary();
             $table->string('concepto_pago_nombre');
             $table->float('concepto_pago_valor');
             $table->timestamps();
         });
 
         Schema::create('pagos', function (Blueprint $table) {
-            $table->id('pago_id');
+            $table->id('pago_id')->primary();
             $table->unsignedBigInteger('matricula_id');
             $table->unsignedBigInteger('concepto_pago_id');
             $table->date('pago_fecha');
@@ -179,7 +185,7 @@ return new class extends Migration
 
         // Complementarias
         Schema::create('observaciones', function (Blueprint $table) {
-            $table->id('observacion_id');
+            $table->id('observacion_id')->primary();
             $table->unsignedBigInteger('estudiante_id');
             $table->string('observacion_tipo');
             $table->text('observacion_descripcion');
