@@ -10,6 +10,7 @@ use App\Models\Grupo;
 use App\Models\Asignacion;
 use App\Models\Bloque;
 use App\Models\Docente;
+use App\Models\Horario;
 use App\Models\Institucion;
 use App\Models\Materia;
 use App\Models\PeriodoAcademico;
@@ -201,9 +202,19 @@ class ViewsController
         $institucion_id = $usuarioSesion->administrativo->institucion_id;
 
         $bloques = Bloque::where('institucion_id', $institucion_id)->get();
+        $grupos = Grupo::where('institucion_id', $institucion_id)->get();
 
-        $asignaciones = Asignacion::with('docente', 'docente.usuario', 'materia', 'grupo')->get();
+        // Obtener el horario del grupo seleccionado path?grupo_id=019717a9-ddcb-756b-bf6b-280a404e032d
+        $selectedGroupId = request('grupo_id');
+        $bloquesHorario = Bloque::where('institucion_id', $institucion_id)
+            ->get()
+            ->groupBy('bloque_dia');
+        $horarios = Horario::with('bloque', 'asignacion', 'asignacion.grupo', 'asignacion.materia', 'asignacion.docente')
+            ->whereHas('asignacion.grupo', function ($query) use ($selectedGroupId) {
+                $query->where('grupo_id', $selectedGroupId);
+            })->get();
+        $asignaciones = Asignacion::with('materia', 'docente', 'docente.usuario')->where('grupo_id', $selectedGroupId)->get();
 
-        return view('app.administrative.schedules', compact('usuarioSesion', 'asignaciones', 'bloques'));
+        return view('app.administrative.schedules', compact('usuarioSesion', 'bloques', 'grupos', 'horarios', 'asignaciones', 'bloquesHorario'));
     }
 }

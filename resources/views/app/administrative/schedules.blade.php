@@ -81,11 +81,55 @@
         </div>
 
         <!-- Segundo generar horarios -->
-        <div class="card bg-base-200 border border-base-300">
-            <div class="card-body">
-                <h2 class="card-title">Generar Horario Semanal (Próximamente)</h2>
-                <p>Esta sección permitirá generar automáticamente los horarios basados en las horas hábiles definidas.</p>
-                <!-- Aquí iría la lógica o UI para la generación automática -->
+        <div class="p-5 rounded-lg bg-base-200 border border-base-300 space-y-5">
+            <h2 class="card-title">Gestionar Horario Semanal</h2>
+            <div class="space-y-10">
+                <form action="/dashboard/horarios" method="get" class="flex items-end gap-5">
+                    <fieldset class="w-full fieldset m-0 p-0">
+                        <label class="fieldset-label after:content-['*'] after:text-red-500" for="">
+                            Seleccionar el grupo
+                        </label>
+                        <select name="grupo_id" id="grupo_id" class="select select-bordered w-full">
+                            <option value="">Seleccione un grupo</option>
+                            @foreach($grupos as $grupo)
+                            <option value="{{ $grupo->grupo_id }}">{{ $grupo->grupo_nombre }}</option>
+                            @endforeach
+                        </select>
+                    </fieldset>
+                    <button type="submit" class="btn btn-primary">Obtener Horario</button>
+                </form>
+
+                <div class="w-full overflow-x-auto">
+                    <div class="w-full grid grid-cols-5 gap-5">
+
+                        @foreach($bloquesHorario as $dia)
+                        <div class="space-y-5">
+                            <div class="w-full space-y-5 bg-neutral-content text-neutral border border-neutral p-2">
+                                <h3 class="text-xl font-semibold text-center">{{ ucfirst($dia[0]->bloque_dia) }}</h3>
+                            </div>
+                            @foreach($dia as $bloque)
+                            <div class="w-full bg-neutral-content border border-neutral text-neutral p-4 space-y-5">
+                                <h3 class="text-lg font-medium tracking-tight">{{ $bloque->bloque_inicio }} - {{ $bloque->bloque_fin }}</h3>
+                                @if($horarios->where('bloque_id', $bloque->bloque_id)->isEmpty())
+                                <p>No hay asignaciones para este bloque.</p>
+                                <div class="w-full flex justify-center">
+                                    <button class="btn btn-sm py-1 btn-primary">
+                                        Asignar materia
+                                    </button>
+                                </div>
+                                @else
+                                @foreach($horarios->where('bloque_id', $bloque->bloque_id) as $horario)
+                                <div class="w-full bg-base-100 border border-base-300 rounded-lg p-5 space-y-5">
+                                    <h3 class="text-xl font-semibold">{{ $horario->asignacion->materia->materia_nombre }}</h3>
+                                </div>
+                                @endforeach
+                                @endif
+                            </div>
+                            @endforeach
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -136,6 +180,34 @@
 <form id="delete-block-form" class="upload-form hidden" data-target="/api/blocks/{id}" data-reset="true" data-method="delete" data-reload="true" data-show-alert="true">
     <button>Enviar</button>
 </form>
+
+<!-- Assing Subject Modal -->
+<dialog id="assing-subject-modal" class="modal" open="">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg">Asignar Materia</h3>
+        <form class="upload-form space-y-4" data-target="/api/blocks/{id}" data-reset="true" data-method="put" data-reload="true" data-show-alert="true">
+            <input type="hidden" name="bloque_id" id="assing_block_id">
+            <fieldset class="w-full fieldset">
+                <label class="fieldset-label after:content-['*'] after:text-red-500" for="assing_materia_id">Materia:</label>
+                <select id="assing_materia_id" name="materia_id" class="select select-bordered w-full">
+                    <option disabled selected>Seleccione una materia</option>
+                    @foreach($asignaciones as $asignacion)
+                    <option value="{{ $asignacion->asignacion_id }}">{{ $asignacion->materia->materia_nombre }} - {{ $asignacion->docente->usuario->usuario_nombre }} {{ $asignacion->docente->usuario->usuario_apellido }}</option>
+                    @endforeach
+                </select>
+            </fieldset>
+
+            <div class="modal-action">
+                <button type="submit" class="btn btn-primary">Asignar</button>
+                <button type="button" class="btn btn-error" onclick="document.getElementById('assing-subject-modal').close()">Cancelar</button>
+            </div>
+        </form>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>
+
 @endsection
 
 @section('scripts')

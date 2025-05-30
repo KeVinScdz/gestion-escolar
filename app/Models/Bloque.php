@@ -25,7 +25,7 @@ class Bloque extends Model
 
     public function asignaciones()
     {
-        return $this->hasMany(Asignacion::class, 'bloque_id', 'bloque_id');
+        return $this->belongsToMany(Asignacion::class, 'horarios', 'bloque_id', 'asignacion_id');
     }
 
     public function horarios()
