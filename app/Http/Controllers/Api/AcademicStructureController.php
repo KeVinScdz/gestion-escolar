@@ -437,10 +437,20 @@ class AcademicStructureController
     public function updateBlock(Request $request, $id)
     {
         try {
+            // dd($request->all()); // format "19:00:00"
             $request->validate([
                 'bloque_dia' => 'sometimes|required|string|max:255',
                 'bloque_inicio' => 'sometimes|required|date_format:H:i',
                 'bloque_fin' => 'sometimes|required|date_format:H:i|after:bloque_inicio',
+            ], [
+                'bloque_dia.required' => 'El día del bloque es requerido',
+                'bloque_dia.string' => 'El día del bloque debe ser una cadena de caracteres',
+                'bloque_dia.max' => 'El día del bloque no puede exceder los 255 caracteres',
+                'bloque_inicio.required' => 'La hora de inicio es requerida',
+                'bloque_inicio.date_format' => 'La hora de inicio debe tener el formato HH:mm:ss',
+                'bloque_fin.required' => 'La hora de fin es requerida',
+                'bloque_fin.date_format' => 'La hora de fin debe tener el formato HH:mm:ss',
+                'bloque_fin.after' => 'La hora de fin debe ser posterior a la hora de inicio',
             ]);
 
             $block = Bloque::find($id);

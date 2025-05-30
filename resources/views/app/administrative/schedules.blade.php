@@ -15,7 +15,6 @@
 
                     <fieldset class="w-full fieldset">
                         <label class="fieldset-label after:content-['*'] after:text-red-500" for="bloque_dia">Día:</label>
-                        <!-- type select -->
                         <select id="bloque_dia" name="bloque_dia" class="select select-bordered w-full">
                             <option disabled selected>Seleccione un día</option>
                             <option value="lunes">Lunes</option>
@@ -69,8 +68,8 @@
                                 <td>{{ \Carbon\Carbon::parse($bloque->bloque_inicio)->format('h:i A') }}</td>
                                 <td>{{ \Carbon\Carbon::parse($bloque->bloque_fin)->format('h:i A') }}</td>
                                 <td>
-                                    <button class="btn py-1 btn-primary" onclick="/* Lógica para eliminar */">Editar</button>
-                                    <button class="btn py-1 btn-error" onclick="/* Lógica para eliminar */">Eliminar</button>
+                                    <button class="btn py-1 btn-primary" onclick="editBlock('{{ $bloque->bloque_id }}', '{{ json_encode($bloque) }}')">Editar</button>
+                                    <button class="btn py-1 btn-error" onclick="deleteBlock('{{ $bloque->bloque_id }}')">Eliminar</button>
                                 </td>
                             </tr>
                             @endforeach
@@ -91,4 +90,88 @@
         </div>
     </div>
 </section>
+
+<!-- Update Block Modal -->
+<dialog id="update-block-modal" class="modal">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg">Editar Bloque</h3>
+        <form class="upload-form space-y-4" data-target="/api/blocks/{id}" data-reset="true" data-method="put" data-reload="true" data-show-alert="true">
+            <fieldset class="w-full fieldset">
+                <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_bloque_dia">Día:</label>
+                <select id="edit_bloque_dia" name="bloque_dia" class="select select-bordered w-full">
+                    <option disabled selected>Seleccione un día</option>
+                    <option value="lunes">Lunes</option>
+                    <option value="martes">Martes</option>
+                    <option value="miércoles">Miércoles</option>
+                    <option value="jueves">Jueves</option>
+                    <option value="viernes">Viernes</option>
+                </select>
+            </fieldset>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <fieldset class="w-full fieldset">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_bloque_inicio">Hora de Inicio:</label>
+                    <input type="time" id="edit_bloque_inicio" name="bloque_inicio" class="input input-bordered w-full">
+                </fieldset>
+
+                <fieldset class="w-full fieldset">
+                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="edit_bloque_fin">Hora de Fin:</label>
+                    <input type="time" id="edit_bloque_fin" name="bloque_fin" class="input input-bordered w-full">
+                </fieldset>
+            </div>
+            <div class="modal-action">
+
+                <button type="submit" class="btn btn-primary">Actualizar</button>
+                <button type="button" class="btn btn-error" onclick="document.getElementById('update-block-modal').close()">Cancelar</button>
+            </div>
+        </form>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>
+
+<!-- Delete Block Form -->
+<form id="delete-block-form" class="upload-form hidden" data-target="/api/blocks/{id}" data-reset="true" data-method="delete" data-reload="true" data-show-alert="true">
+    <button>Enviar</button>
+</form>
+@endsection
+
+@section('scripts')
+<script>
+    // Editar Bloque
+    function editBlock(id, blockJSONString) {
+        const block = JSON.parse(blockJSONString);
+        document.querySelector('#update-block-modal form').setAttribute('data-target', '/api/blocks/' + id);
+
+        document.getElementById('edit_bloque_dia').value = block.bloque_dia;
+        document.getElementById('edit_bloque_inicio').value = block.bloque_inicio.substring(0, 5);
+        document.getElementById('edit_bloque_fin').value = block.bloque_fin.substring(0, 5);
+
+        const updateBlockModal = document.getElementById('update-block-modal');
+        updateBlockModal.show();
+    }
+
+    // Eliminar Bloque
+    function deleteBlock(id) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Esta acción no se puede deshacer.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (!result.isConfirmed) return;
+
+            const deleteBlockForm = document.getElementById('delete-block-form');
+            deleteBlockForm.setAttribute('data-target', '/api/blocks/' + id);
+
+            document.querySelector('#delete-block-form button').click();
+        })
+    }
+</script>
 @endsection
