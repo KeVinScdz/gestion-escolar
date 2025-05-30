@@ -521,7 +521,12 @@ class AcademicStructureController
         try {
             $request->validate([
                 'asignacion_id' => 'required|exists:asignaciones,asignacion_id',
-                'institucion_id' => 'required|exists:instituciones,institucion_id',
+                'bloque_id' => 'required|exists:bloques,bloque_id',
+            ], [
+                'asignacion_id.required' => 'La asignación es requerida',
+                'asignacion_id.exists' => 'La asignación no existe',
+                'bloque_id.required' => 'El bloque es requerido',
+                'bloque_id.exists' => 'El bloque no existe',
             ]);
 
             $schedule = Horario::create($request->all());

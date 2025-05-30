@@ -99,7 +99,7 @@
                     <button type="submit" class="btn btn-primary">Obtener Horario</button>
                 </form>
 
-                <div class="w-full overflow-x-auto">
+                <div class="w-full overflow-x-auto pb-10">
                     <div class="w-full grid grid-cols-5 gap-5">
 
                         @foreach($bloquesHorario as $dia)
@@ -113,14 +113,27 @@
                                 @if($horarios->where('bloque_id', $bloque->bloque_id)->isEmpty())
                                 <p>No hay asignaciones para este bloque.</p>
                                 <div class="w-full flex justify-center">
-                                    <button class="btn btn-sm py-1 btn-primary">
+                                    <button onclick="assignSubject('{{ $bloque->bloque_id }}')" class="btn btn-sm py-1 btn-primary">
                                         Asignar materia
                                     </button>
                                 </div>
                                 @else
                                 @foreach($horarios->where('bloque_id', $bloque->bloque_id) as $horario)
-                                <div class="w-full bg-base-100 border border-base-300 rounded-lg p-5 space-y-5">
+                                <div class="w-full flex justify-between items-center">
                                     <h3 class="text-xl font-semibold">{{ $horario->asignacion->materia->materia_nombre }}</h3>
+                                    <div class="dropdown dropdown-center">
+                                        <div tabindex="0" role="button" class="btn btn-ghost w-7 h-7 rounded-full p-0">
+                                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                                        </div>
+                                        <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                                            <li>
+                                                <a onclick="editAssignment('{{ $horario->horario_id }}')">Editar materia</a>
+                                            </li>
+                                            <li>
+                                                <a onclick="deleteAssignment('{{ $horario->horario_id }}')">Eliminar asignacion</a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                                 @endforeach
                                 @endif
@@ -182,14 +195,14 @@
 </form>
 
 <!-- Assing Subject Modal -->
-<dialog id="assing-subject-modal" class="modal" open="">
-    <div class="modal-box">
+<dialog id="assing-subject-modal" class="modal">
+    <div class="modal-box space-y-5">
         <h3 class="font-bold text-lg">Asignar Materia</h3>
-        <form class="upload-form space-y-4" data-target="/api/blocks/{id}" data-reset="true" data-method="put" data-reload="true" data-show-alert="true">
+        <form class="upload-form space-y-4" data-target="/api/schedules" data-reset="true" data-method="post" data-reload="true" data-show-alert="true">
             <input type="hidden" name="bloque_id" id="assing_block_id">
             <fieldset class="w-full fieldset">
-                <label class="fieldset-label after:content-['*'] after:text-red-500" for="assing_materia_id">Materia:</label>
-                <select id="assing_materia_id" name="materia_id" class="select select-bordered w-full">
+                <label class="fieldset-label after:content-['*'] after:text-red-500" for="assing_asignacion_id">Materia:</label>
+                <select id="assing_asignacion_id" name="asignacion_id" class="select select-bordered w-full">
                     <option disabled selected>Seleccione una materia</option>
                     @foreach($asignaciones as $asignacion)
                     <option value="{{ $asignacion->asignacion_id }}">{{ $asignacion->materia->materia_nombre }} - {{ $asignacion->docente->usuario->usuario_nombre }} {{ $asignacion->docente->usuario->usuario_apellido }}</option>
@@ -208,6 +221,37 @@
     </form>
 </dialog>
 
+<!-- Update Assign Subject Modal -->
+<dialog id="update-assign-subject-modal" class="modal">
+    <div class="modal-box space-y-5">
+        <h3 class="font-bold text-lg">Actualizar Asignación</h3>
+
+        <form class="upload-form space-y-4" data-target="/api/schedules/{id}" data-reset="true" data-method="put" data-reload="true" data-show-alert="true">
+            <fieldset class="w-full fieldset">
+                <label class="fieldset-label after:content-['*'] after:text-red-500" for="assing_asignacion_id">Materia:</label>
+                <select id="assing_asignacion_id" name="asignacion_id" class="select select-bordered w-full">
+                    <option disabled selected>Seleccione una materia</option>
+                    @foreach($asignaciones as $asignacion)
+                    <option value="{{ $asignacion->asignacion_id }}">{{ $asignacion->materia->materia_nombre }} - {{ $asignacion->docente->usuario->usuario_nombre }} {{ $asignacion->docente->usuario->usuario_apellido }}</option>
+                    @endforeach
+                </select>
+            </fieldset>
+
+            <div class="modal-action">
+                <button type="submit" class="btn btn-primary">Actualizar</button>
+                <button type="button" class="btn btn-error" onclick="document.getElementById('update-assign-subject-modal').close()">Cancelar</button>
+            </div>
+        </form>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>
+
+<!-- Delete Assign Subject Form -->
+<form id="delete-assign-subject-form" class="upload-form hidden" data-target="/api/schedules/{id}" data-method="delete" data-reload="true" data-show-alert="true">
+    <button type="submit">Enviar</button>
+</form>
 @endsection
 
 @section('scripts')
@@ -244,6 +288,42 @@
 
             document.querySelector('#delete-block-form button').click();
         })
+    }
+
+    // Asignar Materia
+    function assignSubject(blockId) {
+        const $assingSubjectModal = document.getElementById('assing-subject-modal');
+        document.getElementById('assing_block_id').value = blockId;
+
+        $assingSubjectModal.show();
+    }
+
+    function editAssignment(scheduleId) {
+        const $editAssignSubjectModal = document.getElementById('update-assign-subject-modal');
+        const $editAssignSubjectForm = document.querySelector('#update-assign-subject-modal form');
+
+        $editAssignSubjectForm.dataset.target = '/api/schedules/' + scheduleId;
+
+        $editAssignSubjectModal.show();
+    }
+
+    function deleteAssignment(scheduleId) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Esta acción no se puede deshacer.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar',
+        }).then((result) => {
+            if (!result.isConfirmed) return;
+
+            const $deleteAssignSubjectForm = document.getElementById('delete-assign-subject-form');
+            $deleteAssignSubjectForm.dataset.target = '/api/schedules/' + scheduleId;
+
+            document.querySelector('#delete-assign-subject-form button').click();
+        });
     }
 </script>
 @endsection
