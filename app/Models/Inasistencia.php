@@ -14,4 +14,9 @@ class Inasistencia extends Model
     {
         return $this->belongsTo(Matricula::class, 'matricula_id', 'matricula_id');
     }
+
+    public function institucion()
+    {
+        return $this->belongsTo(Institucion::class, 'institucion_id', 'institucion_id');
+    }
 }

@@ -159,9 +159,11 @@ return new class extends Migration
 
         Schema::create('inasistencias', function (Blueprint $table) {
             $table->id('inasistencia_id')->primary();
-            $table->unsignedBigInteger('matricula_id');
+            $table->uuid('institucion_id');
+            $table->uuid('matricula_id');
             $table->date('inasistencia_fecha');
-            $table->string('inasistencia_justificada')->nullable();
+            $table->boolean('inasistencia_justificada');
+            $table->string('inasistencia_motivo')->nullable();
             $table->timestamps();
         });
 
@@ -222,6 +224,7 @@ return new class extends Migration
         // Asignacion academica
         Schema::dropIfExists('asignaciones');
         Schema::dropIfExists('horarios');
+        Schema::dropIfExists('bloques');
 
         // Matriculas
         Schema::dropIfExists('matriculas');

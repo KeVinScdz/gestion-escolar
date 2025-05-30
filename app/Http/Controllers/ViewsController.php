@@ -11,6 +11,7 @@ use App\Models\Asignacion;
 use App\Models\Bloque;
 use App\Models\Docente;
 use App\Models\Horario;
+use App\Models\Inasistencia;
 use App\Models\Institucion;
 use App\Models\Materia;
 use App\Models\PeriodoAcademico;
@@ -216,5 +217,28 @@ class ViewsController
         $asignaciones = Asignacion::with('materia', 'docente', 'docente.usuario')->where('grupo_id', $selectedGroupId)->get();
 
         return view('app.administrative.schedules', compact('usuarioSesion', 'bloques', 'grupos', 'horarios', 'asignaciones', 'bloquesHorario'));
+    }
+
+    public function absences()
+    {
+        $usuarioSesion = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
+        $institucion_id = $usuarioSesion->administrativo->institucion_id;
+        $justificationFilter = request('justification_filter');
+
+        $inasistencias = Inasistencia::with('matricula', 'matricula.estudiante', 'matricula.estudiante.usuario')
+            ->where('institucion_id', $institucion_id)
+            ->whereHas('matricula', function ($query) {
+                $query->where('matricula_año', date('Y'));
+            });
+
+        if ($justificationFilter == 'justificada') {
+            $inasistencias = $inasistencias->where('inasistencia_justificada', true);
+        } elseif ($justificationFilter == 'injustificada') {
+            $inasistencias = $inasistencias->where('inasistencia_justificada', false);
+        }
+
+        $inasistencias = $inasistencias->paginate(20);
+
+        return view('app.administrative.absences', compact('usuarioSesion', 'inasistencias', 'justificationFilter'));
     }
 }
