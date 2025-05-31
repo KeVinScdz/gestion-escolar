@@ -92,13 +92,14 @@
                         <select name="grupo_id" id="grupo_id" class="select select-bordered w-full">
                             <option value="">Seleccione un grupo</option>
                             @foreach($grupos as $grupo)
-                            <option value="{{ $grupo->grupo_id }}">{{ $grupo->grupo_nombre }}</option>
+                            <option value="{{ $grupo->grupo_id }}" {{ $selectedGroupId == $grupo->grupo_id ? 'selected' : '' }}>{{ $grupo->grupo_nombre }}</option>
                             @endforeach
                         </select>
                     </fieldset>
                     <button type="submit" class="btn btn-primary">Obtener Horario</button>
                 </form>
 
+                @if(isset($selectedGroupId))
                 <div class="w-full overflow-x-auto pb-10">
                     <div class="w-full grid grid-cols-5 gap-5">
 
@@ -143,6 +144,7 @@
                         @endforeach
                     </div>
                 </div>
+                @endif
             </div>
         </div>
     </div>

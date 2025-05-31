@@ -221,10 +221,12 @@ class ViewsController
         $usuarioSesion = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
         $institucion_id = $usuarioSesion->administrativo->institucion_id;
 
-        $bloques = Bloque::where('institucion_id', $institucion_id)->get();
+        $bloques = Bloque::where('institucion_id', $institucion_id)
+            ->orderByRaw("FIELD(bloque_dia, 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo') ASC")
+            ->get();
         $grupos = Grupo::where('institucion_id', $institucion_id)->get();
 
-        // Obtener el horario del grupo seleccionado path?grupo_id=019717a9-ddcb-756b-bf6b-280a404e032d
+        // Obtener el horario del grupo seleccionado
         $selectedGroupId = request('grupo_id');
         $bloquesHorario = Bloque::where('institucion_id', $institucion_id)
             ->get()
@@ -235,7 +237,7 @@ class ViewsController
             })->get();
         $asignaciones = Asignacion::with('materia', 'docente', 'docente.usuario')->where('grupo_id', $selectedGroupId)->get();
 
-        return view('app.administrative.schedules', compact('usuarioSesion', 'bloques', 'grupos', 'horarios', 'asignaciones', 'bloquesHorario'));
+        return view('app.administrative.schedules', compact('usuarioSesion', 'bloques', 'grupos', 'horarios', 'asignaciones', 'bloquesHorario', 'selectedGroupId'));
     }
 
     public function absences()
