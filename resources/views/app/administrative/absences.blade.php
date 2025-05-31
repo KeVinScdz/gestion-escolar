@@ -65,6 +65,12 @@
                     </tbody>
                 </table>
             </div>
+
+            @if($inasistencias->isEmpty())
+            <div class="text-center py-10">
+                <p class="text-gray-500">No se encontraron registros de inasistencias.</p>
+            </div>
+            @endif
         </div>
 
         {{ $inasistencias->links('components.pagination') }}

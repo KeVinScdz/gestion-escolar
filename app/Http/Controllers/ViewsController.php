@@ -124,12 +124,24 @@ class ViewsController
         $usuarioSesion = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos', 'administrativo.institucion');
         $search = request('search');
 
-        $estudiantes = Usuario::with('estudiante', 'estudiante.tutor', 'estudiante.matriculas', 'rol')
-            ->where('rol_id', 4)
-            ->whereHas('estudiante', function ($query) use ($usuarioSesion) {
-                $query->where('institucion_id', $usuarioSesion->administrativo->institucion_id);
+        $estudiantes = Estudiante::with('usuario', 'tutor', 'tutor.usuario', 'matriculas', 'matriculas.grupo')
+            ->where('institucion_id', $usuarioSesion->administrativo->institucion_id)
+            ->whereHas('usuario', function ($query) use ($search) {
+                $query->where('usuario_nombre', 'like', '%' . $search . '%')
+                    ->orWhere('usuario_apellido', 'like', '%' . $search . '%')
+                    ->orWhere('usuario_documento', 'like', '%' . $search . '%')
+                    ->orWhere('usuario_correo', 'like', '%' . $search . '%');
             })
-            ->search($search ?? '')->paginate(10);
+            ->orWhereHas('tutor.usuario', function ($query) use ($search) {
+                $query->where('usuario_nombre', 'like', '%' . $search . '%')
+                    ->orWhere('usuario_apellido', 'like', '%' . $search . '%')
+                    ->orWhere('usuario_documento', 'like', '%' . $search . '%')
+                    ->orWhere('usuario_correo', 'like', '%' . $search . '%');
+            })
+            ->orWhereHas('matriculas.grupo', function ($query) use ($search) {
+                $query->where('grupo_nombre', 'like', '%' . $search . '%');
+            })
+            ->paginate(10);
 
         $grupos = Grupo::with('grado', 'grado.nivel')
             ->where('institucion_id', $usuarioSesion->administrativo->institucion_id)
