@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
         // Call your custom seeders here
         $this->call([
             create_info::class,
+            create_school::class,
             create_users::class,
         ]);
     }
