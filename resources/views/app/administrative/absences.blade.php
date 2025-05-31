@@ -56,10 +56,10 @@
                     <tbody>
                         @foreach($inasistencias as $inasistencia)
                         <tr>
-                            <td class="border px-4 py-2">{{ $inasistencia->inastencia_id }}</td>
-                            <td class="border px-4 py-2">{{ $inasistencia->matricula->estudiante->usuario->usuario_nombre }} {{ $inasistencia->matricula->estudiante->usuario->usuario_apellido }}</td>
-                            <td class="border px-4 py-2">{{ $inasistencia->inasistencia_fecha }}</td>
-                            <td class="border px-4 py-2">{{ $inasistencia->inasistencia_justificada ? 'Sí: ' . $inasistencia->inasistencia_motivo : 'No' }}</td>
+                            <td class="px-4 py-2">{{ $inasistencia->inasistencia_id }}</td>
+                            <td class="px-4 py-2">{{ $inasistencia->matricula->estudiante->usuario->usuario_nombre }} {{ $inasistencia->matricula->estudiante->usuario->usuario_apellido }}</td>
+                            <td class="px-4 py-2">{{ $inasistencia->inasistencia_fecha }}</td>
+                            <td class="px-4 py-2">{{ $inasistencia->inasistencia_justificada ? 'Sí: ' . $inasistencia->inasistencia_motivo : 'No' }}</td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -68,7 +68,7 @@
 
             @if($inasistencias->isEmpty())
             <div class="text-center py-10">
-                <p class="text-gray-500">No se encontraron registros de inasistencias.</p>
+                <p class="text-base-content/80">No se encontraron registros de inasistencias.</p>
             </div>
             @endif
         </div>
