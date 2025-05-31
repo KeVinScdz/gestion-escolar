@@ -64,6 +64,8 @@
             @endif
             @endif
         </div>
+
+        {{ $periodos->links('components.pagination') }}
     </div>
 </section>
 
