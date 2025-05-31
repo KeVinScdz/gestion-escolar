@@ -31,43 +31,28 @@
                 <table class="table-auto w-full">
                     <thead>
                         <tr>
-                            <th class="px-4 py-2">ID Observación</th>
-                            <th class="px-4 py-2">Estudiante</th>
-                            <th class="px-4 py-2">Tipo</th>
-                            <th class="px-4 py-2">Descripción</th>
-                            <th class="px-4 py-2">Fecha</th>
-                            <th class="px-4 py-2">Acciones</th> {{-- Columna para acciones --}}
+                            <th class="text-start px-4 py-2">ID Observación</th>
+                            <th class="text-start px-4 py-2">Estudiante</th>
+                            <th class="text-start px-4 py-2">Tipo</th>
+                            <th class="text-start px-4 py-2">Descripción</th>
+                            <th class="text-start px-4 py-2">Fecha</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($observaciones as $observacion)
                         <tr>
-                            <td class="px-4 py-2">{{ $observacion->observacion_id }}</td>
-                            {{-- Asumiendo que cargas la relación estudiante y su usuario --}}
-                            {{-- Si $observacion->estudiante_id es directo y no hay relación 'estudiante' cargada, necesitarás ajustar esto --}}
-                            {{-- o cargar la relación en el controlador: $observacion->estudiante->usuario->usuario_nombre ?? 'N/A' --}}
+                            <td class="px-4 py-2">{{ explode("-", $observacion->observacion_id)[0] }}</td>
                             <td class="px-4 py-2">
                                 @if($observacion->estudiante && $observacion->estudiante->usuario)
-                                    {{ $observacion->estudiante->usuario->usuario_nombre }} {{ $observacion->estudiante->usuario->usuario_apellido }}
+                                {{ $observacion->estudiante->usuario->usuario_nombre }} {{ $observacion->estudiante->usuario->usuario_apellido }}
                                 @else
-                                    {{-- Fallback si la relación no está cargada o el estudiante no existe --}}
-                                    Estudiante ID: {{ $observacion->estudiante_id }}
+                                {{-- Fallback si la relación no está cargada o el estudiante no existe --}}
+                                Estudiante ID: {{ $observacion->estudiante_id }}
                                 @endif
                             </td>
                             <td class="px-4 py-2">{{ $observacion->observacion_tipo }}</td>
                             <td class="px-4 py-2">{{ Str::limit($observacion->observacion_descripcion, 100) }}</td> {{-- Limitar descripción para brevedad --}}
                             <td class="px-4 py-2">{{ \Carbon\Carbon::parse($observacion->observacion_fecha)->format('d/m/Y') }}</td>
-                            <td class="px-4 py-2">
-                                <button class="btn btn-xs btn-info" onclick="openViewObservationModal('{{ $observacion->observacion_id }}')">
-                                    Ver
-                                </button>
-                                <button class="btn btn-xs btn-warning" onclick="openEditObservationModal('{{ $observacion->observacion_id }}')">
-                                    Editar
-                                </button>
-                                <button class="btn btn-xs btn-error" onclick="deleteObservation('{{ $observacion->observacion_id }}')">
-                                    Eliminar
-                                </button>
-                            </td>
                         </tr>
                         @empty
                         <tr>
