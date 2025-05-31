@@ -14,6 +14,7 @@ use App\Models\Horario;
 use App\Models\Inasistencia;
 use App\Models\Institucion;
 use App\Models\Materia;
+use App\Models\Observacion;
 use App\Models\PeriodoAcademico;
 use App\Models\Permiso;
 use App\Models\Rol;
@@ -240,5 +241,20 @@ class ViewsController
         $inasistencias = $inasistencias->paginate(20);
 
         return view('app.administrative.absences', compact('usuarioSesion', 'inasistencias', 'justificationFilter'));
+    }
+
+    public function observations()
+    {
+        $usuarioSesion = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
+        $institucion_id = $usuarioSesion->administrativo->institucion_id;
+
+        $observaciones = Observacion::with('estudiante', 'estudiante.usuario', 'estudiante.matriculas')
+            ->whereHas('estudiante', function ($query) use ($institucion_id) {
+                $query->where('institucion_id', $institucion_id);
+            })
+            ->orderBy('observacion_fecha', 'desc')
+            ->paginate(20);
+
+        return view('app.administrative.observations', compact('usuarioSesion', 'observaciones'));
     }
 }
