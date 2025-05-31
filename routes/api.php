@@ -6,6 +6,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UsuarioController;
 use App\Http\Controllers\Api\InstitucionController;
 use App\Http\Controllers\Api\AcademicStructureController;
+use App\Http\Controllers\Api\BackupController;
+
+// Backup Routes
+Route::get("/info", [BackupController::class, 'exportData']);
 
 // User Routes
 Route::get('/users', [UsuarioController::class, 'index']);

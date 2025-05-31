@@ -207,7 +207,7 @@ class UsuarioController
             }
 
             if ($usuario->rol_id == 3) {
-                $docente = Docente::where('usuario_id', $usuario->usuario_id)->first(); 
+                $docente = Docente::where('usuario_id', $usuario->usuario_id)->first();
 
                 if (!$docente) {
                     DB::rollBack();
