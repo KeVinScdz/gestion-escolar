@@ -29,4 +29,9 @@ class Matricula extends Model
     {
         return $this->hasMany(Inasistencia::class, 'matricula_id', 'matricula_id');
     }
+
+    public function pagos()
+    {
+        return $this->hasMany(Pago::class, 'matricula_id', 'matricula_id');
+    }
 }

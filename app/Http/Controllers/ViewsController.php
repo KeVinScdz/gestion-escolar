@@ -9,12 +9,14 @@ use App\Models\Grado;
 use App\Models\Grupo;
 use App\Models\Asignacion;
 use App\Models\Bloque;
+use App\Models\ConceptoPago;
 use App\Models\Docente;
 use App\Models\Horario;
 use App\Models\Inasistencia;
 use App\Models\Institucion;
 use App\Models\Materia;
 use App\Models\Observacion;
+use App\Models\Pago;
 use App\Models\PeriodoAcademico;
 use App\Models\Permiso;
 use App\Models\Rol;
@@ -129,7 +131,11 @@ class ViewsController
             })
             ->search($search ?? '')->paginate(10);
 
-        return view('app.administrative.students', compact('usuarioSesion', 'estudiantes'));
+        $grupos = Grupo::with('grado', 'grado.nivel')
+            ->where('institucion_id', $usuarioSesion->administrativo->institucion_id)
+            ->get();
+
+        return view('app.administrative.students', compact('usuarioSesion', 'estudiantes', 'grupos'));
     }
 
     public function periods()
@@ -256,5 +262,22 @@ class ViewsController
             ->paginate(20);
 
         return view('app.administrative.observations', compact('usuarioSesion', 'observaciones'));
+    }
+
+    public function payments()
+    {
+        $usuarioSesion = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
+        $institucion_id = $usuarioSesion->administrativo->institucion_id;
+        $search = request('search');
+
+        $conceptos = ConceptoPago::where('institucion_id', $institucion_id)->get();
+        $estudiantes = Estudiante::with('usuario', 'matriculas', 'matriculas.pagos')
+            ->where('institucion_id', $institucion_id)
+            ->whereHas('matriculas', function ($query) {
+                $query->where('matricula_año', date('Y'));
+            })
+            ->paginate(10);
+
+        return view('app.administrative.payments', compact('usuarioSesion', 'estudiantes', 'conceptos'));
     }
 }

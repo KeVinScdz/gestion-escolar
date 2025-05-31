@@ -169,20 +169,19 @@ return new class extends Migration
 
         // Financiero
         Schema::create('conceptos_pago', function (Blueprint $table) {
-            $table->id('concepto_pago_id')->primary();
-            $table->string('concepto_pago_nombre');
-            $table->float('concepto_pago_valor');
-            $table->timestamps();
+            $table->uuid('concepto_id')->primary();
+            $table->uuid('institucion_id');
+            $table->string('concepto_nombre');
+            $table->float('concepto_valor');
         });
 
         Schema::create('pagos', function (Blueprint $table) {
             $table->id('pago_id')->primary();
             $table->unsignedBigInteger('matricula_id');
-            $table->unsignedBigInteger('concepto_pago_id');
+            $table->unsignedBigInteger('concepto_id');
             $table->date('pago_fecha');
             $table->float('pago_valor');
             $table->string('pago_estado'); // pendiente, pagado, etc.
-            $table->timestamps();
         });
 
         // Complementarias
