@@ -92,7 +92,7 @@ class ViewsController
             ->whereHas('administrativo', function ($query) use ($usuarioSesion) {
                 $query->where('institucion_id', $usuarioSesion->administrativo->institucion_id);
             })
-            ->paginate(10);
+            ->paginate(5);
 
         $permisos = Permiso::all();
         $institucion = Institucion::where('institucion_id', $usuarioSesion->administrativo->institucion_id)->first();
@@ -111,7 +111,7 @@ class ViewsController
             ->whereHas('docente', function ($query) use ($usuarioSesion) {
                 $query->where('institucion_id', $usuarioSesion->administrativo->institucion_id);
             })
-            ->paginate(10);
+            ->paginate(5);
 
         $institucion = Institucion::where('institucion_id', $usuarioSesion->administrativo->institucion_id)->first();
 
@@ -141,7 +141,7 @@ class ViewsController
             ->orWhereHas('matriculas.grupo', function ($query) use ($search) {
                 $query->where('grupo_nombre', 'like', '%' . $search . '%');
             })
-            ->paginate(10);
+            ->paginate(5);
 
         $grupos = Grupo::with('grado', 'grado.nivel')
             ->where('institucion_id', $usuarioSesion->administrativo->institucion_id)
@@ -171,7 +171,7 @@ class ViewsController
 
         $periodos = $query->orderBy('periodo_academico_año', 'desc')
             ->orderBy('periodo_academico_inicio', 'asc')
-            ->get();
+            ->paginate(8);
 
         return view('app.administrative.periods', compact('usuarioSesion', 'periodos', 'availableYears', 'selectedYear'));
     }
