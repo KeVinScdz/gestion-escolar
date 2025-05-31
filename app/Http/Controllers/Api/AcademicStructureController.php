@@ -11,6 +11,7 @@ use App\Models\Materia;
 use App\Models\Asignacion;
 use App\Models\Horario;
 use App\Models\Bloque;
+use App\Models\Matricula;
 
 class AcademicStructureController
 {
@@ -375,7 +376,7 @@ class AcademicStructureController
                 return response()->json([
                     'success' => false,
                     'message' => 'No se puede eliminar la materia porque tiene asignaciones activas.',
-                ], 409);
+                ], 409); // Conflict
             }
 
             $subject->delete();
@@ -392,6 +393,146 @@ class AcademicStructureController
         }
     }
 
+    // Enrollment Functions
+    public function storeEnrollment(Request $request)
+    {
+        try {
+            $request->validate([
+                'estudiante_id' => 'required|exists:estudiantes,estudiante_id',
+                'grupo_id' => 'required|exists:grupos,grupo_id',
+                'matricula_año' => 'required|numeric',
+            ], [
+                'estudiante_id.required' => 'El ID del estudiante es requerido',
+                'estudiante_id.exists' => 'El estudiante no existe',
+                'grupo_id.required' => 'El ID del grupo es requerido',
+                'grupo_id.exists' => 'El grupo no existe',
+                'matricula_año.required' => 'El año de matrícula es requerido',
+                'matricula_año.numeric' => 'El año de matrícula debe ser numérico',
+            ]);
+
+            $existingEnrollment = Matricula::with('grupo')
+                ->where('estudiante_id', $request->input('estudiante_id'))
+                ->where('matricula_año', $request->input('matricula_año'))
+                ->first();
+
+            if ($existingEnrollment) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'El estudiante ya está matriculado en este periodo académico (' . $existingEnrollment->matricula_año . ') en el grupo ' . $existingEnrollment->grupo->grupo_nombre . '.',
+                ], 409);
+            }
+
+            $enrollment = Matricula::create($request->all());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Matrícula creada con éxito',
+                'data' => $enrollment,
+            ], 201);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear la matrícula: ' . $e->getMessage(),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear la matrícula: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function updateEnrollment(Request $request, $id)
+    {
+        try {
+            $enrollment = Matricula::find($id);
+
+            if (!$enrollment) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Matrícula no encontrada',
+                ], 404);
+            }
+
+            $request->validate([
+                'grupo_id' => 'required|exists:grupos,grupo_id',
+                'matricula_año' => 'required|numeric',
+            ], [
+                'grupo_id.required' => 'El ID del grupo es requerido',
+                'grupo_id.exists' => 'El grupo no existe',
+                'matricula_año.required' => 'El año de matrícula es requerido',
+                'matricula_año.numeric' => 'El año de matrícula debe ser numérico',
+            ]);
+
+            // Check if the student is already enrolled in the same group and year
+            $existingEnrollment = Matricula::where('estudiante_id', $enrollment->estudiante_id)
+                ->where('grupo_id', $request->input('grupo_id'))
+                ->where('matricula_año', $enrollment->matricula_año)
+                ->first();
+
+            if ($existingEnrollment && $existingEnrollment->matricula_id != $id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'El estudiante ya está matriculado en este grupo para el año ' . $enrollment->matricula_año . '.',
+                ], 409);
+            }
+
+            $enrollment->update($request->all());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Matrícula actualizada con éxito',
+                'data' => $enrollment,
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error de validación',
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar la matrícula: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function destroyEnrollment($id)
+    {
+        try {
+            $enrollment = Matricula::find($id);
+
+            if (!$enrollment) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Matrícula no encontrada',
+                ], 404);
+            }
+
+            // Add any dependency checks here if needed, e.g., if there are grades associated
+            // if ($enrollment->notas()->exists()) {
+            //     return response()->json([
+            //         'success' => false,
+            //         'message' => 'No se puede eliminar la matrícula porque tiene notas asociadas.',
+            //     ], 409); // Conflict
+            // }
+
+            $enrollment->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Matrícula eliminada con éxito',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al eliminar la matrícula: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    // Schedule functions
     public function storeBlock(Request $request)
     {
         try {

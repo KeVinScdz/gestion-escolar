@@ -13,6 +13,11 @@ Route::post('/users', [UsuarioController::class, 'store']);
 Route::put('/users/{id}', [UsuarioController::class, 'update']);
 Route::delete('/users/{id}', [UsuarioController::class, 'destroy']);
 
+// Enrollment Routes
+Route::post('/enrollments', [AcademicStructureController::class, 'storeEnrollment']);
+Route::put('/enrollments/{id}', [AcademicStructureController::class, 'updateEnrollment']);
+Route::delete('/enrollments/{id}', [AcademicStructureController::class, 'destroyEnrollment']);
+
 // Institution Routes
 Route::post('/institutions', [InstitucionController::class, 'store']);
 Route::put('/institutions/{id}', [InstitucionController::class, 'update']);

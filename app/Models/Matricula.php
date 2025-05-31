@@ -2,13 +2,25 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 class Matricula extends Model
 {
+    use HasUuids;
+
     protected $table = 'matriculas';
-    protected $primaryKey = 'matricula_id';
     public $timestamps = false;
+    protected $primaryKey = 'matricula_id';
+    protected $keyType = 'string';
+    public $incrementing = false;
+
+    protected $fillable = [
+        // 'matricula_id',
+        'estudiante_id',
+        'grupo_id',
+        'matricula_año',
+    ];
 
     public function estudiante()
     {

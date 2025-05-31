@@ -150,11 +150,10 @@ return new class extends Migration
 
         // Matriculas
         Schema::create('matriculas', function (Blueprint $table) {
-            $table->id('matricula_id')->primary();
+            $table->uuid('matricula_id');
             $table->uuid('estudiante_id');
             $table->uuid('grupo_id');
             $table->integer('matricula_año');
-            $table->timestamps();
         });
 
         Schema::create('inasistencias', function (Blueprint $table) {
@@ -176,9 +175,9 @@ return new class extends Migration
         });
 
         Schema::create('pagos', function (Blueprint $table) {
-            $table->id('pago_id')->primary();
-            $table->unsignedBigInteger('matricula_id');
-            $table->unsignedBigInteger('concepto_id');
+            $table->uuid('pago_id')->primary();
+            $table->uuid('matricula_id');
+            $table->uuid('concepto_id');
             $table->date('pago_fecha');
             $table->float('pago_valor');
             $table->string('pago_estado'); // pendiente, pagado, etc.
@@ -186,8 +185,8 @@ return new class extends Migration
 
         // Complementarias
         Schema::create('observaciones', function (Blueprint $table) {
-            $table->id('observacion_id')->primary();
-            $table->unsignedBigInteger('estudiante_id');
+            $table->uuid('observacion_id')->primary();
+            $table->uuid('estudiante_id');
             $table->string('observacion_tipo');
             $table->text('observacion_descripcion');
             $table->date('observacion_fecha');
