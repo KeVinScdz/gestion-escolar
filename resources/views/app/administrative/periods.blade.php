@@ -6,14 +6,14 @@
 
 <section class="w-full">
     <div class="w-full max-w-[1200px] mx-auto py-10 space-y-10">
-        <div class="flex justify-between items-center">
+        <div class="flex flex-col md:flex-row gap-5 justify-between items-center">
             <h1 class="text-3xl font-semibold">Gestión de Periodos Académicos</h1>
             {{-- Botón para abrir modal de creación, necesitarás crear este modal --}}
             <button class="btn btn-primary" onclick="document.getElementById('create_period_modal').show()">Crear Nuevo Periodo</button>
         </div>
 
         {{-- Filtro por Año --}}
-        <div class="bg-base-200 border border-base-300 p-5 rounded-lg shadow">
+        <div class="bg-base-200 border border-base-300 p-5 rounded-lg">
             <form method="GET" action="/dashboard/periodos" class="flex items-end space-x-3">
                 <div>
                     <label for="year_filter" class="block text-sm font-medium">Filtrar por Año:</label>
@@ -32,7 +32,7 @@
         </div>
 
         {{-- Tabla de Periodos Académicos --}}
-        <div class="overflow-x-auto bg-base-200 border border-base-300 p-5 rounded-lg shadow">
+        <div class="overflow-x-auto bg-base-200 border border-base-300 rounded-lg">
             @if($periodos->count() > 0)
             <table class="table w-full">
                 <thead>
@@ -49,9 +49,11 @@
                         <td>{{ $periodo->periodo_academico_nombre }}</td>
                         <td>{{ \Carbon\Carbon::parse($periodo->periodo_academico_inicio)->format('d/m/Y') }}</td>
                         <td>{{ \Carbon\Carbon::parse($periodo->periodo_academico_fin)->format('d/m/Y') }}</td>
-                        <td class="space-x-2">
-                            <button class="btn btn-sm py-1 btn-primary" onclick="openEditModal('{{ $periodo->periodo_academico_id }}', '{{ json_encode($periodo) }}')">Editar</button>
-                            <button class="btn btn-sm py-1 btn-error" onclick="deletePeriod('{{ $periodo->periodo_academico_id }}')">Eliminar</button>
+                        <td>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn btn-sm py-1 btn-primary" onclick="openEditModal('{{ $periodo->periodo_academico_id }}', '{{ json_encode($periodo) }}')">Editar</button>
+                                <button class="btn btn-sm py-1 btn-error" onclick="deletePeriod('{{ $periodo->periodo_academico_id }}')">Eliminar</button>
+                            </div>
                         </td>
                     </tr>
                     @endforeach

@@ -25,9 +25,11 @@
                     <tr>
                         <td>{{ explode("-", $materia->materia_id)[0] }}</td>
                         <td>{{ $materia->materia_nombre }}</td>
-                        <td class="space-x-2">
-                            <button class="btn btn-sm py-1 btn-primary" onclick="openEditSubjectModal('{{ $materia->materia_id }}', '{{ json_encode($materia) }}')">Editar</button>
-                            <button class="btn btn-sm py-1 btn-error" onclick="confirmDeleteSubject('{{ $materia->materia_id }}')">Eliminar</button>
+                        <td>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn btn-sm py-1 btn-primary" onclick="openEditSubjectModal('{{ $materia->materia_id }}', '{{ json_encode($materia) }}')">Editar</button>
+                                <button class="btn btn-sm py-1 btn-error" onclick="confirmDeleteSubject('{{ $materia->materia_id }}')">Eliminar</button>
+                            </div>
                         </td>
                     </tr>
                     @endforeach

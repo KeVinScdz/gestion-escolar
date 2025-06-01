@@ -17,7 +17,7 @@
             </div>
 
             <div class="overflow-x-auto mt-4">
-                <table class="table table-zebra w-full">
+                <table class="table w-full">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -29,12 +29,14 @@
                     <tbody>
                         @forelse($conceptos as $concepto)
                         <tr>
-                            <td>{{ $concepto->concepto_id }}</td>
+                            <td>{{ explode("-", $concepto->concepto_id)[0] }}</td>
                             <td>{{ $concepto->concepto_nombre }}</td>
                             <td>${{ number_format($concepto->concepto_valor, 2) }}</td>
                             <td>
-                                <button class="btn btn-xs btn-info" onclick="openEditConceptoModal('{{ $concepto->concepto_id }}', '{{ $concepto->concepto_nombre }}', '{{ $concepto->concepto_valor }}')">Editar</button>
-                                <button class="btn btn-xs btn-error" onclick="deleteConcepto('{{ $concepto->concepto_id }}')">Eliminar</button>
+                                <div class="flex flex-wrap gap-2">
+                                    <button class="btn btn-xs btn-info" onclick="openEditConceptoModal('{{ $concepto->concepto_id }}', '{{ $concepto->concepto_nombre }}', '{{ $concepto->concepto_valor }}')">Editar</button>
+                                    <button class="btn btn-xs btn-error" onclick="deleteConcepto('{{ $concepto->concepto_id }}')">Eliminar</button>
+                                </div>
                             </td>
                         </tr>
                         @empty

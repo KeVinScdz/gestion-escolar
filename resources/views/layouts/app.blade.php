@@ -1,6 +1,9 @@
-<html data-theme="light">
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title') | Sistema de Gestión Escolar</title>
     <script src="https://kit.fontawesome.com/eb36e646d1.js" crossorigin="anonymous"></script>
     @vite(['resources/css/app.css', 'resources/js/uploadForm.js'])
@@ -22,7 +25,7 @@
                 @yield('content')
             </main>
         </div>
-        <aside class="drawer-side border-r border-neutral-700">
+        <aside class="drawer-side border-r border-neutral-700 z-[51]">
             <label for="my-drawer-2" aria-label="close sidebar" class="drawer-overlay"></label>
             <ul class="menu bg-neutral text-neutral-content min-h-full w-80 p-4">
                 <a href="/dashboard" class="w-full space-y-2">

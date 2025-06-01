@@ -41,27 +41,26 @@
             </form>
         </div>
 
-        <div class="w-full p-5 bg-base-200 border border-base-300">
-
+        <div class="w-full bg-base-200 border border-base-300 rounded-lg">
             <div class="w-full overflow-x-auto">
-                <table class="table-auto w-full">
+                <table class="table w-full">
                     <thead>
                         <tr>
-                            <th class="px-4 py-2 text-start">ID</th>
-                            <th class="px-4 py-2 text-start">Alumno</th>
-                            <th class="px-4 py-2 text-start">Fecha</th>
-                            <th class="px-4 py-2 text-start">Justificada</th>
-                            <th class="px-4 py-2 text-start">Acciones</th>
+                            <th>ID</th>
+                            <th>Alumno</th>
+                            <th>Fecha</th>
+                            <th>Justificada</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($inasistencias as $inasistencia)
                         <tr>
-                            <td class="px-4 py-2">{{ $inasistencia->inasistencia_id }}</td>
-                            <td class="px-4 py-2">{{ $inasistencia->matricula->estudiante->usuario->usuario_nombre }} {{ $inasistencia->matricula->estudiante->usuario->usuario_apellido }}</td>
-                            <td class="px-4 py-2">{{ $inasistencia->inasistencia_fecha }}</td>
-                            <td class="px-4 py-2">{{ $inasistencia->inasistencia_justificada ? 'Sí: ' . $inasistencia->inasistencia_motivo : 'No' }}</td>
-                            <td class="px-4 py-2">
+                            <td>{{ $inasistencia->inasistencia_id }}</td>
+                            <td>{{ $inasistencia->matricula->estudiante->usuario->usuario_nombre }} {{ $inasistencia->matricula->estudiante->usuario->usuario_apellido }}</td>
+                            <td>{{ $inasistencia->inasistencia_fecha }}</td>
+                            <td>{{ $inasistencia->inasistencia_justificada ? 'Sí: ' . $inasistencia->inasistencia_motivo : 'No' }}</td>
+                            <td>
                                 <button
                                     onclick="openEditAbsenceModal('{{ $inasistencia->inasistencia_id }}', '{{ json_encode($inasistencia) }}')"
                                     class="btn btn-sm py-1 btn-primary">

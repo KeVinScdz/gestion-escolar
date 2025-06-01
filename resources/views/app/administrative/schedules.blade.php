@@ -101,7 +101,7 @@
 
                 @if(isset($selectedGroupId))
                 <div class="w-full overflow-x-auto pb-10">
-                    <div class="w-full grid grid-cols-5 gap-5">
+                    <div class="w-full min-w-[1200px] grid grid-cols-5 gap-5">
 
                         @foreach($bloquesHorario as $dia)
                         <div class="space-y-5">

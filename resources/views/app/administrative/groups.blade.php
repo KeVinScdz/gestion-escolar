@@ -11,7 +11,7 @@
         </div>
 
         {{-- Filtro por Año --}}
-        <div class="bg-base-200 border border-base-300 p-5 rounded-lg shadow">
+        <div class="bg-base-200 border border-base-300 p-5 rounded-lg">
             <form method="GET" action="/dashboard/cursos" class="flex items-end space-x-3">
                 <div>
                     <label for="year_filter" class="block text-sm font-medium">Filtrar por Año:</label>
@@ -30,8 +30,8 @@
         </div>
 
         @if($grupos->count() > 0)
-        <div class="overflow-x-auto">
-            <table class="table w-full">
+        <div class="overflow-x-auto bg-base-200 border border-base-300 rounded-lg">
+            <table class="table w-full min-w-[900px]">
                 <thead>
                     <tr>
                         <th>Nombre del Grupo</th>
@@ -48,10 +48,12 @@
                         <td>{{ $grupo->grado->grado_nombre ?? 'N/A' }}</td> {{-- Asumiendo que tienes la relación 'grado' y 'grado_nombre' en el modelo Grado --}}
                         <td>{{ $grupo->grupo_año }}</td>
                         <td>{{ $grupo->grupo_cupo }}</td>
-                        <td class="space-x-2">
-                            <button class="btn btn-sm py-1 btn-primary" onclick="openEditGroupModal('{{ $grupo->grupo_id }}', '{{ json_encode($grupo) }}')">Editar</button>
-                            <button class="btn btn-sm py-1 btn-error" onclick="confirmDeleteGroup('{{ $grupo->grupo_id }}')">Eliminar</button>
-                            <button class="btn btn-sm py-1 btn-primary btn-outline" onclick="openAssignSubjectsModal('{{ $grupo->grupo_id,  }}', '{{ json_encode($grupo) }}')">Asignar Materias</button>
+                        <td>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn btn-sm py-1 btn-primary" onclick="openEditGroupModal('{{ $grupo->grupo_id }}', '{{ json_encode($grupo) }}')">Editar</button>
+                                <button class="btn btn-sm py-1 btn-error" onclick="confirmDeleteGroup('{{ $grupo->grupo_id }}')">Eliminar</button>
+                                <button class="btn btn-sm py-1 btn-primary btn-outline" onclick="openAssignSubjectsModal('{{ $grupo->grupo_id,  }}', '{{ json_encode($grupo) }}')">Asignar Materias</button>
+                            </div>
                         </td>
                     </tr>
                     @endforeach

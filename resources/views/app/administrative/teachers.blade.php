@@ -5,7 +5,7 @@
 @section('content')
 <section class="w-full">
     <div class="w-full max-w-[1200px] mx-auto py-10 space-y-10">
-        <div class="flex justify-between items-center gap-10">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-10">
             <h1 class="text-2xl font-bold flex-1 tracking-tight">Docentes {{ $institucion -> institucion_nombre }} </h1>
             <div class="flex items-center justify-end gap-5">
                 <form method="get" class="flex gap-2">
@@ -30,8 +30,8 @@
             </div>
         </div>
         <div class="overflow-x-auto rounded bg-base-200 border border-base-300">
-            <table class="min-w-full text-sm text-base-content">
-                <thead class="bg-bsae-300 border-b border-base-300">
+            <table class="table w-full">
+                <thead class="border-b border-base-300">
                     <tr>
                         <th class="px-6 py-3 text-left font-semibold">Nombre</th>
                         <th class="px-6 py-3 text-left font-semibold">Correo</th>

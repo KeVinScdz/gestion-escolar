@@ -25,24 +25,23 @@
             </form>
         </div>
 
-        <div class="w-full p-5 bg-base-200 border border-base-300">
-
+        <div class="w-full bg-base-200 border border-base-300 rounded-lg">
             <div class="w-full overflow-x-auto">
-                <table class="table-auto w-full">
+                <table class="table w-full">
                     <thead>
                         <tr>
-                            <th class="text-start px-4 py-2">ID Observación</th>
-                            <th class="text-start px-4 py-2">Estudiante</th>
-                            <th class="text-start px-4 py-2">Tipo</th>
-                            <th class="text-start px-4 py-2">Descripción</th>
-                            <th class="text-start px-4 py-2">Fecha</th>
+                            <th>ID</th>
+                            <th>Estudiante</th>
+                            <th>Tipo</th>
+                            <th>Descripción</th>
+                            <th>Fecha</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($observaciones as $observacion)
                         <tr>
-                            <td class="px-4 py-2">{{ explode("-", $observacion->observacion_id)[0] }}</td>
-                            <td class="px-4 py-2">
+                            <td>{{ explode("-", $observacion->observacion_id)[0] }}</td>
+                            <td>
                                 @if($observacion->estudiante && $observacion->estudiante->usuario)
                                 {{ $observacion->estudiante->usuario->usuario_nombre }} {{ $observacion->estudiante->usuario->usuario_apellido }}
                                 @else
@@ -50,9 +49,9 @@
                                 Estudiante ID: {{ $observacion->estudiante_id }}
                                 @endif
                             </td>
-                            <td class="px-4 py-2">{{ $observacion->observacion_tipo }}</td>
-                            <td class="px-4 py-2">{{ Str::limit($observacion->observacion_descripcion, 100) }}</td> {{-- Limitar descripción para brevedad --}}
-                            <td class="px-4 py-2">{{ \Carbon\Carbon::parse($observacion->observacion_fecha)->format('d/m/Y') }}</td>
+                            <td>{{ $observacion->observacion_tipo }}</td>
+                            <td>{{ Str::limit($observacion->observacion_descripcion, 100) }}</td> {{-- Limitar descripción para brevedad --}}
+                            <td>{{ \Carbon\Carbon::parse($observacion->observacion_fecha)->format('d/m/Y') }}</td>
                         </tr>
                         @empty
                         <tr>

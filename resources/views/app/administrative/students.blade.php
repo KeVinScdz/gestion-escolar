@@ -5,7 +5,7 @@
 @section('content')
 <section class="w-full">
     <div class="w-full max-w-[1200px] mx-auto py-10 space-y-10">
-        <div class="flex justify-between items-center">
+        <div class="flex flex-col md:flex-row gap-10 justify-between items-center">
             <h1 class="text-2xl font-bold flex-1">Gestión de Matrículas</h1>
             <div class="flex items-center justify-end gap-5">
                 <form method="get" class="flex gap-2">
@@ -30,75 +30,79 @@
                 </a>
             </div>
         </div>
-        <div class="overflow-x-auto rounded bg-base-200 border border-base-300">
-            <table class="min-w-full text-sm text-base-content">
-                <thead class="bg-bsae-300 border-b border-base-300 text-nowrap">
-                    <tr>
-                        <th class="px-6 py-3 text-left font-semibold">ID</th>
-                        <th class="px-6 py-3 text-left font-semibold">Nombre Completo</th>
-                        <th class="px-6 py-3 text-left font-semibold">Correo</th>
-                        <th class="px-6 py-3 text-left font-semibold">Documento</th>
-                        <th class="px-6 py-3 text-left font-semibold">Tutor</th>
-                        <th class="px-6 py-3 text-left font-semibold">Estado</th>
-                        <th class="px-6 py-3 text-left font-semibold">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($estudiantes as $estudiante)
-                    <tr>
-                        <td class="px-6 py-4">{{ explode("-", $estudiante->usuario->usuario_id)[0] }}</td>
-                        <td class="px-6 py-4">{{ $estudiante->usuario->usuario_nombre }} {{ $estudiante->usuario->usuario_apellido }}</td>
-                        <td class="px-6 py-4">{{ $estudiante->usuario->usuario_correo }}</td>
-                        <td class="px-6 py-4 text-nowrap">{{ $estudiante->usuario->usuario_documento_tipo }}: {{ $estudiante->usuario->usuario_documento }}</td>
-                        <td class="px-6 py-4">
-                            @if($estudiante->tutor)
-                            {{ $estudiante->tutor->usuario->usuario_nombre ?? 'N/A' }} {{ $estudiante->tutor->usuario->usuario_apellido ?? '' }}
-                            (Tutor)
-                            @else
-                            Sin tutor asignado
-                            @endif
-                        </td>
-                        <td class="px-6 py-4">
-                            @if($estudiante->matriculas && $estudiante->matriculas->count() > 0)
-                            @php
-                            $matriculaActual = $estudiante->matriculas->where('matricula_año', date('Y'))->first();
-                            $ultimaMatricula = $estudiante->matriculas->sortByDesc('matricula_año')->first();
-                            @endphp
+        <div class="w-full rounded bg-base-200 border border-base-300">
+            <div class="overflow-x-auto w-full">
+                <table class="table w-full min-w-[1100px]">
+                    <thead class="bg-bsae-300 border-b border-base-300 text-nowrap">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre Completo</th>
+                            <th>Correo</th>
+                            <th>Documento</th>
+                            <th>Tutor</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($estudiantes as $estudiante)
+                        <tr>
+                            <td>{{ explode("-", $estudiante->usuario->usuario_id)[0] }}</td>
+                            <td>{{ $estudiante->usuario->usuario_nombre }} {{ $estudiante->usuario->usuario_apellido }}</td>
+                            <td>{{ $estudiante->usuario->usuario_correo }}</td>
+                            <td>{{ $estudiante->usuario->usuario_documento_tipo }}: {{ $estudiante->usuario->usuario_documento }}</td>
+                            <td>
+                                @if($estudiante->tutor)
+                                {{ $estudiante->tutor->usuario->usuario_nombre ?? 'N/A' }} {{ $estudiante->tutor->usuario->usuario_apellido ?? '' }}
+                                (Tutor)
+                                @else
+                                Sin tutor asignado
+                                @endif
+                            </td>
+                            <td>
+                                @if($estudiante->matriculas && $estudiante->matriculas->count() > 0)
+                                @php
+                                $matriculaActual = $estudiante->matriculas->where('matricula_año', date('Y'))->first();
+                                $ultimaMatricula = $estudiante->matriculas->sortByDesc('matricula_año')->first();
+                                @endphp
 
-                            @if($matriculaActual)
-                            <span>Matriculado en el grupo {{ $matriculaActual->grupo->grupo_nombre }}</span>
-                            @else
-                            <span>No renovado desde {{ $ultimaMatricula->matricula_año }}</span>
-                            @endif
+                                @if($matriculaActual)
+                                <span>Matriculado en el grupo {{ $matriculaActual->grupo->grupo_nombre }}</span>
+                                @else
+                                <span>No renovado desde {{ $ultimaMatricula->matricula_año }}</span>
+                                @endif
 
-                            @else
-                            No se le ha asignado ninguna matricula
-                            @endif
-                        </td>
-                        <td class="px-6 py-4 flex flex-wrap gap-2">
-                            @if(!$estudiante->tutor)
-                            <button
-                                onclick="asignarTutor('{{ $estudiante->estudiante_id }}', '{{ $estudiante->usuario_nombre }} {{ $estudiante->usuario_apellido }}')"
-                                class="btn btn-sm py-1 btn-primary">
-                                Asignar Tutor
-                            </button>
-                            @endif
-                            <button onclick="asignarMatricula('{{ $estudiante->estudiante_id }}')" class="btn btn-sm py-1 btn-primary btn-outline">Asignar matricula</button>
-                            @if($estudiante->matriculas && $estudiante->matriculas->count() > 0 && $matriculaActual)
-                            <button onclick="actualizarMatricula('{{ $matriculaActual->matricula_id }}', '{{ json_encode($matriculaActual) }}')"
-                                class="btn btn-sm py-1 btn-secondary btn-outline">Actualizar Matrícula</button>
-                            @endif
-                            <button onclick="editarUsuario('{{ $estudiante->usuario->usuario_id }}', '{{ json_encode($estudiante->usuario) }}')" class="btn btn-sm py-1 btn-primary">Editar</button>
-                            <button onclick="eliminarUsuario('{{ $estudiante->usuario->usuario_id }}')" class="btn btn-sm py-1 btn-error">Eliminar</button>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="6" class="text-center px-6 py-4 text-gray-500">No hay estudiantes o tutores registrados.</td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                                @else
+                                No se le ha asignado ninguna matricula
+                                @endif
+                            </td>
+                            <td>
+                                <div class="flex flex-wrap gap-2 w-fit">
+                                    @if(!$estudiante->tutor)
+                                    <button
+                                        onclick="asignarTutor('{{ $estudiante->estudiante_id }}', '{{ $estudiante->usuario_nombre }} {{ $estudiante->usuario_apellido }}')"
+                                        class="btn btn-sm py-1 btn-primary">
+                                        Asignar Tutor
+                                    </button>
+                                    @endif
+                                    <button onclick="asignarMatricula('{{ $estudiante->estudiante_id }}')" class="btn btn-sm py-1 btn-primary btn-outline">Asignar matricula</button>
+                                    @if($estudiante->matriculas && $estudiante->matriculas->count() > 0 && $matriculaActual)
+                                    <button onclick="actualizarMatricula('{{ $matriculaActual->matricula_id }}', '{{ json_encode($matriculaActual) }}')"
+                                        class="btn btn-sm py-1 btn-secondary btn-outline">Actualizar Matrícula</button>
+                                    @endif
+                                    <button onclick="editarUsuario('{{ $estudiante->usuario->usuario_id }}', '{{ json_encode($estudiante->usuario) }}')" class="btn btn-sm py-1 btn-primary">Editar</button>
+                                    <button onclick="eliminarUsuario('{{ $estudiante->usuario->usuario_id }}')" class="btn btn-sm py-1 btn-error">Eliminar</button>
+                                </div>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="6" class="text-center px-6 py-4 text-gray-500">No hay estudiantes o tutores registrados.</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         {{ $estudiantes->links('components.pagination') }}

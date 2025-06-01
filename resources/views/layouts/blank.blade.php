@@ -1,6 +1,9 @@
-<html data-theme="light">
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title') | Sistema de Gestión Escolar</title>
     <script src="https://kit.fontawesome.com/eb36e646d1.js" crossorigin="anonymous"></script>
     @vite(['resources/css/app.css', 'resources/js/uploadForm.js'])
