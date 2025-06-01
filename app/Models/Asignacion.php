@@ -36,4 +36,9 @@ class Asignacion extends Model
     {
         return $this->belongsTo(Grupo::class, 'grupo_id', 'grupo_id');
     }
+
+    public function horarios()
+    {
+        return $this->hasMany(Horario::class, 'asignacion_id', 'asignacion_id');
+    }
 }

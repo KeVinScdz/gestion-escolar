@@ -132,34 +132,32 @@
                     @endif
                     @endif
 
-                    {{-- Estudiante --}}
+                    {{-- Docente --}}
                     @if($usuarioSesion->rol_id == 3)
                     <li>
-                        <a href="/dashboard/matriculas" class="hover:bg-primary/50 {{ request()->is('dashboard/matriculas') ? 'bg-primary' : '' }}">Mi Matrícula</a>
+                        <a href="/dashboard/docente/horario" class="hover:bg-primary/50 {{ request()->is('dashboard/docente/horario') ? 'bg-primary' : '' }}">
+                            Mi Horario
+                        </a>
                     </li>
                     <li>
-                        <a href="/dashboard/notas" class="hover:bg-primary/50 {{ request()->is('dashboard/notas') ? 'bg-primary' : '' }}">Mis Notas</a>
+                        <a href="/dashboard/docente/cursos" class="hover:bg-primary/50 {{ request()->is('dashboard/docente/cursos') ? 'bg-primary' : '' }}">
+                            Mis Cursos
+                        </a>
                     </li>
-                    <li>
-                        <a href="/dashboard/inasistencias" class="hover:bg-primary/50 {{ request()->is('dashboard/inasistencias') ? 'bg-primary' : '' }}">Mi Asistencia</a>
-                    </li>
-                    <li>
-                        <a href="/dashboard/pagos" class="hover:bg-primary/50 {{ request()->is('dashboard/pagos') ? 'bg-primary' : '' }}">Mis Pagos</a>
-                    </li>
+                    @endif
+
+
+
+                    {{-- Estudiante --}}
+                    @if($usuarioSesion->rol_id == 4)
+                    <!-- Pendiente -->
                     @endif
 
                     {{-- Padre/Madre/Tutor --}}
                     @if($usuarioSesion->rol_id == 5)
-                    <li>
-                        <a href="/dashboard/matriculas" class="hover:bg-primary/50 {{ request()->is('dashboard/matriculas') ? 'bg-primary' : '' }}">Información Académica</a>
-                    </li>
-                    <li>
-                        <a href="/dashboard/observaciones" class="hover:bg-primary/50 {{ request()->is('dashboard/observaciones') ? 'bg-primary' : '' }}">Observaciones</a>
-                    </li>
-                    <li>
-                        <a href="/dashboard/pagos" class="hover:bg-primary/50 {{ request()->is('dashboard/pagos') ? 'bg-primary' : '' }}">Pagos</a>
-                    </li>
+                    <!-- Pendiente -->
                     @endif
+
 
                 </div>
                 <hr class="border-neutral-content/60 my-6">

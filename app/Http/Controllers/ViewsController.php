@@ -296,4 +296,33 @@ class ViewsController
 
         return view('app.administrative.payments', compact('usuarioSesion', 'estudiantes', 'conceptos'));
     }
+
+    public function teacherSchedule()
+    {
+        $usuarioSesion = Auth::user()->load('rol', 'docente');
+        $institucion_id = $usuarioSesion->docente->institucion_id;
+
+        $horarios = Horario::with('bloque', 'asignacion', 'asignacion.grupo')
+            ->whereHas('asignacion', function ($query) use ($usuarioSesion) {
+                $query->where('docente_id', $usuarioSesion->docente->docente_id);
+            })
+            ->whereHas('asignacion.grupo', function ($query) use ($institucion_id) {
+                $query->where('institucion_id', $institucion_id)->where('grupo_año', date('Y'));
+            })
+            ->get();
+
+        $bloquesHorario = Bloque::where('institucion_id', $institucion_id)
+            ->orderByRaw("FIELD(bloque_dia, 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo') ASC")
+            ->get()
+            ->groupBy('bloque_dia');
+
+        $asignaciones = Asignacion::with('grupo', 'materia', 'horarios', 'horarios.bloque')
+            ->where('docente_id', $usuarioSesion->docente->docente_id)
+            ->whereHas('grupo', function ($query) use ($institucion_id) {
+                $query->where('institucion_id', $institucion_id)->where('grupo_año', date('Y'));
+            })
+            ->get();
+
+        return view('app.teacher.schedule', compact('usuarioSesion', 'horarios', 'asignaciones', 'bloquesHorario'));
+    }
 }

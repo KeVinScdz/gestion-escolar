@@ -29,6 +29,7 @@ Route::middleware(['auth', 'rol:1'])->group(function () {
     Route::get("/dashboard/usuarios", [ViewsController::class, 'users']);
 });
 
+// Administrative Dashboard
 Route::middleware(['auth', 'rol:2'])->group(function () {
     Route::middleware('permiso:1')->get("/dashboard/institucion", [ViewsController::class, 'institution']);
     Route::middleware('permiso:2')->get("/dashboard/administrativos", [ViewsController::class, 'administratives']);
@@ -41,4 +42,11 @@ Route::middleware(['auth', 'rol:2'])->group(function () {
     Route::middleware('permiso:9')->get("/dashboard/inasistencias", [ViewsController::class, 'absences']);
     Route::middleware('permiso:10')->get("/dashboard/observaciones", [ViewsController::class, 'observations']);
     Route::middleware('permiso:11')->get("/dashboard/pagos", [ViewsController::class, 'payments']);
+});
+
+// Teacher Dashboard
+Route::middleware(['auth', 'rol:3'])->prefix('/dashboard/docente')->group(function () {
+    Route::get("/horario", [ViewsController::class, 'teacherSchedule']);
+    Route::get("/cursos", [ViewsController::class, 'teacherCourses']);
+    Route::get("/cursos/{id}", [ViewsController::class, 'teacherCourseDetails']);
 });
