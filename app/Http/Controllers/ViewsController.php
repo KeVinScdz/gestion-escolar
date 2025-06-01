@@ -250,7 +250,8 @@ class ViewsController
             ->where('institucion_id', $institucion_id)
             ->whereHas('matricula', function ($query) {
                 $query->where('matricula_año', date('Y'));
-            });
+            })
+            ->orderBy('inasistencia_fecha', 'desc');
 
         if ($justificationFilter == 'justificada') {
             $inasistencias = $inasistencias->where('inasistencia_justificada', true);

@@ -905,8 +905,6 @@ class create_school extends Seeder
                 'inasistencia_fecha' => '2025-03-01',
                 'inasistencia_justificada' => false,
                 'inasistencia_motivo' => null,
-                'created_at' => now(),
-                'updated_at' => null,
             ],
             [
                 'inasistencia_id' => 2,
@@ -915,8 +913,6 @@ class create_school extends Seeder
                 'inasistencia_fecha' => '2025-03-15',
                 'inasistencia_justificada' => true,
                 'inasistencia_motivo' => 'Problemas de salud',
-                'created_at' => now(),
-                'updated_at' => null,
             ],
             [
                 'inasistencia_id' => 3,
@@ -925,8 +921,6 @@ class create_school extends Seeder
                 'inasistencia_fecha' => '2025-04-10',
                 'inasistencia_justificada' => false,
                 'inasistencia_motivo' => null,
-                'created_at' => now(),
-                'updated_at' => null,
             ],
         ]);
     }

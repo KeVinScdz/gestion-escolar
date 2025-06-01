@@ -47,10 +47,11 @@
                 <table class="table-auto w-full">
                     <thead>
                         <tr>
-                            <th class="px-4 py-2">ID</th>
-                            <th class="px-4 py-2">Alumno</th>
-                            <th class="px-4 py-2">Fecha</th>
-                            <th class="px-4 py-2">Justificada</th>
+                            <th class="px-4 py-2 text-start">ID</th>
+                            <th class="px-4 py-2 text-start">Alumno</th>
+                            <th class="px-4 py-2 text-start">Fecha</th>
+                            <th class="px-4 py-2 text-start">Justificada</th>
+                            <th class="px-4 py-2 text-start">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -60,6 +61,13 @@
                             <td class="px-4 py-2">{{ $inasistencia->matricula->estudiante->usuario->usuario_nombre }} {{ $inasistencia->matricula->estudiante->usuario->usuario_apellido }}</td>
                             <td class="px-4 py-2">{{ $inasistencia->inasistencia_fecha }}</td>
                             <td class="px-4 py-2">{{ $inasistencia->inasistencia_justificada ? 'Sí: ' . $inasistencia->inasistencia_motivo : 'No' }}</td>
+                            <td class="px-4 py-2">
+                                <button
+                                    onclick="openEditAbsenceModal('{{ $inasistencia->inasistencia_id }}', '{{ json_encode($inasistencia) }}')"
+                                    class="btn btn-sm py-1 btn-primary">
+                                    Editar
+                                </button>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -76,4 +84,56 @@
         {{ $inasistencias->links('components.pagination') }}
     </div>
 </section>
+
+<!-- Edit Absence Modal -->
+<dialog id="edit-absence-modal" class="modal">
+    <div class="modal-box">
+        <h2 class="text-2xl font-bold mb-4">Editar Inasistencia</h2>
+        <form class="upload-form space-y-4" data-target="/api/absences/{id}" data-method="put" data-reload="true" data-show-alert="true">
+            <fieldset class="fieldset">
+                <label for="edit_inasistencia_fecha" class="fieldset-label">
+                    Fecha de la Inasistencia:
+                </label>
+                <input type="date" name="inasistencia_fecha" id="edit_inasistencia_fecha" class="input input-bordered">
+            </fieldset>
+            <fieldset class="fieldset">
+                <label for="edit_inasistencia_justificada" class="fieldset-label">
+                    Estado de la Inasistencia:
+                </label>
+                <select name="inasistencia_justificada" id="edit_inasistencia_justificada" class="select select-bordered">
+                    <option value="1">Justificada</option>
+                    <option value="0">Injustificada</option>
+                </select>
+            </fieldset>
+            <fieldset class="fieldset">
+                <label for="edit_inasistencia_motivo" class="fieldset-label">
+                    Motivo de la Inasistencia (opcional):
+                </label>
+                <textarea name="inasistencia_motivo" id="edit_inasistencia_motivo" class="textarea textarea-bordered"></textarea>
+            </fieldset>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </form>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>
+@endsection
+
+@section('scripts')
+<script>
+    function openEditAbsenceModal(id, inasistenciaJSONString) {
+        const inasistencia = JSON.parse(inasistenciaJSONString);
+
+        const $form = document.querySelector('#edit-absence-modal form');
+        $form.dataset.target = "/api/absences/" + id;
+
+        document.getElementById('edit_inasistencia_justificada').value = inasistencia.inasistencia_justificada ? '1' : '0';
+        document.getElementById('edit_inasistencia_motivo').value = inasistencia.inasistencia_motivo || '';
+        document.getElementById('edit_inasistencia_fecha').value = inasistencia.inasistencia_fecha;
+
+        const $modal = document.getElementById('edit-absence-modal');
+        $modal.show();
+    }
+</script>
 @endsection

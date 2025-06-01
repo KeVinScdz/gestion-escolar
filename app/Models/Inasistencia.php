@@ -14,9 +14,9 @@ class Inasistencia extends Model
         'inasistencia_id',
         'matricula_id',
         'institucion_id',
-        'fecha',
-        'justificada',
-        'observacion'
+        'inasistencia_fecha',
+        'inasistencia_justificada',
+        'inasistencia_motivo',
     ];
 
     public function matricula()

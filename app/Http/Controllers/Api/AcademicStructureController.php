@@ -752,9 +752,15 @@ class AcademicStructureController
     {
         try {
             $request->validate([
-                'inasistencia_fecha' => 'sometimes|required|date',
-                'inasistencia_justificada' => 'sometimes|required|boolean',
+                'inasistencia_fecha' => 'required|date',
+                'inasistencia_justificada' => 'required|boolean',
                 'inasistencia_motivo' => 'nullable|string',
+            ], [
+                'inasistencia_fecha.required' => 'La fecha de la inasistencia es requerida',
+                'inasistencia_fecha.date' => 'La fecha de la inasistencia debe ser una fecha válida',
+                'inasistencia_justificada.required' => 'El estado de justificación es requerido',
+                'inasistencia_justificada.boolean' => 'El estado de justificación debe ser verdadero o falso',
+                'inasistencia_motivo.string' => 'El motivo de la inasistencia debe ser una cadena de caracteres',
             ]);
 
             $absence = Inasistencia::find($id);
@@ -771,7 +777,6 @@ class AcademicStructureController
             return response()->json([
                 'success' => true,
                 'message' => 'Inasistencia actualizada con éxito',
-                'data' => $absence,
             ]);
         } catch (\Exception $e) {
             return response()->json([
