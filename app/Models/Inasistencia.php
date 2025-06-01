@@ -10,6 +10,15 @@ class Inasistencia extends Model
     protected $primaryKey = 'inasistencia_id';
     public $timestamps = false;
 
+    protected $fillable = [
+        'inasistencia_id',
+        'matricula_id',
+        'institucion_id',
+        'fecha',
+        'justificada',
+        'observacion'
+    ];
+
     public function matricula()
     {
         return $this->belongsTo(Matricula::class, 'matricula_id', 'matricula_id');

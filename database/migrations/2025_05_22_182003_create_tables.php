@@ -163,7 +163,6 @@ return new class extends Migration
             $table->date('inasistencia_fecha');
             $table->boolean('inasistencia_justificada');
             $table->string('inasistencia_motivo')->nullable();
-            $table->timestamps();
         });
 
         // Financiero

@@ -51,3 +51,8 @@ Route::delete('/blocks/{id}', [AcademicStructureController::class, 'destroyBlock
 Route::post('/schedules', [AcademicStructureController::class, 'storeSchedule']);
 Route::put('/schedules/{id}', [AcademicStructureController::class, 'updateSchedule']);
 Route::delete('/schedules/{id}', [AcademicStructureController::class, 'destroySchedule']);
+
+// Absences Routes
+Route::post('/absences', [AcademicStructureController::class, 'storeAbsence']);
+Route::put('/absences/{id}', [AcademicStructureController::class, 'updateAbsence']);
+Route::delete('/absences/{id}', [AcademicStructureController::class, 'destroyAbsence']);

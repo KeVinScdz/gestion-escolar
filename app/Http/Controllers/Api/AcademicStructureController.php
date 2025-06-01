@@ -11,6 +11,7 @@ use App\Models\Materia;
 use App\Models\Asignacion;
 use App\Models\Horario;
 use App\Models\Bloque;
+use App\Models\Inasistencia;
 use App\Models\Matricula;
 
 class AcademicStructureController
@@ -429,11 +430,6 @@ class AcademicStructureController
                 'message' => 'Matrícula creada con éxito',
                 'data' => $enrollment,
             ], 201);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error al crear la matrícula: ' . $e->getMessage(),
-            ], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -484,12 +480,6 @@ class AcademicStructureController
                 'message' => 'Matrícula actualizada con éxito',
                 'data' => $enrollment,
             ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error de validación',
-                'errors' => $e->errors(),
-            ], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -561,12 +551,6 @@ class AcademicStructureController
                 'message' => 'Bloque creado con éxito',
                 'data' => $block,
             ], 201);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error de validación: ' . $e->getMessage(),
-                'errors' => $e->errors(),
-            ], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -610,12 +594,6 @@ class AcademicStructureController
                 'message' => 'Bloque actualizado con éxito',
                 'data' => $block,
             ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error de validación: ' . $e->getMessage(),
-                'errors' => $e->errors(),
-            ], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -677,12 +655,6 @@ class AcademicStructureController
                 'message' => 'Horario creado con éxito',
                 'data' => $schedule,
             ], 201);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error de validación: ' . $e->getMessage(),
-                'errors' => $e->errors(),
-            ], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -715,12 +687,6 @@ class AcademicStructureController
                 'message' => 'Horario actualizado con éxito',
                 'data' => $schedule,
             ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error de validación: ' . $e->getMessage(),
-                'errors' => $e->errors(),
-            ], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -751,6 +717,92 @@ class AcademicStructureController
             return response()->json([
                 'success' => false,
                 'message' => 'Error al eliminar el horario: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    // Absences functions
+    public function storeAbsence(Request $request)
+    {
+        try {
+            $request->validate([
+                'institucion_id' => 'required|exists:instituciones,institucion_id',
+                'matricula_id' => 'required|exists:matriculas,matricula_id',
+                'inasistencia_fecha' => 'required|date',
+                'inasistencia_justificada' => 'required|boolean',
+                'inasistencia_motivo' => 'nullable|string',
+            ]);
+
+            $absence = Inasistencia::create($request->all());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Inasistencia creada con éxito',
+                'data' => $absence,
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear la inasistencia: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function updateAbsence(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'inasistencia_fecha' => 'sometimes|required|date',
+                'inasistencia_justificada' => 'sometimes|required|boolean',
+                'inasistencia_motivo' => 'nullable|string',
+            ]);
+
+            $absence = Inasistencia::find($id);
+
+            if (!$absence) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Inasistencia no encontrada',
+                ], 404);
+            }
+
+            $absence->update($request->all());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Inasistencia actualizada con éxito',
+                'data' => $absence,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar la inasistencia: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function destroyAbsence($id)
+    {
+        try {
+            $absence = Inasistencia::find($id);
+
+            if (!$absence) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Inasistencia no encontrada',
+                ], 404);
+            }
+
+            $absence->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Inasistencia eliminada con éxito',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al eliminar la inasistencia: ' . $e->getMessage(),
             ], 500);
         }
     }
