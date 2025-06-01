@@ -229,6 +229,7 @@ class ViewsController
         // Obtener el horario del grupo seleccionado
         $selectedGroupId = request('grupo_id');
         $bloquesHorario = Bloque::where('institucion_id', $institucion_id)
+            ->orderByRaw("FIELD(bloque_dia, 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo') ASC")
             ->get()
             ->groupBy('bloque_dia');
         $horarios = Horario::with('bloque', 'asignacion', 'asignacion.grupo', 'asignacion.materia', 'asignacion.docente')

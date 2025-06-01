@@ -11,6 +11,7 @@ use App\Models\Materia;
 use App\Models\Asignacion;
 use App\Models\Horario;
 use App\Models\Bloque;
+use App\Models\Docente;
 use App\Models\Inasistencia;
 use App\Models\Matricula;
 
@@ -648,6 +649,37 @@ class AcademicStructureController
                 'bloque_id.exists' => 'El bloque no existe',
             ]);
 
+            $asignacion = Asignacion::find($request->input('asignacion_id'));
+
+            if (!$asignacion) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Asignación no encontrada',
+                ], 404);
+            }
+
+            $bloque = Bloque::find($request->input('bloque_id'));
+
+            if (!$bloque) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Bloque no encontrado',
+                ], 404);
+            }
+
+            $existingSchedule = Horario::with('asignacion')
+                ->where('bloque_id', $bloque->bloque_id)
+                ->whereHas('asignacion', function ($query) use ($asignacion) {
+                    $query->where('docente_id', $asignacion->docente_id);
+                })->first();
+
+            if ($existingSchedule) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'El docente ya tiene una clase programada en este horario.',
+                ], 409);
+            }
+
             $schedule = Horario::create($request->all());
 
             return response()->json([
@@ -678,6 +710,28 @@ class AcademicStructureController
                     'success' => false,
                     'message' => 'Horario no encontrado',
                 ], 404);
+            }
+
+            $asignacion = Asignacion::find($request->input('asignacion_id'));
+            if (!$asignacion) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Asignación no encontrada',
+                ], 404);
+            }
+
+            $existingSchedule = Horario::with('asignacion')
+                ->where('bloque_id', $schedule->bloque_id)
+                ->whereHas('asignacion', function ($query) use ($asignacion) {
+                    $query->where('docente_id', $asignacion->docente_id);
+                })
+                ->where('horario_id', '!=', $id)
+                ->first();
+            if ($existingSchedule) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'El docente ya tiene una clase programada en este horario.',
+                ], 409);
             }
 
             $schedule->update($request->all());

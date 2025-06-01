@@ -21,11 +21,6 @@ class Horario extends Model
         'asignacion_id',
     ];
 
-    public function grupo()
-    {
-        return $this->belongsTo(Grupo::class, 'grupo_id', 'grupo_id');
-    }
-
     public function bloque()
     {
         return $this->belongsTo(Bloque::class, 'bloque_id', 'bloque_id');

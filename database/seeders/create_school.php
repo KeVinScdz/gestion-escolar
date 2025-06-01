@@ -623,31 +623,31 @@ class create_school extends Seeder
             [
                 'asignacion_id' => '7c7c6c0b-f4af-4a43-9487-664ec9d3364d',
                 'docente_id' => '0515d9d8-e261-4f83-9c71-3db614d76f6b',
-                'materia_id' => '019717d5-0114-7069-898b-47696dd7a6e8',
+                'materia_id' => '019717d5-0114-7069-898b-47696dd7a6e8', // Ciencias Sociales
                 'grupo_id' => '019717a9-de2a-714b-b396-110996b777ee',
             ],
             [
                 'asignacion_id' => '01ea6124-c930-4868-a48c-c2e701416e1e',
                 'docente_id' => '9387b98b-1963-4528-8e4d-7efcde01c396',
-                'materia_id' => '019717d5-00df-752a-91a0-1c251cc69836',
+                'materia_id' => '019717d5-00df-752a-91a0-1c251cc69836', // Español y Literatura
                 'grupo_id' => '019717a9-de2a-714b-b396-110996b777ee',
             ],
             [
                 'asignacion_id' => '07710813-e691-4cec-8183-33c7574f3c69',
                 'docente_id' => 'a03da01f-ebd0-4d7d-91c2-d70f8a053348',
-                'materia_id' => '019717d5-0046-772b-b23f-e9c9b2336a63',
+                'materia_id' => '019717d5-0046-772b-b23f-e9c9b2336a63', // Matemáticas
                 'grupo_id' => '019717a9-de2a-714b-b396-110996b777ee',
             ],
             [
                 'asignacion_id' => '44064d52-5218-42aa-8969-73838caa4735',
                 'docente_id' => 'c163c21f-4204-468e-90a8-9725411d7833',
-                'materia_id' => '019717d5-0112-7371-b580-863a91da32c6',
+                'materia_id' => '019717d5-0112-7371-b580-863a91da32c6', // Ciencias Naturales
                 'grupo_id' => '019717a9-de2a-714b-b396-110996b777ee',
             ],
             [
                 'asignacion_id' => 'b93700f5-6589-4ea4-8a25-d52c4206d027',
                 'docente_id' => 'cc4d28f9-8d77-4c0e-b9c7-39fbc54d69b8',
-                'materia_id' => '019717d5-00e3-7452-9163-e6c495bacb5c',
+                'materia_id' => '019717d5-00e3-7452-9163-e6c495bacb5c', // Inglés
                 'grupo_id' => '019717a9-de2a-714b-b396-110996b777ee',
             ],
         ]);
@@ -686,34 +686,34 @@ class create_school extends Seeder
 
             // UNDECIMO B
             // Lunes
-            ['horario_id' => '1200e586-baaf-4c71-bbda-a4e473cef360', 'bloque_id' => '598956ac-93be-4aec-9b1a-c2f5e9d775fe', 'asignacion_id' => '07710813-e691-4cec-8183-33c7574f3c69'], // Matemáticas 07-08 Lunes
-            ['horario_id' => 'eccaff62-2a7a-4ce1-bd72-fca2340f64ae', 'bloque_id' => '982bcce7-d768-4382-890e-2a23b2bf1cb0', 'asignacion_id' => '7c7c6c0b-f4af-4a43-9487-664ec9d3364d'], // Ciencias Sociales 08-09 Lunes
-            ['horario_id' => '7ca7abe0-d30f-4f84-9e47-f361927204e6', 'bloque_id' => 'f1588930-93db-445b-8f44-6b61f086e49d', 'asignacion_id' => 'b93700f5-6589-4ea4-8a25-d52c4206d027'], // Inglés 09:30-10:30 Lunes
-            ['horario_id' => '8499d173-edb8-49f5-89ea-622c48d8924f', 'bloque_id' => '808ee534-5b19-4de2-af6c-14e778bce12c', 'asignacion_id' => '01ea6124-c930-4868-a48c-c2e701416e1e'], // Español 10:30-11:30 Lunes
+            ['horario_id' => '1200e586-baaf-4c71-bbda-a4e473cef360', 'bloque_id' => '598956ac-93be-4aec-9b1a-c2f5e9d775fe', 'asignacion_id' => 'b93700f5-6589-4ea4-8a25-d52c4206d027'], // Inglés 07-08 Lunes
+            ['horario_id' => 'eccaff62-2a7a-4ce1-bd72-fca2340f64ae', 'bloque_id' => '982bcce7-d768-4382-890e-2a23b2bf1cb0', 'asignacion_id' => '07710813-e691-4cec-8183-33c7574f3c69'], // Matemáticas 08-09 Lunes
+            ['horario_id' => '7ca7abe0-d30f-4f84-9e47-f361927204e6', 'bloque_id' => 'f1588930-93db-445b-8f44-6b61f086e49d', 'asignacion_id' => '44064d52-5218-42aa-8969-73838caa4735'], // Ciencias Naturales 09:30-10:30 Lunes
+            ['horario_id' => '8499d173-edb8-49f5-89ea-622c48d8924f', 'bloque_id' => '808ee534-5b19-4de2-af6c-14e778bce12c', 'asignacion_id' => '7c7c6c0b-f4af-4a43-9487-664ec9d3364d'], // Ciencias Sociales 10:30-11:30 Lunes
 
             // Martes
-            ['horario_id' => '98c4c41d-d6ba-48ff-afce-c072fe51d13f', 'bloque_id' => '8d91eec8-473e-4e02-853c-926677fb0fe3', 'asignacion_id' => '44064d52-5218-42aa-8969-73838caa4735'], // Ciencias Naturales 07-08 Martes
-            ['horario_id' => '4e9ba681-d5a5-4104-8359-1e29291b024b', 'bloque_id' => 'e42abe8f-b535-4fed-8330-228614104cd3', 'asignacion_id' => 'b93700f5-6589-4ea4-8a25-d52c4206d027'], // Inglés 08-09 Martes
-            ['horario_id' => '119dd2e2-00cb-4b4b-bbdd-1e02747c6a4e', 'bloque_id' => '0b8bf9c5-e1ec-443d-b953-8ed7a55ebdc8', 'asignacion_id' => '07710813-e691-4cec-8183-33c7574f3c69'], // Matemáticas 09:30-10:30 Martes
-            ['horario_id' => 'cf3ded8a-661c-4292-befe-fd743a29f0e7', 'bloque_id' => 'b5f18dda-e7d5-4822-91b8-a7088a0f9db7', 'asignacion_id' => '7c7c6c0b-f4af-4a43-9487-664ec9d3364d'], // Ciencias Sociales 10:30-11:30 Martes
+            ['horario_id' => '98c4c41d-d6ba-48ff-afce-c072fe51d13f', 'bloque_id' => '8d91eec8-473e-4e02-853c-926677fb0fe3', 'asignacion_id' => '07710813-e691-4cec-8183-33c7574f3c69'], // Matemáticas 07-08 Martes
+            ['horario_id' => '4e9ba681-d5a5-4104-8359-1e29291b024b', 'bloque_id' => 'e42abe8f-b535-4fed-8330-228614104cd3', 'asignacion_id' => '01ea6124-c930-4868-a48c-c2e701416e1e'], // Español y literatura 08-09 Martes
+            ['horario_id' => '119dd2e2-00cb-4b4b-bbdd-1e02747c6a4e', 'bloque_id' => '0b8bf9c5-e1ec-443d-b953-8ed7a55ebdc8', 'asignacion_id' => 'b93700f5-6589-4ea4-8a25-d52c4206d027'], // Ingles 09:30-10:30 Martes
+            ['horario_id' => 'cf3ded8a-661c-4292-befe-fd743a29f0e7', 'bloque_id' => 'b5f18dda-e7d5-4822-91b8-a7088a0f9db7', 'asignacion_id' => 'b93700f5-6589-4ea4-8a25-d52c4206d027'], // Ingles 10:30-11:30 Martes
 
             // Miércoles
-            ['horario_id' => '5b06ac51-3e0a-4fa5-86d2-6726b3f80830', 'bloque_id' => '08e7b669-c301-4106-abfd-68140b8db9f5', 'asignacion_id' => '01ea6124-c930-4868-a48c-c2e701416e1e'], // Español 07-08 Miércoles
-            ['horario_id' => '7d2e9043-d343-48ba-b592-bd6762936ff2', 'bloque_id' => 'f0f3e200-6ba4-4903-9119-342854071686', 'asignacion_id' => '44064d52-5218-42aa-8969-73838caa4735'], // Ciencias Naturales 08-09 Miércoles
-            ['horario_id' => '168752d3-b3bf-4fe4-aa4a-cec4dfe18361', 'bloque_id' => 'e03eb3c0-4f9a-4913-a82d-699e6402466a', 'asignacion_id' => '7c7c6c0b-f4af-4a43-9487-664ec9d3364d'], // Ciencias Sociales 09:30-10:30 Miércoles
-            ['horario_id' => 'd19d5070-5350-4309-bf9e-c4f140818c96', 'bloque_id' => '8ffbcbe5-0a4d-45bb-bb71-c8bd614ccc3d', 'asignacion_id' => '07710813-e691-4cec-8183-33c7574f3c69'], // Matemáticas 10:30-11:30 Miércoles
+            ['horario_id' => '5b06ac51-3e0a-4fa5-86d2-6726b3f80830', 'bloque_id' => '08e7b669-c301-4106-abfd-68140b8db9f5', 'asignacion_id' => '7c7c6c0b-f4af-4a43-9487-664ec9d3364d'], // Ciencias Sociales 07-08 Miércoles
+            ['horario_id' => '7d2e9043-d343-48ba-b592-bd6762936ff2', 'bloque_id' => 'f0f3e200-6ba4-4903-9119-342854071686', 'asignacion_id' => '07710813-e691-4cec-8183-33c7574f3c69'], // Matemáticas 08-09 Miércoles
+            ['horario_id' => '168752d3-b3bf-4fe4-aa4a-cec4dfe18361', 'bloque_id' => 'e03eb3c0-4f9a-4913-a82d-699e6402466a', 'asignacion_id' => '01ea6124-c930-4868-a48c-c2e701416e1e'], // Español y literatura 09:30-10:30 Miércoles
+            ['horario_id' => 'd19d5070-5350-4309-bf9e-c4f140818c96', 'bloque_id' => '8ffbcbe5-0a4d-45bb-bb71-c8bd614ccc3d', 'asignacion_id' => '44064d52-5218-42aa-8969-73838caa4735'], // Ciencias Naturales 10:30-11:30 Miércoles
 
             // Jueves
-            ['horario_id' => 'f4d1c14a-7b57-4a2a-8e38-da50330362d9', 'bloque_id' => '22c2c692-7045-4afb-8127-660d190abcd3', 'asignacion_id' => 'b93700f5-6589-4ea4-8a25-d52c4206d027'], // Inglés 07-08 Jueves
-            ['horario_id' => '7b455b77-4886-4c42-93cf-a48dec0420cf', 'bloque_id' => '54fc4660-6c70-4e07-ad09-0bbd20c1b9a7', 'asignacion_id' => '07710813-e691-4cec-8183-33c7574f3c69'], // Matemáticas 08-09 Jueves
-            ['horario_id' => 'f2648a19-39d3-4ec8-895a-dee7790918cb', 'bloque_id' => '2b55b621-3509-4855-a224-f48072a3acff', 'asignacion_id' => '01ea6124-c930-4868-a48c-c2e701416e1e'], // Español 09:30-10:30 Jueves
-            ['horario_id' => 'ed4a6300-c699-4678-9a8f-c6b0dcd12a98', 'bloque_id' => '74610303-7f02-4a7a-accd-b3874dd2fadb', 'asignacion_id' => '44064d52-5218-42aa-8969-73838caa4735'], // Ciencias Naturales 10:30-11:30 Jueves
+            ['horario_id' => 'f4d1c14a-7b57-4a2a-8e38-da50330362d9', 'bloque_id' => '22c2c692-7045-4afb-8127-660d190abcd3', 'asignacion_id' => '01ea6124-c930-4868-a48c-c2e701416e1e'], // Español y literatura 07-08 Jueves
+            ['horario_id' => '7b455b77-4886-4c42-93cf-a48dec0420cf', 'bloque_id' => '54fc4660-6c70-4e07-ad09-0bbd20c1b9a7', 'asignacion_id' => 'b93700f5-6589-4ea4-8a25-d52c4206d027'], // Ingles 08-09 Jueves
+            ['horario_id' => 'f2648a19-39d3-4ec8-895a-dee7790918cb', 'bloque_id' => '2b55b621-3509-4855-a224-f48072a3acff', 'asignacion_id' => '44064d52-5218-42aa-8969-73838caa4735'], // Ciencias Naturales 09:30-10:30 Jueves
+            ['horario_id' => 'ed4a6300-c699-4678-9a8f-c6b0dcd12a98', 'bloque_id' => '74610303-7f02-4a7a-accd-b3874dd2fadb', 'asignacion_id' => '07710813-e691-4cec-8183-33c7574f3c69'], // Matemáticas 10:30-11:30 Jueves
 
             // Viernes
-            ['horario_id' => '380e751c-5f40-4dbd-b322-8f91ada9a952', 'bloque_id' => '24f88fec-18ac-498e-a980-47ffa90926a5', 'asignacion_id' => '7c7c6c0b-f4af-4a43-9487-664ec9d3364d'], // Ciencias Sociales 07-08 Viernes
-            ['horario_id' => '79731eb2-63ad-42e8-9e6f-2fb7b9627447', 'bloque_id' => '55ee9bf7-fecd-46ed-a5db-b35c9fc48344', 'asignacion_id' => '01ea6124-c930-4868-a48c-c2e701416e1e'], // Español 08-09 Viernes
-            ['horario_id' => '27d703b4-57a6-49f9-a875-1c24b22a472b', 'bloque_id' => '144944c0-25c4-4000-a4be-6061587232f6', 'asignacion_id' => 'b93700f5-6589-4ea4-8a25-d52c4206d027'], // Inglés 09:30-10:30 Viernes
-            ['horario_id' => 'c98a932c-56f5-492b-bdc2-6d292124e7d7', 'bloque_id' => '585d0e0c-f073-4355-91a1-ad59149fbefc', 'asignacion_id' => '07710813-e691-4cec-8183-33c7574f3c69'], // Matemáticas 10:30-11:30 Viernes
+            ['horario_id' => '380e751c-5f40-4dbd-b322-8f91ada9a952', 'bloque_id' => '24f88fec-18ac-498e-a980-47ffa90926a5', 'asignacion_id' => 'b93700f5-6589-4ea4-8a25-d52c4206d027'], // Ingles 07-08 Viernes
+            ['horario_id' => '79731eb2-63ad-42e8-9e6f-2fb7b9627447', 'bloque_id' => '55ee9bf7-fecd-46ed-a5db-b35c9fc48344', 'asignacion_id' => '44064d52-5218-42aa-8969-73838caa4735'], // Ciencias Naturales 08-09 Viernes
+            ['horario_id' => '27d703b4-57a6-49f9-a875-1c24b22a472b', 'bloque_id' => '144944c0-25c4-4000-a4be-6061587232f6', 'asignacion_id' => '07710813-e691-4cec-8183-33c7574f3c69'], // Matemáticas 09:30-10:30 Viernes
+            ['horario_id' => 'c98a932c-56f5-492b-bdc2-6d292124e7d7', 'bloque_id' => '585d0e0c-f073-4355-91a1-ad59149fbefc', 'asignacion_id' => '01ea6124-c930-4868-a48c-c2e701416e1e'], // Español y literatura 10:30-11:30 Viernes
         ]);
 
         DB::table('conceptos_pago')->insert([
