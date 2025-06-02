@@ -56,3 +56,18 @@ Route::delete('/schedules/{id}', [AcademicStructureController::class, 'destroySc
 Route::post('/absences', [AcademicStructureController::class, 'storeAbsence']);
 Route::put('/absences/{id}', [AcademicStructureController::class, 'updateAbsence']);
 Route::delete('/absences/{id}', [AcademicStructureController::class, 'destroyAbsence']);
+
+// Observations Routes
+Route::post('/observations', [AcademicStructureController::class, 'storeObservation']);
+Route::put('/observations/{id}', [AcademicStructureController::class, 'updateObservation']);
+Route::delete('/observations/{id}', [AcademicStructureController::class, 'destroyObservation']);
+
+// Grades Routes
+Route::post('/grades', [AcademicStructureController::class, 'storeGrade']);
+Route::put('/grades/{id}', [AcademicStructureController::class, 'updateGrade']);
+Route::delete('/grades/{id}', [AcademicStructureController::class, 'destroyGrade']);
+
+// Attendances Routes
+Route::post('/attendaces', [AcademicStructureController::class, 'storeAttendance']);
+Route::put('/attendaces/{id}', [AcademicStructureController::class, 'updateAttendance']);
+Route::delete('/attendaces/{id}', [AcademicStructureController::class, 'destroyAttendance']);

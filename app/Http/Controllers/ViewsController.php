@@ -365,11 +365,11 @@ class ViewsController
                 return $estudiante->usuario->usuario_apellido;
             });
 
-        $observaciones = Observacion::with('estudiante', 'estudiante.matriculas')
-            ->whereHas('estudiante', function ($query) use ($institucion_id) {
+        $observaciones = Observacion::with('matricula', 'matricula.estudiante', 'matricula.estudiante.usuario')
+            ->whereHas('matricula.estudiante', function ($query) use ($institucion_id) {
                 $query->where('institucion_id', $institucion_id);
             })
-            ->whereHas('estudiante.matriculas', function ($query) use ($asignacion) {
+            ->whereHas('matricula', function ($query) use ($asignacion) {
                 $query->where('grupo_id', $asignacion->grupo->grupo_id);
             })
             ->orderBy('observacion_fecha', 'desc')
