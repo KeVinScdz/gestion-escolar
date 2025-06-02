@@ -3,7 +3,7 @@
 
 @section('content')
 <section class="w-full">
-    <div class="w-full max-w- mx-auto py-10 space-y-10">
+    <div class="w-full max-w- mx-auto py-10 space-y-5">
         <div class="space-y-4">
             {{-- Título principal --}}
             <h1 class="text-3xl font-bold">
@@ -104,13 +104,13 @@
         </form>
     </div>
 </section>
-@endif
-
-@if(request('accion') === 'notas')
+@elseif (request('accion') === 'notas')
 <section class="w-full">
     <div class="w-full max-w- mx-auto py-10 space-y-10">
-        <h2 class="text-2xl font-semibold">Gestión de Notas</h2>
-        <p class="text-base-content/60">Aquí puedes gestionar las notas de los estudiantes del curso.</p>
+        <div>
+            <h2 class="text-2xl font-semibold">Gestión de Notas</h2>
+            <p class="text-base-content/60">Aquí puedes gestionar las notas de los estudiantes del curso.</p>
+        </div>
         <form class="upload-form space-y-5" data-debug="true">
 
             <div class="w-full overflow-x-auto bg-base-200 border border-base-300 rounded-lg">
@@ -160,6 +160,53 @@
         </form>
     </div>
 </section>
+@else
+<section class="w-full">
+    <div class="w-full max-w- mx-auto py-10 space-y-5">
+        <div>
+            <h2 class="text-2xl font-semibold">Observaciones de Estudiantes</h2>
+            <p class="text-base-content/60">Aquí puedes ver y gestionar las observaciones de los estudiantes.</p>
+        </div>
+        <div class="w-full overflow-x-auto bg-base-200 border border-base-300 rounded-lg">
+
+            <table class="table w-full">
+                <thead>
+                    <tr>
+                        <th>Estudiante</th>
+                        <th>Fecha</th>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                @foreach($observaciones as $observacion)
+                <tr>
+                    <td>
+                        <a href="/dashboard/docente/estudiantes/{{ $observacion->matricula->estudiante_id }}" target="_blank" class="hover:text-primary hover:underline tooltip" data-tip="Ver perfil">
+                            {{ $observacion->matricula->estudiante->usuario->usuario_apellido }} {{ $observacion->matricula->estudiante->usuario->usuario_nombre }}
+                        </a>
+                    </td>
+                    <td>{{ $observacion->observacion_fecha }}</td>
+                    <td>{{ $observacion->observacion_tipo }}</td>
+                    <td>{{ $observacion->observacion_descripcion }}</td>
+                    <td>
+                        <div class="flex flex-wrap gap-4">
+                            <button onclick="openEditObservationModal('{{ $observacion->observacion_id }}', '{{ json_encode($observacion) }}')" class="btn btn-sm py-1.5 btn-primary">
+                                <i class="fas fa-edit"></i>
+                                Editar
+                            </button>
+                            <button onclick="deleteObservation('{{ $observacion->observacion_id }}')" class="btn btn-sm py-1.5 btn-error">
+                                <i class="fas fa-trash"></i>
+                                Eliminar
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                @endforeach
+            </table>
+        </div>
+    </div>
+</section>
 @endif
 
 <!-- Create List Modal -->
@@ -192,7 +239,81 @@
     <div class="modal-box space-y-5">
         <h2 class="text-xl font-semibold">Agregar Observación</h2>
 
-        <form class="upload-form space-y-4">
+        <form class="upload-form space-y-4" data-target="/api/observations" data-method="post" data-reload="true" data-show-alert="true">
+            <fieldset class="fieldset">
+                <label class="fieldset-label" for="observacion_fecha">
+                    Fecha:
+                </label>
+                <input type="date" id="observacion_fecha" name="observacion_fecha" class="input" value="{{ date('Y-m-d') }}">
+            </fieldset>
+
+            <fieldset class="fieldset">
+                <label class="fieldset-label" for="observacion_tipo">
+                    Tipo de observación:
+                </label>
+                <select name="observacion_tipo" id="observacion_tipo" class="select select-bordered">
+                    <!-- Academicas -->
+                    <optgroup label="Académicas">
+                        <option value="bajo rendimiento">Bajo rendimiento</option>
+                        <option value="falta de participación">Falta de participación</option>
+                        <option value="inconvenientes con tareas">Inconvenientes con tareas</option>
+                    </optgroup>
+
+                    <!-- Disciplinarias -->
+                    <optgroup label="Disciplinarias">
+                        <option value="faltas de respeto">Faltas de respeto</option>
+                        <option value="incumplimiento de normas">Incumplimiento de normas</option>
+                        <option value="problemas de convivencia">Problemas de convivencia</option>
+                        <option value="comportamiento ejemplar">Comportamiento ejemplar</option>
+                        <option value="llamado de atención">Llamado de atención</option>
+                    </optgroup>
+
+                    <!-- Otros -->
+                    <optgroup label="Otros">
+                        <option value="observación general">Observación general</option>
+                        <option value="salud o bienestar">Salud o bienestar</option>
+                        <option value="asistencia irregular">Asistencia irregular</option>
+                    </optgroup>
+                </select>
+            </fieldset>
+
+            <fieldset class="fieldset">
+                <label class="fieldset-label" for="matricula_id">
+                    Estudiante:
+                </label>
+                <select name="matricula_id" id="matricula_id" class="select select-bordered">
+                    @foreach ($estudiantes as $estudiante)
+                    <option value="{{ $estudiante->matriculas->last()->matricula_id }}">
+                        {{ $estudiante->usuario->usuario_nombre }} {{ $estudiante->usuario->usuario_apellido }}
+                    </option>
+                    @endforeach
+                </select>
+            </fieldset>
+
+            <fieldset class="fieldset">
+                <label class="fieldset-label" for="observacion_descripcion">
+                    Descripción:
+                </label>
+                <textarea id="observacion_descripcion" name="observacion_descripcion" rows="4" class="textarea" placeholder="Escribe aquí la observación..."></textarea>
+            </fieldset>
+
+            <div class="flex justify-end gap-2 mt-4">
+                <button type="button" onclick="document.getElementById('create-observation-modal').close()" class="btn">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </form>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>Cerrar</button>
+    </form>
+</dialog>
+
+<!-- Edit Observation Modal -->
+<dialog id="edit-observation-modal" class="modal">
+    <div class="modal-box space-y-5">
+        <h2 class="text-xl font-semibold">Editar Observación</h2>
+
+        <form class="upload-form space-y-4" data-target="/api/observations/{id}" data-method="put" data-reload="true" data-show-alert="true">
             <fieldset class="fieldset">
                 <label class="fieldset-label" for="observacion_fecha">
                     Fecha:
@@ -229,20 +350,6 @@
                     </optgroup>
                 </select>
             </fieldset>
-
-            <fieldset class="fieldset">
-                <label class="fieldset-label" for="estudiante_id">
-                    Estudiante:
-                </label>
-                <select name="estudiante_id" id="estudiante_id" class="select select-bordered">
-                    @foreach ($estudiantes as $estudiante)
-                    <option value="{{ $estudiante->estudiante_id }}">
-                        {{ $estudiante->usuario->usuario_nombre }} {{ $estudiante->usuario->usuario_apellido }}
-                    </option>
-                    @endforeach
-                </select>
-            </fieldset>
-
             <fieldset class="fieldset">
                 <label class="fieldset-label" for="observacion_descripcion">
                     Descripción:
@@ -251,7 +358,7 @@
             </fieldset>
 
             <div class="flex justify-end gap-2 mt-4">
-                <button type="button" onclick="document.getElementById('create-observation-modal').close()" class="btn">Cancelar</button>
+                <button type="button" onclick="document.getElementById('edit-observation-modal').close()" class="btn">Cancelar</button>
                 <button type="submit" class="btn btn-primary">Guardar</button>
             </div>
         </form>
@@ -260,4 +367,44 @@
         <button>Cerrar</button>
     </form>
 </dialog>
+
+<form id="delete-observation-form" class="upload-form hidden" data-target="/api/observations/{id}" data-method="delete" data-reload="true" data-show-alert="true">
+    <button type="submit">Eliminar</button>
+</form>
+@endsection
+
+@section('scripts')
+<script>
+    function openEditObservationModal(observationId, observationJSONString) {
+        const observation = JSON.parse(observationJSONString);
+        const $modal = document.getElementById('edit-observation-modal');
+
+        $modal.querySelector('form').dataset.target = `/api/observations/${observationId}`;
+
+        $modal.querySelector('input[name="observacion_fecha"]').value = observation.observacion_fecha;
+        $modal.querySelector('select[name="observacion_tipo"]').value = observation.observacion_tipo;
+        $modal.querySelector('textarea[name="observacion_descripcion"]').value = observation.observacion_descripcion;
+
+        $modal.show();
+    }
+
+    function deleteObservation(observationId) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "Estaacción no se puede deshacer.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar'
+        }).then((result) => {
+            if (!result.isConfirmed) return;
+
+            const $deleteForm = document.getElementById('delete-observation-form');
+            $deleteForm.dataset.target = `/api/observations/${observationId}`;
+
+            $deleteForm.querySelector('button').click();
+        });
+    }
+</script>
 @endsection

@@ -871,7 +871,7 @@ class create_school extends Seeder
             [
                 'observacion_id' => '2696bae5-a2b1-4f80-887d-e8808afe638b',
                 'matricula_id' => '0ec23155-b327-4386-8895-df34c355c6e2',
-                'observacion_tipo' => 'Falta de participación',
+                'observacion_tipo' => 'falta de participación',
                 'observacion_descripcion' => 'El estudiante no participa en las actividades de clase.',
                 'observacion_fecha' => '2025-03-15',
                 'created_at' => now(),
@@ -880,7 +880,7 @@ class create_school extends Seeder
             [
                 'observacion_id' => '3589999e-666c-4f88-8e10-7e0eb4e5db0a',
                 'matricula_id' => 'f4ff4f51-0303-4035-a865-9d7df3783e2d',
-                'observacion_tipo' => 'Bajo rendimiento',
+                'observacion_tipo' => 'bajo rendimiento',
                 'observacion_descripcion' => 'Necesita mejorar la entrega de tareas.',
                 'observacion_fecha' => '2025-04-10',
                 'created_at' => now(),
@@ -888,8 +888,8 @@ class create_school extends Seeder
             ],
             [
                 'observacion_id' => '54cb2fc2-0772-42b0-b924-573c19a29f93',
-                'matricula_id' => '1712b8e4-f374-48fe-8b67-c55e678f5289',
-                'observacion_tipo' => 'Observación general',
+                'matricula_id' => '54cb2fc2-0772-42b0-b924-573c19a29f93',
+                'observacion_tipo' => 'observación general',
                 'observacion_descripcion' => 'El estudiante no asiste a clases con regularidad.',
                 'observacion_fecha' => '2025-05-05',
                 'created_at' => now(),
