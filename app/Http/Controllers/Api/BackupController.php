@@ -13,7 +13,7 @@ use App\Models\Estudiante;
 use App\Models\Grado;
 use App\Models\Grupo;
 use App\Models\Horario;
-use App\Models\Inasistencia;
+use App\Models\Asistencia;
 use App\Models\Institucion;
 use App\Models\Materia;
 use App\Models\Matricula;
@@ -51,7 +51,7 @@ class BackupController
             'horarios' => Horario::all()->toArray(),
             'notas' => Nota::all()->toArray(),
             'matriculas' => Matricula::all()->toArray(),
-            'inasistencias' => Inasistencia::all()->toArray(),
+            'asistencias' => Asistencia::all()->toArray(),
             'conceptos_pago' => ConceptoPago::all()->toArray(),
             'pagos' => Pago::all()->toArray(),
             'observaciones' => Observacion::all()->toArray(),

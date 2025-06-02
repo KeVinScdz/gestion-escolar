@@ -35,8 +35,8 @@ class create_info extends Seeder
             ['permiso_id' => 7, 'permiso_nombre' => 'gestionar_horarios'],
             ['permiso_id' => 8, 'permiso_nombre' => 'gestionar_periodos'],
 
-            // Inasistencias
-            ['permiso_id' => 9, 'permiso_nombre' => 'gestionar_inasistencias'],
+            // Asistencias
+            ['permiso_id' => 9, 'permiso_nombre' => 'gestionar_asistencias'],
 
             // Observaciones
             ['permiso_id' => 10, 'permiso_nombre' => 'gestionar_observaciones'],

@@ -159,13 +159,12 @@ return new class extends Migration
             $table->integer('matricula_año');
         });
 
-        Schema::create('inasistencias', function (Blueprint $table) {
-            $table->id('inasistencia_id')->primary();
-            $table->uuid('institucion_id');
+        Schema::create('asistencias', function (Blueprint $table) {
+            $table->uuid('asistencia_id')->primary();
             $table->uuid('matricula_id');
-            $table->date('inasistencia_fecha');
-            $table->boolean('inasistencia_justificada');
-            $table->string('inasistencia_motivo')->nullable();
+            $table->date('asistencia_fecha');
+            $table->enum('asistencia_estado', ['presente', 'ausente', 'retardo']);
+            $table->string('asistencia_motivo')->nullable();
         });
 
         // Financiero
@@ -229,7 +228,7 @@ return new class extends Migration
         // Matriculas
         Schema::dropIfExists('matriculas');
         Schema::dropIfExists('notas');
-        Schema::dropIfExists('inasistencias');
+        Schema::dropIfExists('asistencias');
 
         // Financiero
         Schema::dropIfExists('pagos');

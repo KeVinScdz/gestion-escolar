@@ -37,9 +37,9 @@ class Matricula extends Model
         return $this->hasMany(Nota::class, 'matricula_id', 'matricula_id');
     }
 
-    public function inasistencias()
+    public function asistencias()
     {
-        return $this->hasMany(Inasistencia::class, 'matricula_id', 'matricula_id');
+        return $this->hasMany(Asistencia::class, 'matricula_id', 'matricula_id');
     }
 
     public function pagos()

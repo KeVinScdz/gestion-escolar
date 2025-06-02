@@ -51,6 +51,8 @@
                     del {{ $usuario->docente->institucion->institucion_nombre }}
                     @elseif ($usuario->rol_id == 4)
                     del {{ $usuario->estudiante->institucion->institucion_nombre }}
+                    @elseif ($usuario->rol_id == 5)
+                    del {{ explode(" ",  $usuario->tutor->estudiante->usuario->usuario_nombre)[0] }} {{ explode(" ",  $usuario->tutor->estudiante->usuario->usuario_apellido)[0] }}
                     @endif
                     </td>
                     <td class="px-6 py-4 flex gap-2">

@@ -896,32 +896,5 @@ class create_school extends Seeder
                 'updated_at' => null,
             ],
         ]);
-
-        DB::table('inasistencias')->insert([
-            [
-                'inasistencia_id' => 1,
-                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
-                'matricula_id' => '0ec23155-b327-4386-8895-df34c355c6e2',
-                'inasistencia_fecha' => '2025-03-01',
-                'inasistencia_justificada' => false,
-                'inasistencia_motivo' => null,
-            ],
-            [
-                'inasistencia_id' => 2,
-                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
-                'matricula_id' => 'f4ff4f51-0303-4035-a865-9d7df3783e2d',
-                'inasistencia_fecha' => '2025-03-15',
-                'inasistencia_justificada' => true,
-                'inasistencia_motivo' => 'Problemas de salud',
-            ],
-            [
-                'inasistencia_id' => 3,
-                'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
-                'matricula_id' => '54cb2fc2-0772-42b0-b924-573c19a29f93',
-                'inasistencia_fecha' => '2025-04-10',
-                'inasistencia_justificada' => false,
-                'inasistencia_motivo' => null,
-            ],
-        ]);
     }
 }

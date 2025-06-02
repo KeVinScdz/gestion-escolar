@@ -12,7 +12,7 @@ use App\Models\Bloque;
 use App\Models\ConceptoPago;
 use App\Models\Docente;
 use App\Models\Horario;
-use App\Models\Inasistencia;
+use App\Models\Asistencia;
 use App\Models\Institucion;
 use App\Models\Materia;
 use App\Models\Observacion;
@@ -63,7 +63,8 @@ class ViewsController
         $usuarioSesion = Auth::user()->load('rol');
         $search = request('search');
 
-        $usuarios = Usuario::with('administrativo', 'administrativo.permisos', 'administrativo.institucion', 'estudiante', 'estudiante.institucion', 'docente', 'docente.institucion', 'tutor')->search($search ?? '')->paginate(5);
+        $usuarios = Usuario::with('administrativo', 'administrativo.permisos', 'administrativo.institucion', 'estudiante', 'estudiante.institucion', 'docente', 'docente.institucion', 'tutor', 'tutor.estudiante', 'tutor.estudiante.usuario')
+            ->search($search ?? '')->paginate(5);
         $roles = Rol::all();
         $instituciones = Institucion::all();
         $estudiantes = Estudiante::with('usuario', 'tutor')->get();
@@ -247,17 +248,16 @@ class ViewsController
         $institucion_id = $usuarioSesion->administrativo->institucion_id;
         $justificationFilter = request('justification_filter');
 
-        $inasistencias = Inasistencia::with('matricula', 'matricula.estudiante', 'matricula.estudiante.usuario')
-            ->where('institucion_id', $institucion_id)
-            ->whereHas('matricula', function ($query) {
-                $query->where('matricula_año', date('Y'));
+        $inasistencias = Asistencia::with('matricula', 'matricula.estudiante', 'matricula.estudiante.usuario')
+            ->whereHas('matricula', function ($query) use ($institucion_id) {
+                $query->where('matricula_año', date('Y'))->where('institucion_id', $institucion_id);
             })
-            ->orderBy('inasistencia_fecha', 'desc');
+            ->orderBy('asistencia_fecha', 'desc');
 
         if ($justificationFilter == 'justificada') {
-            $inasistencias = $inasistencias->where('inasistencia_justificada', true);
+            $inasistencias = $inasistencias->where('asistencia_motivo', '!=', 'null');
         } elseif ($justificationFilter == 'injustificada') {
-            $inasistencias = $inasistencias->where('inasistencia_justificada', false);
+            $inasistencias = $inasistencias->where('asistencia_motivo', 'null');
         }
 
         $inasistencias = $inasistencias->paginate(20);
@@ -382,8 +382,8 @@ class ViewsController
             ->get();
 
         $fecha_asistencia = request('fecha_asistencia');
-        $inasistencias = Inasistencia::with('matricula')
-            ->where('inasistencia_fecha',  $fecha_asistencia)
+        $asistencias = Asistencia::with('matricula')
+            ->where('asistencia_fecha',  $fecha_asistencia)
             ->whereHas('matricula', function ($query) use ($asignacion) {
                 $query->where('grupo_id', $asignacion->grupo->grupo_id);
             })
@@ -391,6 +391,6 @@ class ViewsController
 
         $periodos = PeriodoAcademico::where('institucion_id', $institucion_id)->where('periodo_academico_año', date('Y'))->orderBy('periodo_academico_inicio', 'asc')->get();
 
-        return view('app.teacher.course', compact('usuarioSesion', 'asignacion', 'estudiantes', 'observaciones', 'periodos', 'inasistencias'));
+        return view('app.teacher.course', compact('usuarioSesion', 'asignacion', 'estudiantes', 'observaciones', 'periodos', 'asistencias'));
     }
 }

@@ -12,7 +12,7 @@ use App\Models\Asignacion;
 use App\Models\Horario;
 use App\Models\Bloque;
 use App\Models\Docente;
-use App\Models\Inasistencia;
+use App\Models\Asistencia;
 use App\Models\Matricula;
 use App\Models\Observacion;
 
@@ -792,97 +792,6 @@ class AcademicStructureController
         }
     }
 
-    // Absences functions
-    public function storeAbsence(Request $request)
-    {
-        try {
-            $request->validate([
-                'institucion_id' => 'required|exists:instituciones,institucion_id',
-                'matricula_id' => 'required|exists:matriculas,matricula_id',
-                'inasistencia_fecha' => 'required|date',
-                'inasistencia_justificada' => 'required|boolean',
-                'inasistencia_motivo' => 'nullable|string',
-            ]);
-
-            $absence = Inasistencia::create($request->all());
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Inasistencia creada con éxito',
-                'data' => $absence,
-            ], 201);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error al crear la inasistencia: ' . $e->getMessage(),
-            ], 500);
-        }
-    }
-
-    public function updateAbsence(Request $request, $id)
-    {
-        try {
-            $request->validate([
-                'inasistencia_fecha' => 'required|date',
-                'inasistencia_justificada' => 'required|boolean',
-                'inasistencia_motivo' => 'nullable|string',
-            ], [
-                'inasistencia_fecha.required' => 'La fecha de la inasistencia es requerida',
-                'inasistencia_fecha.date' => 'La fecha de la inasistencia debe ser una fecha válida',
-                'inasistencia_justificada.required' => 'El estado de justificación es requerido',
-                'inasistencia_justificada.boolean' => 'El estado de justificación debe ser verdadero o falso',
-                'inasistencia_motivo.string' => 'El motivo de la inasistencia debe ser una cadena de caracteres',
-            ]);
-
-            $absence = Inasistencia::find($id);
-
-            if (!$absence) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Inasistencia no encontrada',
-                ], 404);
-            }
-
-            $absence->update($request->all());
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Inasistencia actualizada con éxito',
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error al actualizar la inasistencia: ' . $e->getMessage(),
-            ], 500);
-        }
-    }
-
-    public function destroyAbsence($id)
-    {
-        try {
-            $absence = Inasistencia::find($id);
-
-            if (!$absence) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Inasistencia no encontrada',
-                ], 404);
-            }
-
-            $absence->delete();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Inasistencia eliminada con éxito',
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error al eliminar la inasistencia: ' . $e->getMessage(),
-            ], 500);
-        }
-    }
-
     // Observations functions
     public function storeObservation(Request $request)
     {
@@ -987,5 +896,21 @@ class AcademicStructureController
                 'message' => 'Error al eliminar la observación: ' . $e->getMessage(),
             ], 500);
         }
+    }
+
+    // Attendance functions
+    public function storeAttendance(Request $request)
+    {
+        // Implementar la logica para crear una asistencia
+    }
+
+    public function updateAttendance(Request $request, $id)
+    {
+        // Implementar la logica para actualizar una asistencia
+    }
+
+    public function destroyAttendance($id)
+    {
+        // Implementar la logica para eliminar una asistencia
     }
 }
