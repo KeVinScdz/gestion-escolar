@@ -55,11 +55,11 @@
                     <input type="checkbox" />
                     <div class="collapse-title font-semibold">Dias de clase Correspondientes</div>
                     <div class="collapse-content text-sm">
-                    <ul class="border-l border-base-content/20 pl-4">
-                        @foreach ($asignacion->horarios as $horario)
-                        <li class="text-sm text-base-content/80">{{ $horario->bloque->bloque_dia }} </li>
-                        @endforeach
-                    </ul>
+                        <ul class="border-l border-base-content/20 pl-4">
+                            @foreach ($asignacion->horarios as $horario)
+                            <li class="text-sm text-base-content/80">{{ $horario->bloque->bloque_dia }} </li>
+                            @endforeach
+                        </ul>
                     </div>
                 </div>
                 <a href="/dashboard/docente/cursos/{{ $asignacion->asignacion_id }}">

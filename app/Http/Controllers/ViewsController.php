@@ -325,4 +325,20 @@ class ViewsController
 
         return view('app.teacher.schedule', compact('usuarioSesion', 'horarios', 'asignaciones', 'bloquesHorario'));
     }
+
+    public function teacherCourses()
+    {
+        $usuarioSesion = Auth::user()->load('rol', 'docente');
+        $institucion_id = $usuarioSesion->docente->institucion_id;
+
+
+        $asignaciones = Asignacion::with('grupo', 'materia', 'horarios', 'horarios.bloque')
+            ->where('docente_id', $usuarioSesion->docente->docente_id)
+            ->whereHas('grupo', function ($query) use ($institucion_id) {
+                $query->where('institucion_id', $institucion_id)->where('grupo_año', date('Y'));
+            })
+            ->get();
+
+        return view('app.teacher.courses', compact('usuarioSesion', 'asignaciones'));
+    }
 }
