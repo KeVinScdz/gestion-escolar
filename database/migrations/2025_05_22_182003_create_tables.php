@@ -78,7 +78,9 @@ return new class extends Migration
             $table->string('institucion_correo')->unique();
             $table->string('institucion_direccion');
             $table->string('institucion_nit')->unique();
-            $table->timestamps();
+            $table->float('nota_minima');
+            $table->float('nota_maxima');
+            $table->float('nota_aprobatoria');
         });
 
         Schema::create('periodos_academicos', function (Blueprint $table) {

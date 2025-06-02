@@ -2,16 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 class Institucion extends Model
 {
+    use HasUuids;
+
     protected $table = 'instituciones';
+    public $timestamps = false;
     protected $primaryKey = 'institucion_id';
     public $incrementing = false;
     protected $keyType = 'string';
-    public $timestamps = false;
 
     protected $fillable = [
         'institucion_id',
@@ -20,18 +22,10 @@ class Institucion extends Model
         'institucion_correo',
         'institucion_direccion',
         'institucion_nit',
+        'nota_minima',
+        'nota_maxima',
+        'nota_aprobatoria',
     ];
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            if (empty($model->institucion_id)) {
-                $model->institucion_id = (string) Str::uuid();
-            }
-        });
-    }
 
     public function niveles()
     {
@@ -48,9 +42,9 @@ class Institucion extends Model
         if (empty($term)) return $query;
         return $query->where(function ($q) use ($term) {
             $q->where('institucion_nombre', 'like', "%{$term}%")
-              ->orWhere('institucion_correo', 'like', "%{$term}%")
-              ->orWhere('institucion_nit', 'like', "%{$term}%")
-              ->orWhere('institucion_direccion', 'like', "%{$term}%");
+                ->orWhere('institucion_correo', 'like', "%{$term}%")
+                ->orWhere('institucion_nit', 'like', "%{$term}%")
+                ->orWhere('institucion_direccion', 'like', "%{$term}%");
         });
     }
 }
