@@ -402,7 +402,7 @@ class AcademicStructureController
             $request->validate([
                 'estudiante_id' => 'required|exists:estudiantes,estudiante_id',
                 'grupo_id' => 'required|exists:grupos,grupo_id',
-                'matricula_año' => 'required|numeric',
+                'matricula_año' => 'required|numeric|between:1900,' . ((int) date('Y') + 2),
             ], [
                 'estudiante_id.required' => 'El ID del estudiante es requerido',
                 'estudiante_id.exists' => 'El estudiante no existe',
@@ -421,6 +421,22 @@ class AcademicStructureController
                 return response()->json([
                     'success' => false,
                     'message' => 'El estudiante ya está matriculado en este periodo académico (' . $existingEnrollment->matricula_año . ') en el grupo ' . $existingEnrollment->grupo->grupo_nombre . '.',
+                ], 409);
+            }
+
+            $group = Grupo::find($request->input('grupo_id'));
+
+            if (!$group) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Grupo no encontrado',
+                ], 404);
+            }
+
+            if ($group->matriculas()->count() >= $group->grupo_cupo) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'El grupo ' . $group->grupo_nombre . ' ya ha alcanzado su cupo máximo de estudiantes.',
                 ], 409);
             }
 
