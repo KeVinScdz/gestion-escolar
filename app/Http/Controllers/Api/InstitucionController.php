@@ -19,6 +19,9 @@ class InstitucionController
                 'institucion_correo' => 'required|email|unique:instituciones,institucion_correo',
                 'institucion_direccion' => 'required|string|max:255',
                 'institucion_nit' => 'required|string|unique:instituciones,institucion_nit',
+                'nota_minima' => 'required|numeric',
+                'nota_maxima' => 'required|numeric',
+                'nota_aprobatoria' => 'required|numeric',
             ], [
                 'institucion_nombre.required' => 'El nombre de la institución es obligatorio.',
                 'institucion_nombre.string' => 'El nombre debe ser una cadena de texto.',
@@ -35,6 +38,12 @@ class InstitucionController
                 'institucion_nit.required' => 'El NIT es obligatorio.',
                 'institucion_nit.string' => 'El NIT debe ser una cadena de texto.',
                 'institucion_nit.unique' => 'El NIT ya está registrado.',
+                'nota_minima.required' => 'La nota mínima es obligatoria.',
+                'nota_minima.numeric' => 'La nota mínima debe ser un número.',
+                'nota_maxima.required' => 'La nota máxima es obligatoria.',
+                'nota_maxima.numeric' => 'La nota máxima debe ser un número.',
+                'nota_aprobatoria.required' => 'La nota aprobatoria es obligatoria.',
+                'nota_aprobatoria.numeric' => 'La nota aprobatoria debe ser un número.',
             ]);
 
             $institucion = Institucion::create($request->all());
@@ -73,6 +82,9 @@ class InstitucionController
                 'institucion_correo' => 'required|email|unique:instituciones,institucion_correo,' . $id . ',institucion_id',
                 'institucion_direccion' => 'required|string|max:255',
                 'institucion_nit' => 'required|string|unique:instituciones,institucion_nit,' . $id . ',institucion_id',
+                'nota_minima' => 'required|numeric',
+                'nota_maxima' => 'required|numeric',
+                'nota_aprobatoria' => 'required|numeric',
             ], [
                 'institucion_nombre.required' => 'El nombre de la institución es obligatorio.',
                 'institucion_nombre.string' => 'El nombre debe ser una cadena de texto.',
@@ -89,6 +101,12 @@ class InstitucionController
                 'institucion_nit.required' => 'El NIT es obligatorio.',
                 'institucion_nit.string' => 'El NIT debe ser una cadena de texto.',
                 'institucion_nit.unique' => 'El NIT ya está registrado.',
+                'nota_minima.required' => 'La nota mínima es obligatoria.',
+                'nota_minima.numeric' => 'La nota mínima debe ser un número.',
+                'nota_maxima.required' => 'La nota máxima es obligatoria.',
+                'nota_maxima.numeric' => 'La nota máxima debe ser un número.',
+                'nota_aprobatoria.required' => 'La nota aprobatoria es obligatoria.',
+                'nota_aprobatoria.numeric' => 'La nota aprobatoria debe ser un número.',
             ]);
 
             $institucion->update($request->all());
