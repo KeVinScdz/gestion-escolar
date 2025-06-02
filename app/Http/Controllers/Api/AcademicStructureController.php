@@ -14,6 +14,7 @@ use App\Models\Bloque;
 use App\Models\Docente;
 use App\Models\Inasistencia;
 use App\Models\Matricula;
+use App\Models\Observacion;
 
 class AcademicStructureController
 {
@@ -878,6 +879,112 @@ class AcademicStructureController
             return response()->json([
                 'success' => false,
                 'message' => 'Error al eliminar la inasistencia: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    // Observations functions
+    public function storeObservation(Request $request)
+    {
+        try {
+            $request->validate(
+                [
+                    'matricula_id' => 'required|exists:matriculas,matricula_id',
+                    'observacion_tipo' => 'required|string',
+                    'observacion_descripcion' => 'required|string',
+                    'observacion_fecha' => 'required|date',
+                ],
+                [
+                    'matricula_id.required' => 'El ID de matrícula es requerido',
+                    'matricula_id.exists' => 'La matrícula no existe',
+                    'institucion_id.required' => 'El ID de institución es requerido',
+                    'institucion_id.exists' => 'La institución no existe',
+                    'observacion_tipo.required' => 'El tipo de observación es requerido',
+                    'observacion_tipo.string' => 'El tipo de observación debe ser una cadena de caracteres',
+                    'observacion_descripcion.required' => 'La descripción de la observación es requerida',
+                    'observacion_descripcion.string' => 'La descripción de la observación debe ser una cadena de caracteres',
+                    'observacion_fecha.required' => 'La fecha de la observación es requerida',
+                    'observacion_fecha.date' => 'La fecha de la observación debe ser una fecha válida',
+                ]
+            );
+
+            $observation = Observacion::create($request->all());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Observación creada con éxito',
+                'data' => $observation,
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear la observación: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function updateObservation(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'observacion_tipo' => 'sometimes|required|string',
+                'observacion_descripcion' => 'sometimes|required|string',
+                'observacion_fecha' => 'sometimes|required|date',
+            ], [
+                'observacion_tipo.required' => 'El tipo de observación es requerido',
+                'observacion_tipo.string' => 'El tipo de observación debe ser una cadena de caracteres',
+                'observacion_descripcion.required' => 'La descripción de la observación es requerida',
+                'observacion_descripcion.string' => 'La descripción de la observación debe ser una cadena de caracteres',
+                'observacion_fecha.required' => 'La fecha de la observación es requerida',
+                'observacion_fecha.date' => 'La fecha de la observación debe ser una fecha válida',
+            ]);
+
+            $observation = Observacion::find($id);
+
+            if (!$observation) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Observación no encontrada',
+                ], 404);
+            }
+
+            $observation->update($request->all());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Observación actualizada con éxito',
+                'data' => $observation,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar la observación: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function destroyObservation($id)
+    {
+        try {
+            $observation = Observacion::find($id);
+
+            if (!$observation) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Observación no encontrada',
+                ], 404);
+            }
+
+            $observation->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Observación eliminada con éxito',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al eliminar la observación: ' . $e->getMessage(),
             ], 500);
         }
     }
