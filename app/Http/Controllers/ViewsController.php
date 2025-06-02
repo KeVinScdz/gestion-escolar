@@ -250,7 +250,10 @@ class ViewsController
 
         $inasistencias = Asistencia::with('matricula', 'matricula.estudiante', 'matricula.estudiante.usuario')
             ->whereHas('matricula', function ($query) use ($institucion_id) {
-                $query->where('matricula_año', date('Y'))->where('institucion_id', $institucion_id);
+                $query->where('matricula_año', date('Y'));
+            })
+            ->whereHas('matricula.estudiante', function ($query) use ($institucion_id) {
+                $query->where('institucion_id', $institucion_id);
             })
             ->orderBy('asistencia_fecha', 'desc');
 
@@ -270,8 +273,8 @@ class ViewsController
         $usuarioSesion = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
         $institucion_id = $usuarioSesion->administrativo->institucion_id;
 
-        $observaciones = Observacion::with('estudiante', 'estudiante.usuario', 'estudiante.matriculas')
-            ->whereHas('estudiante', function ($query) use ($institucion_id) {
+        $observaciones = Observacion::with('matricula', 'matricula.estudiante', 'matricula.estudiante.usuario')
+            ->whereHas('matricula.estudiante', function ($query) use ($institucion_id) {
                 $query->where('institucion_id', $institucion_id);
             })
             ->orderBy('observacion_fecha', 'desc')

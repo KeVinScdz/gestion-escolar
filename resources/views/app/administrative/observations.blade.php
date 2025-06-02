@@ -42,12 +42,7 @@
                         <tr>
                             <td>{{ explode("-", $observacion->observacion_id)[0] }}</td>
                             <td>
-                                @if($observacion->estudiante && $observacion->estudiante->usuario)
-                                {{ $observacion->estudiante->usuario->usuario_nombre }} {{ $observacion->estudiante->usuario->usuario_apellido }}
-                                @else
-                                {{-- Fallback si la relación no está cargada o el estudiante no existe --}}
-                                Estudiante ID: {{ $observacion->estudiante_id }}
-                                @endif
+                                {{ $observacion->matricula->estudiante->usuario->usuario_nombre }} {{ $observacion->matricula->estudiante->usuario->usuario_apellido }}
                             </td>
                             <td>{{ $observacion->observacion_tipo }}</td>
                             <td>{{ Str::limit($observacion->observacion_descripcion, 100) }}</td> {{-- Limitar descripción para brevedad --}}
