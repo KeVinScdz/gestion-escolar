@@ -341,4 +341,56 @@ class ViewsController
 
         return view('app.teacher.courses', compact('usuarioSesion', 'asignaciones'));
     }
+
+    public function teacherCourseDetails($asignacion_id)
+    {
+        $usuarioSesion = Auth::user()->load('rol', 'docente');
+        $institucion_id = $usuarioSesion->docente->institucion_id;
+
+        $asignacion = Asignacion::with('grupo', 'materia')
+            ->where('asignacion_id', $asignacion_id)
+            ->where('docente_id', $usuarioSesion->docente->docente_id)
+            ->whereHas('grupo', function ($query) use ($institucion_id) {
+                $query->where('institucion_id', $institucion_id)->where('grupo_año', date('Y'));
+            })
+            ->firstOrFail();
+
+        $estudiantes = Estudiante::with('usuario', 'matriculas', 'tutor', 'tutor.usuario')
+            ->where('institucion_id', $institucion_id)
+            ->whereHas('matriculas', function ($query) use ($asignacion) {
+                $query->where('grupo_id', $asignacion->grupo->grupo_id);
+            })
+            ->get()
+            ->sortBy(function ($estudiante) {
+                return $estudiante->usuario->usuario_apellido;
+            });
+
+        $observaciones = Observacion::with('estudiante', 'estudiante.matriculas')
+            ->whereHas('estudiante', function ($query) use ($institucion_id) {
+                $query->where('institucion_id', $institucion_id);
+            })
+            ->whereHas('estudiante.matriculas', function ($query) use ($asignacion) {
+                $query->where('grupo_id', $asignacion->grupo->grupo_id);
+            })
+            ->orderBy('observacion_fecha', 'desc')
+            ->get();
+
+        $periodos = PeriodoAcademico::where('institucion_id', $institucion_id)
+            ->where('periodo_academico_año', date('Y'))
+            ->orderBy('periodo_academico_inicio', 'asc')
+            ->orderBy('periodo_academico_fin', 'asc')
+            ->get();
+
+        $fecha_asistencia = request('fecha_asistencia');
+        $inasistencias = Inasistencia::with('matricula')
+            ->where('inasistencia_fecha',  $fecha_asistencia)
+            ->whereHas('matricula', function ($query) use ($asignacion) {
+                $query->where('grupo_id', $asignacion->grupo->grupo_id);
+            })
+            ->get();
+
+        $periodos = PeriodoAcademico::where('institucion_id', $institucion_id)->where('periodo_academico_año', date('Y'))->orderBy('periodo_academico_inicio', 'asc')->get();
+
+        return view('app.teacher.course', compact('usuarioSesion', 'asignacion', 'estudiantes', 'observaciones', 'periodos', 'inasistencias'));
+    }
 }

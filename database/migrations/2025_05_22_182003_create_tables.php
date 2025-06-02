@@ -142,8 +142,9 @@ return new class extends Migration
 
         Schema::create('notas', function (Blueprint $table) {
             $table->uuid('nota_id')->primary();
-            $table->uuid('estudiante_id');
+            $table->uuid('matricula_id');
             $table->uuid('asignacion_id');
+            $table->uuid('periodo_academico_id');
             $table->float('nota_valor');
             $table->timestamps();
         });
