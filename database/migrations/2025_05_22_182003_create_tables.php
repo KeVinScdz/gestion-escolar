@@ -188,7 +188,7 @@ return new class extends Migration
         // Complementarias
         Schema::create('observaciones', function (Blueprint $table) {
             $table->uuid('observacion_id')->primary();
-            $table->uuid('estudiante_id');
+            $table->uuid('matricula_id');
             $table->string('observacion_tipo');
             $table->text('observacion_descripcion');
             $table->date('observacion_fecha');

@@ -17,18 +17,15 @@ class Observacion extends Model
 
     protected $fillable = [
         // 'observacion_id',
-        'estudiante_id',
-        'institucion_id',
+        'matricula_id',
         'observacion_tipo',
         'observacion_descripcion',
         'observacion_fecha',
-        'created_at',
-        'updated_at',
     ];
 
-    public function estudiante()
+    public function matricula()
     {
-        return $this->belongsTo(Estudiante::class, 'estudiante_id', 'estudiante_id');
+        return $this->belongsTo(Matricula::class, 'matricula_id', 'matricula_id');
     }
 
     public function institucion()
