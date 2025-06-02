@@ -17,8 +17,8 @@ class create_users extends Seeder
             // ADMINISTRADORES
             [
                 'usuario_id' => 'd436d563-a041-46ef-a951-1ca5ff0067ab',
-                'usuario_nombre' => 'Kevin',
-                'usuario_apellido' => 'García',
+                'usuario_nombre' => 'Kevin Andrés',
+                'usuario_apellido' => 'Muñoz García',
                 'usuario_correo' => 'kevin@gmail.com',
                 'usuario_documento_tipo' => 'CC',
                 'usuario_documento' => 1012345678,
@@ -33,7 +33,7 @@ class create_users extends Seeder
             // RECTOR
             [
                 'usuario_id' => 'bc2e8ed8-8682-4ffe-b1ac-e8d5f03670be',
-                'usuario_nombre' => 'Nestor',
+                'usuario_nombre' => 'Nestor Alonso',
                 'usuario_apellido' => 'Gomez Cruz',
                 'usuario_correo' => 'ngomez@gmail.com',
                 'usuario_documento_tipo' => 'CC',
@@ -49,8 +49,8 @@ class create_users extends Seeder
             // COORDINADOR ACADÉMICO
             [
                 'usuario_id' => '6e21d2f5-098e-4ba8-bde5-6c5459adcfef',
-                'usuario_nombre' => 'Diana',
-                'usuario_apellido' => 'Martínez',
+                'usuario_nombre' => 'Diana Carolina',
+                'usuario_apellido' => 'Martínez López',
                 'usuario_correo' => 'diana.martinez@gmail.com',
                 'usuario_documento_tipo' => 'CC',
                 'usuario_documento' => 1029384756,
@@ -65,8 +65,8 @@ class create_users extends Seeder
             // COORDINADOR DE CONVIVENCIA
             [
                 'usuario_id' => 'db7fd923-91e3-48a2-a4c2-9066d2d8d167',
-                'usuario_nombre' => 'Carlos',
-                'usuario_apellido' => 'López',
+                'usuario_nombre' => 'Carlos Alberto',
+                'usuario_apellido' => 'López Pérez',
                 'usuario_correo' => 'carlos.lopez@gmail.com',
                 'usuario_documento_tipo' => 'CC',
                 'usuario_documento' => 1098765432,
@@ -81,8 +81,8 @@ class create_users extends Seeder
             // AUXILIAR ADMINISTRATIVO
             [
                 'usuario_id' => '9c5b484f-b5a6-459d-9819-d1848ce07ede',
-                'usuario_nombre' => 'Lina',
-                'usuario_apellido' => 'Torres',
+                'usuario_nombre' => 'Lina María',
+                'usuario_apellido' => 'Torres Vargas',
                 'usuario_correo' => 'lina.torres@gmail.com',
                 'usuario_documento_tipo' => 'CC',
                 'usuario_documento' => 1054321987,
@@ -97,8 +97,8 @@ class create_users extends Seeder
             // CONTABILIDAD
             [
                 'usuario_id' => '8216e239-ee59-4f30-b7e5-e3ed77643cfc',
-                'usuario_nombre' => 'Oscar',
-                'usuario_apellido' => 'Ramírez',
+                'usuario_nombre' => 'Oscar Iván',
+                'usuario_apellido' => 'Ramírez Sánchez',
                 'usuario_correo' => 'oscar.ramirez@gmail.com',
                 'usuario_documento_tipo' => 'CC',
                 'usuario_documento' => 1043219876,
@@ -113,8 +113,8 @@ class create_users extends Seeder
             // DOCENTES
             [
                 'usuario_id' => '0822d067-f27e-4f27-b858-11dd9c5b271a',
-                'usuario_nombre' => 'María',
-                'usuario_apellido' => 'Pérez',
+                'usuario_nombre' => 'María Camila',
+                'usuario_apellido' => 'Pérez Gómez',
                 'usuario_correo' => 'maria.perez@gmail.com',
                 'usuario_documento_tipo' => 'CC',
                 'usuario_documento' => 1010101010,
@@ -128,8 +128,8 @@ class create_users extends Seeder
             ],
             [
                 'usuario_id' => '9b8e34a9-743d-4425-a6f4-ab661d53bd8c',
-                'usuario_nombre' => 'Juan',
-                'usuario_apellido' => 'Mendoza',
+                'usuario_nombre' => 'Juan David',
+                'usuario_apellido' => 'Mendoza Ruiz',
                 'usuario_correo' => 'juan.mendoza@gmail.com',
                 'usuario_documento_tipo' => 'CC',
                 'usuario_documento' => 1010202020,
@@ -143,8 +143,8 @@ class create_users extends Seeder
             ],
             [
                 'usuario_id' => 'eee75ba6-a7c1-4f11-9d05-524e39d347bc',
-                'usuario_nombre' => 'Laura',
-                'usuario_apellido' => 'Fernández',
+                'usuario_nombre' => 'Laura Sofía',
+                'usuario_apellido' => 'Fernández Díaz',
                 'usuario_correo' => 'laura.fernandez@gmail.com',
                 'usuario_documento_tipo' => 'CC',
                 'usuario_documento' => 1010303030,
@@ -158,8 +158,8 @@ class create_users extends Seeder
             ],
             [
                 'usuario_id' => 'b6e15a77-215a-4c6c-b487-e3107df4f805',
-                'usuario_nombre' => 'Luis',
-                'usuario_apellido' => 'Moreno',
+                'usuario_nombre' => 'Luis Fernando',
+                'usuario_apellido' => 'Moreno Silva',
                 'usuario_correo' => 'luis.moreno@gmail.com',
                 'usuario_documento_tipo' => 'CC',
                 'usuario_documento' => 1010404040,
@@ -173,8 +173,8 @@ class create_users extends Seeder
             ],
             [
                 'usuario_id' => 'a3d16596-6eb9-44e9-b32f-756285a1e927',
-                'usuario_nombre' => 'Natalia',
-                'usuario_apellido' => 'Suárez',
+                'usuario_nombre' => 'Natalia Andrea',
+                'usuario_apellido' => 'Suárez Castro',
                 'usuario_correo' => 'natalia.suarez@gmail.com',
                 'usuario_documento_tipo' => 'CC',
                 'usuario_documento' => 1010505050,
@@ -189,7 +189,7 @@ class create_users extends Seeder
             // ALUMNOS
             [
                 'usuario_id' => 'acc7f7c7-3b60-4a5d-bb2b-433d18d4bca4',
-                'usuario_nombre' => 'Samuel',
+                'usuario_nombre' => 'Samuel David',
                 'usuario_apellido' => 'Useche Chaparro',
                 'usuario_correo' => 'samuuseche01@gmail.com',
                 'usuario_documento_tipo' => 'CC',
@@ -204,8 +204,8 @@ class create_users extends Seeder
             ],
             [
                 'usuario_id' => 'abaaee03-dec0-409f-98e7-082c24f86424',
-                'usuario_nombre' => 'Camila',
-                'usuario_apellido' => 'Ramírez',
+                'usuario_nombre' => 'Camila Andrea',
+                'usuario_apellido' => 'Ramírez Torres',
                 'usuario_correo' => 'camila.ramirez@gmail.com',
                 'usuario_documento_tipo' => 'CC',
                 'usuario_documento' => 1012222222,
@@ -219,8 +219,8 @@ class create_users extends Seeder
             ],
             [
                 'usuario_id' => '05253f46-4b3e-4c0e-ac55-b1ab50aa36f3',
-                'usuario_nombre' => 'Felipe',
-                'usuario_apellido' => 'López',
+                'usuario_nombre' => 'Felipe Andrés',
+                'usuario_apellido' => 'López Vargas',
                 'usuario_correo' => 'felipe.lopez@gmail.com',
                 'usuario_documento_tipo' => 'CC',
                 'usuario_documento' => 1013333333,
@@ -235,7 +235,7 @@ class create_users extends Seeder
             [
                 'usuario_id' => 'ecfa31b1-529a-40cf-adca-a959672fb16a',
                 'usuario_nombre' => 'Valentina',
-                'usuario_apellido' => 'Martínez',
+                'usuario_apellido' => 'Martínez Sánchez',
                 'usuario_correo' => 'valentina.martinez@gmail.com',
                 'usuario_documento_tipo' => 'CC',
                 'usuario_documento' => 1014444444,
@@ -249,8 +249,8 @@ class create_users extends Seeder
             ],
             [
                 'usuario_id' => '99ff4b18-85c5-4086-a50c-cf6bb5371ebe',
-                'usuario_nombre' => 'Sofía',
-                'usuario_apellido' => 'Castro',
+                'usuario_nombre' => 'Sofía Alejandra',
+                'usuario_apellido' => 'Castro Gómez',
                 'usuario_correo' => 'sofia.castro@gmail.com',
                 'usuario_documento_tipo' => 'CC',
                 'usuario_documento' => 1015555555,
@@ -264,8 +264,8 @@ class create_users extends Seeder
             ],
             [
                 'usuario_id' => '9bd53343-7286-44d1-b54e-cbbf480f84c1',
-                'usuario_nombre' => 'Daniel',
-                'usuario_apellido' => 'Rojas',
+                'usuario_nombre' => 'Daniel Felipe',
+                'usuario_apellido' => 'Rojas Ruiz',
                 'usuario_correo' => 'daniel.rojas@gmail.com',
                 'usuario_documento_tipo' => 'CC',
                 'usuario_documento' => 1016666666,
@@ -279,8 +279,8 @@ class create_users extends Seeder
             ],
             [
                 'usuario_id' => '629d01c9-3cea-4403-97bd-6da95c5e44bf',
-                'usuario_nombre' => 'Luisa',
-                'usuario_apellido' => 'Fernández',
+                'usuario_nombre' => 'Luisa Fernanda',
+                'usuario_apellido' => 'Fernández Díaz',
                 'usuario_correo' => 'luisa.fernandez@gmail.com',
                 'usuario_documento_tipo' => 'CC',
                 'usuario_documento' => 1017777777,
@@ -294,8 +294,8 @@ class create_users extends Seeder
             ],
             [
                 'usuario_id' => '43a51cd2-ceda-46ea-b723-801d101e88a4',
-                'usuario_nombre' => 'Sebastián',
-                'usuario_apellido' => 'Muñoz',
+                'usuario_nombre' => 'Sebastián Mateo',
+                'usuario_apellido' => 'Muñoz Silva',
                 'usuario_correo' => 'sebastian.munoz@gmail.com',
                 'usuario_documento_tipo' => 'CC',
                 'usuario_documento' => 1018888888,
@@ -310,7 +310,7 @@ class create_users extends Seeder
             [
                 'usuario_id' => 'a530f503-2040-4658-a0ac-0fb1f10c727f',
                 'usuario_nombre' => 'Isabella',
-                'usuario_apellido' => 'Gómez',
+                'usuario_apellido' => 'Gómez Castro',
                 'usuario_correo' => 'isabella.gomez@gmail.com',
                 'usuario_documento_tipo' => 'CC',
                 'usuario_documento' => 1019999999,
@@ -324,8 +324,8 @@ class create_users extends Seeder
             ],
             [
                 'usuario_id' => 'ed9cd8f0-4f51-4101-bd3b-3466991168c6',
-                'usuario_nombre' => 'Tomás',
-                'usuario_apellido' => 'Herrera',
+                'usuario_nombre' => 'Tomás Alejandro',
+                'usuario_apellido' => 'Herrera Pérez',
                 'usuario_correo' => 'tomas.herrera@gmail.com',
                 'usuario_documento_tipo' => 'CC',
                 'usuario_documento' => 1020000000,
@@ -340,8 +340,8 @@ class create_users extends Seeder
             // TUTORES
             [
                 'usuario_id' => '7fb32471-df2d-46e7-bb94-b893229459f9',
-                'usuario_nombre' => 'Claudia',
-                'usuario_apellido' => 'Mendoza',
+                'usuario_nombre' => 'Claudia Patricia',
+                'usuario_apellido' => 'Mendoza López',
                 'usuario_correo' => 'claudia.mendoza@gmail.com',
                 'usuario_documento_tipo' => 'CC',
                 'usuario_documento' => 1001234567,
@@ -355,8 +355,8 @@ class create_users extends Seeder
             ],
             [
                 'usuario_id' => 'a5af0345-cdd4-48bc-8d6c-18d373004c28',
-                'usuario_nombre' => 'Jorge',
-                'usuario_apellido' => 'Pérez',
+                'usuario_nombre' => 'Jorge Luis',
+                'usuario_apellido' => 'Pérez Ramírez',
                 'usuario_correo' => 'jorge.perez@gmail.com',
                 'usuario_documento_tipo' => 'CC',
                 'usuario_documento' => 1002345678,
@@ -370,8 +370,8 @@ class create_users extends Seeder
             ],
             [
                 'usuario_id' => 'c00a82af-9484-4509-80ff-039997f4369f',
-                'usuario_nombre' => 'Sandra',
-                'usuario_apellido' => 'Gómez',
+                'usuario_nombre' => 'Sandra Milena',
+                'usuario_apellido' => 'Gómez Vargas',
                 'usuario_correo' => 'sandra.gomez@gmail.com',
                 'usuario_documento_tipo' => 'CC',
                 'usuario_documento' => 1003456789,
@@ -385,8 +385,8 @@ class create_users extends Seeder
             ],
             [
                 'usuario_id' => '671336af-c528-451a-b0bd-eb16b69603bb',
-                'usuario_nombre' => 'Luis',
-                'usuario_apellido' => 'Ramírez',
+                'usuario_nombre' => 'Luis Carlos',
+                'usuario_apellido' => 'Ramírez Sánchez',
                 'usuario_correo' => 'luis.ramirez@gmail.com',
                 'usuario_documento_tipo' => 'CC',
                 'usuario_documento' => 1004567890,
