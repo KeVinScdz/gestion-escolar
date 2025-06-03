@@ -14,10 +14,10 @@ class Usuario extends Authenticatable
     use HasUuids;
 
     protected $table = 'usuarios';
+    public $timestamps = true;
     protected $primaryKey = 'usuario_id';
     protected $keyType = 'string';
-    public $incrementing = true;
-    public $timestamps = true;
+    public $incrementing = false;
 
     protected $hidden = ['usuario_contra'];
 

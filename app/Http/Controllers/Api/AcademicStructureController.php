@@ -15,6 +15,7 @@ use App\Models\Bloque;
 use App\Models\Docente;
 use App\Models\Asistencia;
 use App\Models\Matricula;
+use App\Models\Nota;
 use App\Models\Observacion;
 
 class AcademicStructureController
@@ -918,21 +919,21 @@ class AcademicStructureController
 
             $asistencias = [];
 
-            if (count($request->input('asistencias_estados')) === count($request->input('matriculas')) && count($request->input('justificaciones')) > 0) {
-                foreach ($request->input('matriculas') as $index => $matricula_id) {
-                    $asistencias[] = [
-                        'asistencia_id' => Str::uuid()->toString(),
-                        'matricula_id' => $matricula_id,
-                        'asistencia_fecha' => $request->input('asistencia_fecha'),
-                        'asistencia_estado' => $request->input('asistencias_estados')[$index],
-                        'asistencia_motivo' => $request->input('justificaciones')[$index] ?? null,
-                    ];
-                }
-            } else {
+            if (count($request->input('asistencias_estados')) !== count($request->input('matriculas')) && count($request->input('asistencias_estados')) !== count($request->input('justificaciones'))) {
                 return response()->json([
                     'success' => false,
                     'message' => 'El número de asistencias no coincide con el número de matrículas o no se proporcionaron justificaciones.',
                 ], 400);
+            }
+
+            foreach ($request->input('matriculas') as $index => $matricula_id) {
+                $asistencias[] = [
+                    'asistencia_id' => Str::uuid()->toString(),
+                    'matricula_id' => $matricula_id,
+                    'asistencia_fecha' => $request->input('asistencia_fecha'),
+                    'asistencia_estado' => $request->input('asistencias_estados')[$index],
+                    'asistencia_motivo' => $request->input('justificaciones')[$index] ?? null,
+                ];
             }
 
             if (count($asistenciasDB) > 0) {
@@ -961,13 +962,76 @@ class AcademicStructureController
         }
     }
 
-    public function updateAttendance(Request $request, $id)
+    // Grades functions
+    public function storeGrade(Request $request)
     {
-        // Implementar la logica para actualizar una asistencia
-    }
+        try {
+            $request->validate(
+                [
+                    'asignacion_id' => 'required|exists:asignaciones,asignacion_id',
+                    'notas' => 'required|array',
+                    'matriculas' => 'required|array',
+                    'periodos' => 'required|array',
+                ]
+            );
 
-    public function destroyAttendance($id)
-    {
-        // Implementar la logica para eliminar una asistencia
+            $asignacionDB = Asignacion::find($request->input('asignacion_id'));
+            $notasDB = Nota::with('asignacion')
+                ->whereHas('asignacion', function ($query) use ($asignacionDB) {
+                    $query->where('asignacion_id', $asignacionDB->asignacion_id);
+                })->get();
+
+            $notas = [];
+
+            if (count($request->input('notas')) !== count($request->input('matriculas')) || count($request->input('notas')) !== count($request->input('periodos'))) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'El número de notas no coincide con el número de matrículas o periodos.',
+                ], 400);
+            }
+
+            foreach ($request->input('matriculas') as $index => $matricula_id) {
+                if (!isset($request->input('notas')[$index]) || !isset($request->input('periodos')[$index])) {
+                    $existingGrade = $notasDB->where('matricula_id', $matricula_id)->where('periodo_academico_id', $request->input('periodos')[$index])->first();
+                    if ($existingGrade) {
+                        $existingGrade->delete();
+                    }
+                    continue;
+                }
+
+                $notas[] = [
+                    'nota_id' => Str::uuid()->toString(),
+                    'matricula_id' => $matricula_id,
+                    'asignacion_id' => $request->input('asignacion_id'),
+                    'periodo_academico_id' => $request->input('periodos')[$index],
+                    'nota_valor' => $request->input('notas')[$index],
+                ];
+            }
+
+            if (count($notasDB) > 0) {
+                foreach ($notas as $nota) {
+                    $existingNota = $notasDB->where('matricula_id', $nota['matricula_id'])->where('periodo_academico_id', $nota['periodo_academico_id'])->first();
+                    if ($existingNota) {
+                        unset($nota['nota_id']);
+
+                        $existingNota->update($nota);
+                    } else {
+                        Nota::create($nota);
+                    }
+                }
+            } else {
+                Nota::insert($notas);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => $notasDB->isEmpty() ? 'Notas creadas con éxito' : 'Notas actualizadas con éxito',
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear las notas: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 }
