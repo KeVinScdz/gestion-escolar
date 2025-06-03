@@ -397,8 +397,8 @@ class ViewsController
             ->get();
 
         $notas = Nota::whereHas('matricula', function ($query) use ($asignacion) {
-                $query->where('grupo_id', $asignacion->grupo->grupo_id);
-            })
+            $query->where('grupo_id', $asignacion->grupo->grupo_id);
+        })
             ->whereHas('asignacion', function ($query) use ($asignacion) {
                 $query->where('asignacion_id', $asignacion->asignacion_id);
             })
@@ -406,5 +406,23 @@ class ViewsController
         $periodos = PeriodoAcademico::where('institucion_id', $institucion_id)->where('periodo_academico_año', date('Y'))->orderBy('periodo_academico_inicio', 'asc')->get();
 
         return view('app.teacher.course', compact('usuarioSesion', 'asignacion', 'estudiantes', 'observaciones', 'periodos', 'asistencias', 'institucion', 'notas'));
+    }
+
+    public function studentSchedule()
+    {
+        $usuarioSesion = Auth::user()->load('rol', 'estudiante', 'estudiante.matriculas', 'estudiante.matriculas.grupo');
+        $institucion_id = $usuarioSesion->estudiante->institucion_id;
+
+        $horarios = Horario::with('bloque', 'asignacion', 'asignacion.grupo')
+            ->whereHas('asignacion', function ($query) use ($usuarioSesion) {
+                $query->where('grupo_id', $usuarioSesion->estudiante->matriculas->first()->grupo_id);
+            })
+            ->get();
+        $bloquesHorario = Bloque::where('institucion_id', $institucion_id)
+            ->orderByRaw("FIELD(bloque_dia, 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo') ASC")
+            ->get()
+            ->groupBy('bloque_dia');
+
+        return view('app.student.schedule', compact('usuarioSesion', 'horarios', 'bloquesHorario'));
     }
 }

@@ -51,6 +51,8 @@
                             {{ $usuarioSesion->administrativo->administrativo_cargo }}
                             @elseif($usuarioSesion->rol_id == 3 && $usuarioSesion->docente)
                             {{ $usuarioSesion->docente->docente_titulo }}
+                            @elseif($usuarioSesion->rol_id == 4 && $usuarioSesion->estudiante)
+                            Estudiante de {{ $usuarioSesion->estudiante->matriculas->last()->grupo->grupo_nombre }}
                             @else
                             {{ $usuarioSesion->rol->rol_nombre }}
                             @endif

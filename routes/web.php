@@ -50,3 +50,12 @@ Route::middleware(['auth', 'rol:3'])->prefix('/dashboard/docente')->group(functi
     Route::get("/cursos", [ViewsController::class, 'teacherCourses']);
     Route::get("/cursos/{id}", [ViewsController::class, 'teacherCourseDetails']);
 });
+
+// Student Dashboard
+Route::middleware(['auth', 'rol:4'])->prefix('/dashboard/estudiante')->group(function () {
+    Route::get("/horario", [ViewsController::class, 'studentSchedule']);
+    Route::get("/materias", [ViewsController::class, '']);
+    Route::get("/materias/{id}", [ViewsController::class, '']);
+    Route::get("/inasistencias", [ViewsController::class, '']);
+    Route::get("/observaciones", [ViewsController::class, '']);
+});
