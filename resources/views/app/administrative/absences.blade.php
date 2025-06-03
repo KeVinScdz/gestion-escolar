@@ -56,13 +56,13 @@
                     <tbody>
                         @foreach($inasistencias as $inasistencia)
                         <tr>
-                            <td>{{ $inasistencia->inasistencia_id }}</td>
+                            <td>{{ explode("-", $inasistencia->asistencia_id)[0] }}</td>
                             <td>{{ $inasistencia->matricula->estudiante->usuario->usuario_nombre }} {{ $inasistencia->matricula->estudiante->usuario->usuario_apellido }}</td>
-                            <td>{{ $inasistencia->inasistencia_fecha }}</td>
-                            <td>{{ $inasistencia->inasistencia_justificada ? 'Sí: ' . $inasistencia->inasistencia_motivo : 'No' }}</td>
+                            <td>{{ $inasistencia->asistencia_fecha }}</td>
+                            <td>{{ $inasistencia->asistencia_motivo ? 'Sí: ' . $inasistencia->asistencia_motivo : 'No' }}</td>
                             <td>
                                 <button
-                                    onclick="openEditAbsenceModal('{{ $inasistencia->inasistencia_id }}', '{{ json_encode($inasistencia) }}')"
+                                    onclick="openEditAbsenceModal('{{ $inasistencia->asistencia_id }}', '{{ json_encode($inasistencia) }}')"
                                     class="btn btn-sm py-1 btn-primary">
                                     Editar
                                 </button>
@@ -88,20 +88,22 @@
 <dialog id="edit-absence-modal" class="modal">
     <div class="modal-box">
         <h2 class="text-2xl font-bold mb-4">Editar Inasistencia</h2>
-        <form class="upload-form space-y-4" data-target="/api/absences/{id}" data-method="put" data-reload="true" data-show-alert="true">
+        <form class="upload-form space-y-4" data-target="/api/attendances/{id}" data-method="put" data-reload="true" data-show-alert="true">
             <fieldset class="fieldset">
-                <label for="edit_inasistencia_fecha" class="fieldset-label">
+                <label for="edit_asistencia_fecha" class="fieldset-label">
                     Fecha de la Inasistencia:
                 </label>
-                <input type="date" name="inasistencia_fecha" id="edit_inasistencia_fecha" class="input input-bordered">
+                <input type="date" name="asistencia_fecha" id="edit_asistencia_fecha" class="input input-bordered">
             </fieldset>
             <fieldset class="fieldset">
-                <label for="edit_inasistencia_justificada" class="fieldset-label">
+                <label for="edit_asistencia_estado" class="fieldset-label">
                     Estado de la Inasistencia:
                 </label>
-                <select name="inasistencia_justificada" id="edit_inasistencia_justificada" class="select select-bordered">
-                    <option value="1">Justificada</option>
-                    <option value="0">Injustificada</option>
+                <select name="asistencia_estado" id="edit_asistencia_estado" class="select select-bordered">
+                    <option value="" disabled>Seleccionar estado</option>
+                    <option value="presente">Presente</option>
+                    <option value="ausente">Ausente</option>
+                    <option value="retardo">retardo</option>
                 </select>
             </fieldset>
             <fieldset class="fieldset">
@@ -125,11 +127,11 @@
         const inasistencia = JSON.parse(inasistenciaJSONString);
 
         const $form = document.querySelector('#edit-absence-modal form');
-        $form.dataset.target = "/api/absences/" + id;
+        $form.dataset.target = "/api/attendances/" + id;
 
-        document.getElementById('edit_inasistencia_justificada').value = inasistencia.inasistencia_justificada ? '1' : '0';
-        document.getElementById('edit_inasistencia_motivo').value = inasistencia.inasistencia_motivo || '';
-        document.getElementById('edit_inasistencia_fecha').value = inasistencia.inasistencia_fecha;
+        document.getElementById('edit_asistencia_fecha').value = inasistencia.asistencia_fecha;
+        document.getElementById('edit_asistencia_estado').value = inasistencia.asistencia_estado || '';
+        document.getElementById('edit_inasistencia_motivo').value = inasistencia.asistencia_motivo || '';
 
         const $modal = document.getElementById('edit-absence-modal');
         $modal.show();

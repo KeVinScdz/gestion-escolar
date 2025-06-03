@@ -962,6 +962,33 @@ class AcademicStructureController
         }
     }
 
+    public function updateAttendance(Request $request, $id)
+    {
+        try {
+            $attendance = Asistencia::find($id);
+
+            if (!$attendance) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Asistencia no encontrada',
+                ], 404);
+            }
+
+            $attendance->update($request->all());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Asistencia actualizada con éxito',
+                'data' => $attendance,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar la asistencia: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
     // Grades functions
     public function storeGrade(Request $request)
     {

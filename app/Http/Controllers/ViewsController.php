@@ -250,6 +250,7 @@ class ViewsController
         $justificationFilter = request('justification_filter');
 
         $inasistencias = Asistencia::with('matricula', 'matricula.estudiante', 'matricula.estudiante.usuario')
+            ->where('asistencia_estado', 'ausente')
             ->whereHas('matricula', function ($query) use ($institucion_id) {
                 $query->where('matricula_año', date('Y'));
             })
