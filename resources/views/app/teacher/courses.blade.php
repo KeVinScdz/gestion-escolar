@@ -4,7 +4,7 @@
 
 @section('content')
 <section class="w-full">
-    <div class="w-full max-w- mx-auto py-10">
+    <div class="w-full max-w-[1200px] mx-auto py-10">
         <h1 class="text-3xl font-bold mb-6">Cursos asignados</h1>
 
         <div class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">

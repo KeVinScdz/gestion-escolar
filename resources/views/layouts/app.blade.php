@@ -150,7 +150,26 @@
 
                     {{-- Estudiante --}}
                     @if($usuarioSesion->rol_id == 4)
-                    <!-- Pendiente -->
+                    <li>
+                        <a href="/dashboard/estudiante/horario" class="hover:bg-primary/50 {{ request()->is('dashboard/estudiante/horario') ? 'bg-primary' : '' }}">
+                            Mi Horario
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/dashboard/estudiante/materias" class="hover:bg-primary/50 {{ request()->is('dashboard/estudiante/materias') ? 'bg-primary' : '' }}">
+                            Mis Materias
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/dashboard/estudiante/inasistencias" class="hover:bg-primary/50 {{ request()->is('dashboard/estudiante/inasistencias') ? 'bg-primary' : '' }}">
+                            Mis Inasistencias
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/dashboard/estudiante/observaciones" class="hover:bg-primary/50 {{ request()->is('dashboard/estudiante/observaciones') ? 'bg-primary' : '' }}">
+                            Mis Observaciones
+                        </a>
+                    </li>
                     @endif
 
                     {{-- Padre/Madre/Tutor --}}

@@ -3,7 +3,7 @@
 
 @section('content')
 <section class="w-full">
-    <div class="w-full max-w- mx-auto py-10 space-y-5">
+    <div class="w-full max-w-[1200px] mx-auto py-10 space-y-5">
         <div class="space-y-4">
             {{-- Título principal --}}
             <h1 class="text-3xl font-bold">
@@ -41,7 +41,7 @@
 
 @if(request('accion') === 'lista')
 <section class="w-full">
-    <div class="w-full max-w- mx-auto py-10 space-y-5">
+    <div class="w-full max-w-[1200px] mx-auto py-10 space-y-5">
         <h2 class="text-2xl font-semibold">Lista de Estudiantes</h2>
         <form class="upload-form space-y-5" data-target="/api/attendances" data-method="post" data-reload="true" data-show-alert="true">
             <input type="hidden" name="asignacion_id" value="{{ $asignacion->asignacion_id }}">
@@ -117,7 +117,7 @@
 </section>
 @elseif (request('accion') === 'notas')
 <section class="w-full">
-    <div class="w-full max-w- mx-auto py-10 space-y-10">
+    <div class="w-full max-w-[1200px] mx-auto py-10 space-y-10">
         <div>
             <h2 class="text-2xl font-semibold">Gestión de Notas</h2>
             <p class="text-base-content/60">Aquí puedes gestionar las notas de los estudiantes del curso.</p>
@@ -216,7 +216,7 @@
 </section>
 @else
 <section class="w-full">
-    <div class="w-full max-w- mx-auto py-10 space-y-5">
+    <div class="w-full max-w-[1200px] mx-auto py-10 space-y-5">
         <div>
             <h2 class="text-2xl font-semibold">Observaciones de Estudiantes</h2>
             <p class="text-base-content/60">Aquí puedes ver y gestionar las observaciones de los estudiantes.</p>
