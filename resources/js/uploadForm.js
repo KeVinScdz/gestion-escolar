@@ -41,6 +41,8 @@ $forms.forEach(($form) => {
         });
         const responseData = await response.json();
 
+        if ($debug) console.log(responseData);
+
         if (!responseData.success) {
             if ($showAlert) {
                 Swal.fire({
