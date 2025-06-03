@@ -28,4 +28,9 @@ class PeriodoAcademico extends Model
     {
         return $this->belongsTo(Institucion::class, 'institucion_id', 'institucion_id');
     }
+    
+    public function notas()
+    {
+        return $this->hasMany(Nota::class, 'periodo_academico_id', 'periodo_academico_id');
+    }
 }

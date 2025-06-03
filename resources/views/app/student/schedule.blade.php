@@ -22,7 +22,15 @@
                         @else
                         @foreach($horarios->where('bloque_id', $bloque->bloque_id) as $horario)
                         <div class="w-full space-y-4">
-                            <h3 class="text-xl font-semibold">{{ $horario->asignacion->materia->materia_nombre }}</h3>
+                            <div class="space-y-1">
+                                <h3 class="text-xl font-semibold">{{ $horario->asignacion->materia->materia_nombre }}</h3>
+                                <p class="leading-tight">
+                                    {{ $horario->asignacion->docente->usuario->usuario_nombre }} {{ $horario->asignacion->docente->usuario->usuario_apellido }}
+                                </p>
+                                <p class="italic text-sm text-base-content/80">
+                                    {{ $horario->asignacion->docente->docente_titulo }}
+                                </p>
+                            </div>
                             <a href="/dashboard/estudiante/materias/{{ $horario->asignacion_id }}">
                                 <button class="btn btn-sm py-1 btn-primary">Ver materia</button>
                             </a>

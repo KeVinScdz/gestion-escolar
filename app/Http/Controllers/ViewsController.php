@@ -413,7 +413,7 @@ class ViewsController
         $usuarioSesion = Auth::user()->load('rol', 'estudiante', 'estudiante.matriculas', 'estudiante.matriculas.grupo');
         $institucion_id = $usuarioSesion->estudiante->institucion_id;
 
-        $horarios = Horario::with('bloque', 'asignacion', 'asignacion.grupo')
+        $horarios = Horario::with('bloque', 'asignacion', 'asignacion.docente', 'asignacion.docente.usuario', 'asignacion.grupo')
             ->whereHas('asignacion', function ($query) use ($usuarioSesion) {
                 $query->where('grupo_id', $usuarioSesion->estudiante->matriculas->first()->grupo_id);
             })
@@ -424,5 +424,18 @@ class ViewsController
             ->groupBy('bloque_dia');
 
         return view('app.student.schedule', compact('usuarioSesion', 'horarios', 'bloquesHorario'));
+    }
+
+    public function studentSubjects()
+    {
+        $usuarioSesion = Auth::user()->load('rol', 'estudiante', 'estudiante.matriculas', 'estudiante.matriculas.grupo');
+        $institucion_id = $usuarioSesion->estudiante->institucion_id;
+        $grupo_id = $usuarioSesion->estudiante->matriculas->first()->grupo_id;
+
+        $asignaciones = Asignacion::with(['materia', 'docente.usuario'])
+            ->where('grupo_id', $grupo_id)
+            ->get();
+
+        return view('app.student.subjects', compact('usuarioSesion', 'asignaciones'));
     }
 }
