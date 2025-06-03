@@ -160,11 +160,12 @@ return new class extends Migration
         });
 
         Schema::create('asistencias', function (Blueprint $table) {
-            $table->uuid('asistencia_id')->primary();
+            $table->uuid('asistencia_id');
             $table->uuid('matricula_id');
             $table->date('asistencia_fecha');
             $table->enum('asistencia_estado', ['presente', 'ausente', 'retardo']);
             $table->string('asistencia_motivo')->nullable();
+            $table->primary(['asistencia_id', 'matricula_id', 'asistencia_fecha']);
         });
 
         // Financiero

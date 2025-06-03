@@ -384,9 +384,9 @@ class ViewsController
             ->orderBy('periodo_academico_fin', 'asc')
             ->get();
 
-        $fecha_asistencia = request('fecha_asistencia');
+        $asistencia_fecha = request('asistencia_fecha');
         $asistencias = Asistencia::with('matricula')
-            ->where('asistencia_fecha',  $fecha_asistencia)
+            ->where('asistencia_fecha',  $asistencia_fecha)
             ->whereHas('matricula', function ($query) use ($asignacion) {
                 $query->where('grupo_id', $asignacion->grupo->grupo_id);
             })

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 use App\Models\PeriodoAcademico;
 use App\Models\Grupo;
@@ -580,7 +581,6 @@ class AcademicStructureController
     public function updateBlock(Request $request, $id)
     {
         try {
-            // dd($request->all()); // format "19:00:00"
             $request->validate([
                 'bloque_dia' => 'sometimes|required|string|max:255',
                 'bloque_inicio' => 'sometimes|required|date_format:H:i',
@@ -901,7 +901,64 @@ class AcademicStructureController
     // Attendance functions
     public function storeAttendance(Request $request)
     {
-        // Implementar la logica para crear una asistencia
+        try {
+            $request->validate(
+                [
+                    'asignacion_id' => 'required|exists:asignaciones,asignacion_id',
+                    'asistencia_fecha' => 'required|date',
+                ]
+            );
+
+            $asignacionDB = Asignacion::find($request->input('asignacion_id'));
+            $asistenciasDB = Asistencia::with('matricula')
+                ->where('asistencia_fecha', $request->input('asistencia_fecha'))
+                ->whereHas('matricula', function ($query) use ($asignacionDB) {
+                    $query->where('grupo_id', $asignacionDB->grupo_id);
+                })->get();
+
+            $asistencias = [];
+
+            if (count($request->input('asistencias_estados')) === count($request->input('matriculas')) && count($request->input('justificaciones')) > 0) {
+                foreach ($request->input('matriculas') as $index => $matricula_id) {
+                    $asistencias[] = [
+                        'asistencia_id' => Str::uuid()->toString(),
+                        'matricula_id' => $matricula_id,
+                        'asistencia_fecha' => $request->input('asistencia_fecha'),
+                        'asistencia_estado' => $request->input('asistencias_estados')[$index],
+                        'asistencia_motivo' => $request->input('justificaciones')[$index] ?? null,
+                    ];
+                }
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'El número de asistencias no coincide con el número de matrículas o no se proporcionaron justificaciones.',
+                ], 400);
+            }
+
+            if (count($asistenciasDB) > 0) {
+                foreach ($asistencias as $asistencia) {
+                    $existingAsistencia = $asistenciasDB->firstWhere('matricula_id', $asistencia['matricula_id']);
+                    if ($existingAsistencia) {
+                        unset($asistencia['asistencia_id']);
+                        $existingAsistencia->update($asistencia);
+                    } else {
+                        Asistencia::create($asistencia);
+                    }
+                }
+            } else {
+                Asistencia::insert($asistencias);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => $asistenciasDB->isEmpty() ? 'Asistencia creada con éxito' : 'Asistencia actualizada con éxito',
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear la asistencia: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function updateAttendance(Request $request, $id)

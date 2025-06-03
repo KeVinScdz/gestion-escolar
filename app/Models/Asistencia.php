@@ -12,10 +12,11 @@ class Asistencia extends Model
     protected $table = 'asistencias';
     public $timestamps = false;
     protected $primaryKey = 'asistencia_id';
+    protected $keyType = 'string';
     public $incrementing = false;
 
     protected $fillable = [
-        'asistencia_id',
+        // 'asistencia_id',
         'matricula_id',
         'asistencia_fecha',
         'asistencia_estado',

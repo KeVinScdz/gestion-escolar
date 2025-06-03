@@ -43,9 +43,9 @@
 <section class="w-full">
     <div class="w-full max-w- mx-auto py-10 space-y-5">
         <h2 class="text-2xl font-semibold">Lista de Estudiantes</h2>
-        <form class="upload-form space-y-5" data-debug="true">
+        <form class="upload-form space-y-5" data-target="/api/attendances" data-method="post" data-reload="true" data-show-alert="true">
             <input type="hidden" name="asignacion_id" value="{{ $asignacion->asignacion_id }}">
-            <input type="hidden" name="fecha_asistencia" value="{{ request('fecha_asistencia') }}">
+            <input type="hidden" name="asistencia_fecha" value="{{ request('asistencia_fecha') }}">
 
             <div class="bg-base-200 border border-base-300 rounded-lg">
                 <div class="overflow-x-auto">
@@ -61,6 +61,12 @@
                         </thead>
                         <tbody>
                             @foreach ($estudiantes as $estudiante)
+                            @php
+                                $asistencia = $asistencias->where('matricula_id', $estudiante->matriculas->last()->matricula_id)
+                                    ->where('asistencia_fecha', request('asistencia_fecha'))
+                                    ->first();
+                            @endphp
+                            <input type="hidden" name="matriculas[]" value="{{ $estudiante->matriculas->last()->matricula_id }}">
                             <tr>
                                 <td>{{ $estudiante->usuario->usuario_documento_tipo }}: {{ $estudiante->usuario->usuario_documento }}</td>
                                 <td>
@@ -79,10 +85,15 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <input type="checkbox" name="asistencias[{{ $estudiante->estudiante_id }}]" class="checkbox checkbox-primary">
+                                    <select name="asistencias_estados[]" class="select select-bordered" required>
+                                        <option value="" disabled {{ $asistencia ? '' : 'selected' }}>Seleccionar estado</option>
+                                        <option value="presente" {{ $asistencia ? ($asistencia->asistencia_estado === 'presente' ? 'selected' : '') : '' }}>Presente</option>
+                                        <option value="ausente" {{ $asistencia ? ($asistencia->asistencia_estado === 'ausente' ? 'selected' : '') : '' }}>Ausente</option>
+                                        <option value="retardo" {{ $asistencia ? ($asistencia->asistencia_estado === 'retardo' ? 'selected' : '') : '' }}>retardo</option>
+                                    </select>
                                 </td>
                                 <td>
-                                    <input type="text" name="justificaciones[{{ $estudiante->estudiante_id }}]" class="input input-bordered w-full" placeholder="Justificación (opcional)">
+                                    <input type="text" name="justificaciones[]" class="input input-bordered w-full" placeholder="Justificación (opcional)" value="{{ $asistencia ? $asistencia->asistencia_motivo : '' }}">
                                 </td>
                             </tr>
                             @endforeach
@@ -98,7 +109,7 @@
                 </a>
                 <button type="submit" class="btn btn-success hover:scale-105 transition">
                     <i class="fas fa-save"></i>
-                    Subir registro de asistencia
+                    {{ $asistencias->isEmpty() ? 'Registrar asistencia' : 'Actualizar asistencia' }}
                 </button>
             </div>
         </form>
@@ -217,10 +228,10 @@
         <form method="get">
             <input type="hidden" name="accion" value="lista">
             <fieldset class="fieldset">
-                <label class="fieldset-label" for="fecha_asistencia">
+                <label class="fieldset-label after:content-['(formato:_MM/DD/YYYY)'] after:text-base-content/60" for="asistencia_fecha">
                     Fecha de la clase:
                 </label>
-                <input type="date" id="fecha_asistencia" name="fecha_asistencia" class="input" required value="{{ date('Y-m-d') }}">
+                <input type="date" id="asistencia_fecha" name="asistencia_fecha" class="input" required value="{{ date('Y-m-d') }}">
             </fieldset>
 
             <div class="flex gap-2 justify-end mt-4">
