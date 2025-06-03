@@ -62,9 +62,9 @@
                         <tbody>
                             @foreach ($estudiantes as $estudiante)
                             @php
-                                $asistencia = $asistencias->where('matricula_id', $estudiante->matriculas->last()->matricula_id)
-                                    ->where('asistencia_fecha', request('asistencia_fecha'))
-                                    ->first();
+                            $asistencia = $asistencias->where('matricula_id', $estudiante->matriculas->last()->matricula_id)
+                            ->where('asistencia_fecha', request('asistencia_fecha'))
+                            ->first();
                             @endphp
                             <input type="hidden" name="matriculas[]" value="{{ $estudiante->matriculas->last()->matricula_id }}">
                             <tr>
@@ -122,7 +122,8 @@
             <h2 class="text-2xl font-semibold">Gestión de Notas</h2>
             <p class="text-base-content/60">Aquí puedes gestionar las notas de los estudiantes del curso.</p>
         </div>
-        <form class="upload-form space-y-5" data-debug="true">
+        <form class="upload-form space-y-5" data-target="/api/grades" data-method="post" data-reload="true" data-show-alert="true" data-debug="true">
+            <input type="hidden" name="asignacion_id" value="{{ $asignacion->asignacion_id }}">
 
             <div class="w-full overflow-x-auto bg-base-200 border border-base-300 rounded-lg">
                 <table class="table w-full">
@@ -132,27 +133,69 @@
                             @foreach ($periodos as $periodo)
                             <th>{{ $periodo->periodo_academico_nombre }}</th>
                             @endforeach
+                            <th>Promedio (Mínimo {{ $institucion->nota_aprobatoria }})</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($estudiantes as $estudiante)
+                        @php
+                        $notasEstudiante = $notas->where('matricula_id', $estudiante->matriculas->last()->matricula_id);
+                        $promedio = $notasEstudiante->avg('nota_valor');
+                        $promedio = isset($promedio) ? number_format($promedio, 2) : 'N/A';
+
+                        $periodosTotales = count($periodos);
+                        $restantes = $periodosTotales - $notasEstudiante->count();
+                        $notaNecesaria = $restantes > 0 ? (($institucion->nota_aprobatoria * $periodosTotales) - $notasEstudiante->sum('nota_valor')) / $restantes : 9999;
+                        @endphp
                         <tr>
                             <td>
                                 <a href="/dashboard/docente/estudiantes/{{ $estudiante->estudiante_id }}" target="_blank" class="hover:text-primary hover:underline tooltip" data-tip="Ver perfil">
                                     {{ $estudiante->usuario->usuario_apellido }} {{ $estudiante->usuario->usuario_nombre }}
                                 </a>
                             </td>
-                            @foreach ($periodos as $periodo)
+                            @foreach ($periodos as $index => $periodo)
+                            <input type="hidden" name="matriculas[]" value="{{ $estudiante->matriculas->last()->matricula_id }}">
+                            <input type="hidden" name="periodos[]" value="{{ $periodo->periodo_academico_id }}">
                             <td>
                                 <input
                                     type="number"
-                                    name="notas[{{ $estudiante->estudiante_id }}][{{ $periodo->periodo_academico_id }}]"
+                                    name="notas[]"
                                     class="input input-bordered w-full"
-                                    placeholder="Nota (0-100)"
+                                    placeholder="Nota ({{ $institucion->nota_minima}}-{{ $institucion->nota_maxima }})"
+                                    step="0.1"
                                     min="0"
                                     max="100">
                             </td>
                             @endforeach
+                            <td>
+                                <div class="flex gap-2 items-center">
+                                    <input
+                                        type="text"
+                                        name="promedios[]"
+                                        class="input input-bordered w-20 {{ count($notasEstudiante) > 0 ? ($institucion->nota_aprobatoria > $promedio ? 'input-error' : 'input-success') : '' }}"
+                                        value="{{ $promedio }}"
+                                        readonly>
+
+                                    @if(count($notasEstudiante) > 0)
+                                    @if($institucion->nota_aprobatoria > $promedio)
+                                    <span class="text-error tooltip tooltip-left" data-tip="El estudiante no ha alcanzado la nota mínima aprobatoria ({{ $institucion->nota_aprobatoria }}).
+                                    @if($notaNecesaria && $notaNecesaria > $institucion->nota_maxima)
+                                        El estudiante ya no puede alcanzar la nota mínima aprobatoria.
+                                    @elseif($notaNecesaria && $notaNecesaria > 0)
+                                        Necesita al menos {{ number_format($notaNecesaria, 2) }} en cada periodo restante.
+                                    @endif
+                                    ">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                    </span>
+
+                                    @else
+                                    <span class="text-success tooltip tooltip-left" data-tip="El promedio del estudiente es mayor o igual a la nota aprobatoria.">
+                                        <i class="fas fa-check-circle"></i>
+                                    </span>
+                                    @endif
+                                    @endif
+                                </div>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -165,7 +208,7 @@
                 </a>
                 <button type="submit" class="btn btn-success hover:scale-105 transition">
                     <i class="fas fa-save"></i>
-                    Guardar Notas
+                    {{ $notas->isEmpty() ? 'Registrar notas' : 'Actualizar notas' }}
                 </button>
             </div>
         </form>

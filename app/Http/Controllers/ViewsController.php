@@ -15,6 +15,7 @@ use App\Models\Horario;
 use App\Models\Asistencia;
 use App\Models\Institucion;
 use App\Models\Materia;
+use App\Models\Nota;
 use App\Models\Observacion;
 use App\Models\Pago;
 use App\Models\PeriodoAcademico;
@@ -350,6 +351,8 @@ class ViewsController
         $usuarioSesion = Auth::user()->load('rol', 'docente');
         $institucion_id = $usuarioSesion->docente->institucion_id;
 
+        $institucion = Institucion::findOrFail($institucion_id);
+
         $asignacion = Asignacion::with('grupo', 'materia')
             ->where('asignacion_id', $asignacion_id)
             ->where('docente_id', $usuarioSesion->docente->docente_id)
@@ -392,8 +395,15 @@ class ViewsController
             })
             ->get();
 
+        $notas = Nota::whereHas('matricula', function ($query) use ($asignacion) {
+                $query->where('grupo_id', $asignacion->grupo->grupo_id);
+            })
+            ->whereHas('asignacion', function ($query) use ($asignacion) {
+                $query->where('asignacion_id', $asignacion->asignacion_id);
+            })
+            ->get();
         $periodos = PeriodoAcademico::where('institucion_id', $institucion_id)->where('periodo_academico_año', date('Y'))->orderBy('periodo_academico_inicio', 'asc')->get();
 
-        return view('app.teacher.course', compact('usuarioSesion', 'asignacion', 'estudiantes', 'observaciones', 'periodos', 'asistencias'));
+        return view('app.teacher.course', compact('usuarioSesion', 'asignacion', 'estudiantes', 'observaciones', 'periodos', 'asistencias', 'institucion', 'notas'));
     }
 }

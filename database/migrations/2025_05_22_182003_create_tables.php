@@ -148,7 +148,6 @@ return new class extends Migration
             $table->uuid('asignacion_id');
             $table->uuid('periodo_academico_id');
             $table->float('nota_valor');
-            $table->timestamps();
         });
 
         // Matriculas
