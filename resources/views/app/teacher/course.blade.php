@@ -162,7 +162,8 @@
                                     name="notas[]"
                                     class="input input-bordered w-full"
                                     placeholder="Nota ({{ $institucion->nota_minima}}-{{ $institucion->nota_maxima }})"
-                                    step="0.1"
+                                    value="{{ $notasEstudiante->where('periodo_academico_id', $periodo->periodo_academico_id)->first()->nota_valor ?? '' }}"
+                                    step="0.01"
                                     min="0"
                                     max="100">
                             </td>
