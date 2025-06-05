@@ -46,4 +46,9 @@ class Matricula extends Model
     {
         return $this->hasMany(Pago::class, 'matricula_id', 'matricula_id');
     }
+
+    public function observaciones()
+    {
+        return $this->hasMany(Observacion::class, 'matricula_id', 'matricula_id');
+    }
 }

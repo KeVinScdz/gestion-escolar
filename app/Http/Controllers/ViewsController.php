@@ -503,12 +503,31 @@ class ViewsController
         $usuarioSesion = Auth::user()->load('rol', 'tutor', 'tutor.estudiante', 'tutor.estudiante.matriculas', 'tutor.estudiante.usuario');
         $institucion_id = $usuarioSesion->tutor->estudiante->institucion_id;
 
-        $estudiante = Estudiante::with('usuario', 'matriculas', 'matriculas.grupo', 'matriculas.grupo.asignaciones', 'matriculas.grupo.asignaciones.materia', 'matriculas.grupo.asignaciones.docente', 'matriculas.grupo.asignaciones.docente.usuario')
+        $estudiante = Estudiante::with(
+            'usuario',
+            'matriculas',
+            'matriculas.grupo',
+            'matriculas.grupo.asignaciones',
+            'matriculas.grupo.asignaciones.materia',
+            'matriculas.grupo.asignaciones.docente',
+            'matriculas.grupo.asignaciones.docente.usuario',
+            'matriculas.observaciones'
+        )
             ->where('institucion_id', $institucion_id)
             ->where('estudiante_id', $usuarioSesion->tutor->estudiante_id)
             ->first();
 
-        return view('app.tutor.student', compact('usuarioSesion', 'estudiante'));
+        $periodo = PeriodoAcademico::where('institucion_id', $institucion_id)
+            ->where('periodo_academico_año', date('Y'))
+            ->orderBy('periodo_academico_inicio', 'asc')
+            ->orderBy('periodo_academico_fin', 'asc')
+            ->first();
+
+        $promedio = Nota::where('matricula_id', $usuarioSesion->tutor->estudiante->matriculas->last()->matricula_id)
+            ->get()
+            ->avg('nota_valor');
+
+        return view('app.tutor.student', compact('usuarioSesion', 'estudiante', 'periodo', 'promedio'));
     }
 
     public function tutorGrades()
@@ -560,9 +579,10 @@ class ViewsController
     {
         $usuarioSesion = Auth::user()->load('rol', 'tutor', 'tutor.estudiante', 'tutor.estudiante.usuario');
         $institucion_id = $usuarioSesion->tutor->estudiante->institucion_id;
+        $matricula_id = $usuarioSesion->tutor->estudiante->matriculas->last()->matricula_id;
 
         $observaciones = Observacion::with('matricula', 'matricula.estudiante', 'matricula.estudiante.usuario')
-            ->where('matricula_id', $usuarioSesion->tutor->estudiante->matriculas->last()->matricula_id)
+            ->where('matricula_id', $matricula_id)
             ->orderBy('observacion_fecha', 'desc')
             ->get();
 
