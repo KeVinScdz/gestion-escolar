@@ -12,8 +12,8 @@
             <h2 class="text-xl font-semibold">Resumen de Observaciones</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 @php
-                    $total = $observaciones->count();
-                    $ultimoMes = $observaciones->where('observacion_fecha', '>=', now()->subMonth())->count();
+                $total = $observaciones->count();
+                $ultimoMes = $observaciones->where('observacion_fecha', '>=', now()->subMonth())->count();
                 @endphp
                 <div class="stat bg-base-100 rounded-lg">
                     <div class="stat-title">Total Observaciones</div>
@@ -35,20 +35,24 @@
                 <table class="table w-full">
                     <thead>
                         <tr>
-                            <th>Fecha</th>
+                            <th>ID</th>
+                            <th>Tipo</th>
                             <th>Descripción</th>
+                            <th>Fecha</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($observaciones as $observacion)
                         <tr>
-                            <td>{{ \Carbon\Carbon::parse($observacion->observacion_fecha)->format('d/m/Y') }}</td>
+                            <td>{{ explode("-", $observacion->observacion_id)[0] }}</td>
+                            <td>{{ $observacion->observacion_tipo }}</td>
                             <td>
                                 <div class="tooltip tooltip-left" data-tip="{{ $observacion->observacion_descripcion }}">
                                     {{ Str::limit($observacion->observacion_descripcion, 100) }}
                                 </div>
                             </td>
-                        </tr>
+                            <td>{{ \Carbon\Carbon::parse($observacion->observacion_fecha)->format('d/m/Y') }}</td>
+                            </tr>
                         @empty
                         <tr>
                             <td colspan="2" class="text-center text-gray-500">No hay observaciones registradas</td>
