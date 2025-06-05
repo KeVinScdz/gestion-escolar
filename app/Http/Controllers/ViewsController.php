@@ -297,6 +297,12 @@ class ViewsController
             ->whereHas('matriculas', function ($query) {
                 $query->where('matricula_año', date('Y'));
             })
+            ->whereHas('usuario', function ($query) use ($search) {
+                $query->where('usuario_nombre', 'like', '%'. $search. '%')
+                    ->orWhere('usuario_apellido', 'like', '%'. $search. '%')
+                    ->orWhere('usuario_documento', 'like', '%'. $search. '%')
+                    ->orWhere('usuario_correo', 'like', '%'. $search. '%');
+            })
             ->paginate(10);
 
         return view('app.administrative.payments', compact('usuarioSesion', 'estudiantes', 'conceptos'));
@@ -437,5 +443,45 @@ class ViewsController
             ->get();
 
         return view('app.student.subjects', compact('usuarioSesion', 'asignaciones'));
+    }
+
+    public function studentSubjectDetails($asignacion_id)
+    {
+        $usuarioSesion = Auth::user()->load('rol', 'estudiante', 'estudiante.matriculas', 'estudiante.matriculas.grupo');
+        $institucion_id = $usuarioSesion->estudiante->institucion_id;
+        $matricula_id = $usuarioSesion->estudiante->matriculas->first()->matricula_id;
+
+        $asignacion = Asignacion::with(['materia', 'docente.usuario', 'grupo'])
+            ->findOrFail($asignacion_id);
+
+        $periodos = PeriodoAcademico::with('notas')
+            ->where('institucion_id', $institucion_id)->orderBy('periodo_academico_inicio')->get();
+
+        return view('app.student.subject-details', compact('usuarioSesion', 'asignacion', 'periodos'));
+    }
+
+    public function studentAbsences()
+    {
+        $usuarioSesion = Auth::user()->load('rol', 'estudiante', 'estudiante.matriculas', 'estudiante.matriculas.grupo');
+        $matricula_id = $usuarioSesion->estudiante->matriculas->last()->matricula_id;
+
+        $asistencias = Asistencia::where('matricula_id', $matricula_id)
+            ->where('asistencia_estado', ['ausente', 'retardo'])
+            ->orderBy('asistencia_fecha', 'desc')
+            ->get();
+
+        return view('app.student.absences', compact('usuarioSesion', 'asistencias'));
+    }
+
+    public function studentObservations()
+    {
+        $usuarioSesion = Auth::user()->load('rol', 'estudiante', 'estudiante.matriculas', 'estudiante.matriculas.grupo');
+        $matricula_id = $usuarioSesion->estudiante->matriculas->last()->matricula_id;
+
+        $observaciones = Observacion::where('matricula_id', $matricula_id)
+            ->orderBy('observacion_fecha', 'desc')
+            ->get();
+
+        return view('app.student.observations', compact('usuarioSesion', 'observaciones'));
     }
 }

@@ -14,6 +14,7 @@ use App\Models\Horario;
 use App\Models\Bloque;
 use App\Models\Docente;
 use App\Models\Asistencia;
+use App\Models\Institucion;
 use App\Models\Matricula;
 use App\Models\Nota;
 use App\Models\Observacion;
@@ -993,6 +994,7 @@ class AcademicStructureController
     public function storeGrade(Request $request)
     {
         try {
+            DB::beginTransaction();
             $request->validate(
                 [
                     'asignacion_id' => 'required|exists:asignaciones,asignacion_id',
@@ -1002,7 +1004,8 @@ class AcademicStructureController
                 ]
             );
 
-            $asignacionDB = Asignacion::find($request->input('asignacion_id'));
+            $asignacionDB = Asignacion::with('materia')->find($request->input('asignacion_id'));
+            $institucionDB = Institucion::find($asignacionDB->materia->institucion_id);
             $notasDB = Nota::with('asignacion')
                 ->whereHas('asignacion', function ($query) use ($asignacionDB) {
                     $query->where('asignacion_id', $asignacionDB->asignacion_id);
@@ -1024,6 +1027,14 @@ class AcademicStructureController
                         $existingGrade->delete();
                     }
                     continue;
+                }
+
+                if ($request->input('notas')[$index] < $institucionDB->nota_minima || $request->input('notas')[$index] > $institucionDB->nota_maxima) {
+                    DB::rollBack();
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'La nota debe estar entre ' . $institucionDB->nota_minima . ' y ' . $institucionDB->nota_maxima,
+                    ], 400);
                 }
 
                 $notas[] = [
@@ -1050,11 +1061,13 @@ class AcademicStructureController
                 Nota::insert($notas);
             }
 
+            DB::commit();
             return response()->json([
                 'success' => true,
                 'message' => $notasDB->isEmpty() ? 'Notas creadas con éxito' : 'Notas actualizadas con éxito',
             ], 201);
         } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json([
                 'success' => false,
                 'message' => 'Error al crear las notas: ' . $e->getMessage(),
