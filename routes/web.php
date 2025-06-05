@@ -59,3 +59,12 @@ Route::middleware(['auth', 'rol:4'])->prefix('/dashboard/estudiante')->group(fun
     Route::get("/inasistencias", [ViewsController::class, 'studentAbsences']);
     Route::get("/observaciones", [ViewsController::class, 'studentObservations']);
 });
+
+// Tutor Dashboard
+Route::middleware(['auth', 'rol:5'])->prefix('/dashboard/tutor')->group(function () {
+    Route::get('/estudiante', [ViewsController::class, 'tutorStudentProfile']);
+    Route::get('/notas', [ViewsController::class, 'tutorGrades']);
+    Route::get('/horario', [ViewsController::class, 'tutorSchedule']);
+    Route::get('/inasistencias', [ViewsController::class, 'tutorAbsences']);
+    Route::get('/observaciones', [ViewsController::class, 'tutorObservations']);
+});

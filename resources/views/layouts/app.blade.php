@@ -176,9 +176,32 @@
 
                     {{-- Padre/Madre/Tutor --}}
                     @if($usuarioSesion->rol_id == 5)
-                    <!-- Pendiente -->
+                    <li>
+                        <a href="/dashboard/tutor/estudiante" class="hover:bg-primary/50 {{ request()->is('dashboard/tutor/estudiante') ? 'bg-primary' : '' }}">
+                            Información del Estudiante
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/dashboard/tutor/notas" class="hover:bg-primary/50 {{ request()->is('dashboard/tutor/notas') ? 'bg-primary' : '' }}">
+                            Notas Académicas
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/dashboard/tutor/horario" class="hover:bg-primary/50 {{ request()->is('dashboard/tutor/horario') ? 'bg-primary' : '' }}">
+                            Horario Semanal
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/dashboard/tutor/inasistencias" class="hover:bg-primary/50 {{ request()->is('dashboard/tutor/inasistencias') ? 'bg-primary' : '' }}">
+                            Registro de Inasistencias
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/dashboard/tutor/observaciones" class="hover:bg-primary/50 {{ request()->is('dashboard/tutor/observaciones') ? 'bg-primary' : '' }}">
+                            Observaciones
+                        </a>
+                    </li>
                     @endif
-
 
                 </div>
                 <hr class="border-neutral-content/60 my-6">

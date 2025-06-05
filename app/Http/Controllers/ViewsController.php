@@ -497,4 +497,87 @@ class ViewsController
 
         return view('app.student.observations', compact('usuarioSesion', 'observaciones'));
     }
+
+    public function tutorStudentProfile()
+    {
+        $usuarioSesion = Auth::user()->load('rol', 'tutor', 'tutor.estudiante', 'tutor.estudiante.matriculas', 'tutor.estudiante.usuario');
+        $institucion_id = $usuarioSesion->tutor->estudiante->institucion_id;
+
+        $estudiante = Estudiante::with('usuario', 'matriculas', 'matriculas.grupo', 'matriculas.grupo.asignaciones', 'matriculas.grupo.asignaciones.materia', 'matriculas.grupo.asignaciones.docente', 'matriculas.grupo.asignaciones.docente.usuario')
+            ->where('institucion_id', $institucion_id)
+            ->where('estudiante_id', $usuarioSesion->tutor->estudiante_id)
+            ->first();
+
+        return view('app.tutor.student', compact('usuarioSesion', 'estudiante'));
+    }
+
+    public function tutorGrades()
+    {
+        $usuarioSesion = Auth::user()->load('rol', 'tutor', 'tutor.estudiante', 'tutor.estudiante.matriculas', 'tutor.estudiante.usuario');
+        $institucion_id = $usuarioSesion->tutor->estudiante->institucion_id;
+
+        $asignaciones = Nota::with('asignacion', 'asignacion.materia')
+            ->where('matricula_id', $usuarioSesion->tutor->estudiante->matriculas->last()->matricula_id)
+            ->get();
+
+        return view('app.tutor.grades', compact('usuarioSesion', 'asignaciones'));
+    }
+
+    public function tutorSchedule()
+    {
+        $usuarioSesion = Auth::user()->load('rol', 'tutor', 'tutor.estudiante', 'tutor.estudiante.matriculas', 'tutor.estudiante.usuario');
+        $institucion_id = $usuarioSesion->tutor->estudiante->institucion_id;
+
+        $bloquesHorario = Bloque::where('institucion_id', $institucion_id)
+            ->orderByRaw("FIELD(bloque_dia, 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo') ASC")
+            ->get()
+            ->groupBy('bloque_dia');
+
+        $horarios = Horario::with('bloque', 'asignacion', 'asignacion.docente', 'asignacion.docente.usuario', 'asignacion.grupo')
+            ->whereHas('asignacion', function ($query) use ($usuarioSesion) {
+                $query->where('grupo_id', $usuarioSesion->tutor->estudiante->matriculas->first()->grupo_id);
+            })
+            ->get();
+
+        return view('app.tutor.schedule', compact('usuarioSesion', 'bloquesHorario', 'horarios'));
+    }
+
+    public function tutorAbsences()
+    {
+        $usuarioSesion = Auth::user()->load('rol', 'tutor', 'tutor.estudiante', 'tutor.estudiante.matriculas', 'tutor.estudiante.usuario');
+        $institucion_id = $usuarioSesion->tutor->estudiante->institucion_id;
+
+        $asistencias = Asistencia::with('matricula', 'matricula.estudiante', 'matricula.estudiante.usuario')
+            ->where('matricula_id', $usuarioSesion->tutor->estudiante->matriculas->last()->matricula_id)
+            ->where('asistencia_estado', ['ausente', 'retardo'])
+            ->orderBy('asistencia_fecha', 'desc')
+            ->get();
+
+        return view('app.tutor.absences', compact('usuarioSesion', 'asistencias'));
+    }
+
+    public function tutorObservations()
+    {
+        $usuarioSesion = Auth::user()->load('rol', 'tutor', 'tutor.estudiante', 'tutor.estudiante.usuario');
+        $institucion_id = $usuarioSesion->tutor->estudiante->institucion_id;
+
+        $observaciones = Observacion::with('matricula', 'matricula.estudiante', 'matricula.estudiante.usuario')
+            ->where('matricula_id', $usuarioSesion->tutor->estudiante->matriculas->last()->matricula_id)
+            ->orderBy('observacion_fecha', 'desc')
+            ->get();
+
+        return view('app.tutor.observations', compact('usuarioSesion', 'observaciones'));
+    }
+
+    public function tutorEnroll()
+    {
+        $usuarioSesion = Auth::user()->load('rol', 'tutor', 'tutor.estudiante', 'tutor.estudiante.usuario');
+        $institucion_id = $usuarioSesion->tutor->estudiante->institucion_id;
+
+        $grupos = Grupo::where('institucion_id', $institucion_id)
+            ->where('grupo_año', date('Y'))
+            ->get();
+
+        return view('app.tutor.enroll', compact('usuarioSesion', 'grupos'));
+    }
 }
