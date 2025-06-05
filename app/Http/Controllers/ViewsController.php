@@ -298,10 +298,10 @@ class ViewsController
                 $query->where('matricula_año', date('Y'));
             })
             ->whereHas('usuario', function ($query) use ($search) {
-                $query->where('usuario_nombre', 'like', '%'. $search. '%')
-                    ->orWhere('usuario_apellido', 'like', '%'. $search. '%')
-                    ->orWhere('usuario_documento', 'like', '%'. $search. '%')
-                    ->orWhere('usuario_correo', 'like', '%'. $search. '%');
+                $query->where('usuario_nombre', 'like', '%' . $search . '%')
+                    ->orWhere('usuario_apellido', 'like', '%' . $search . '%')
+                    ->orWhere('usuario_documento', 'like', '%' . $search . '%')
+                    ->orWhere('usuario_correo', 'like', '%' . $search . '%');
             })
             ->paginate(10);
 
@@ -455,9 +455,16 @@ class ViewsController
             ->findOrFail($asignacion_id);
 
         $periodos = PeriodoAcademico::with('notas')
-            ->where('institucion_id', $institucion_id)->orderBy('periodo_academico_inicio')->get();
+            ->where('institucion_id', $institucion_id)
+            ->where('periodo_academico_año', date('Y'))
+            ->orderBy('periodo_academico_inicio')
+            ->get();
 
-        return view('app.student.subject-details', compact('usuarioSesion', 'asignacion', 'periodos'));
+        $asistencias = Asistencia::where('matricula_id', $matricula_id)
+            ->orderBy('asistencia_fecha', 'desc')
+            ->get();
+
+        return view('app.student.subject', compact('usuarioSesion', 'asignacion', 'periodos', 'asistencias'));
     }
 
     public function studentAbsences()
