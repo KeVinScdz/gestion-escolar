@@ -60,7 +60,7 @@
                 @endforelse
                 <div class="w-full text-center">
                     <h3 class="font-medium mb-2">Promedio</h3>
-                    <div class="text-2xl font-bold text-primary tooltip tooltip-left" data-tip="
+                    <div class="text-2xl font-bold text-primary tooltip tooltip-left {{ $institucion->nota_aprobatoria > $notas->avg('nota_valor') ? 'text-error' : 'text-success' }}" data-tip="
                         @php
                             $promedio = $notas->avg('nota_valor');
                             $periodosTotales = count($periodos);
