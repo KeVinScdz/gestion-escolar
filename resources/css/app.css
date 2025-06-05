@@ -217,3 +217,7 @@
         }
     }
 }
+
+.tooltip:before {
+    @apply font-normal font-poppins;
+}

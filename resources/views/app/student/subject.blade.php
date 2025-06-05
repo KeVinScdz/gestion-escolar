@@ -44,14 +44,12 @@
         <!-- Grades -->
         <div class="bg-base-200 border border-base-300 p-5 rounded-lg space-y-2">
             <h2 class="text-xl font-semibold mb-4">Calificaciones</h2>
-            <div class="w-full grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
+            <div class="w-full grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
                 @forelse($periodos as $periodo)
                 <div class="w-full text-center">
                     <h3 class="font-medium mb-2">{{ $periodo->periodo_academico_nombre }}</h3>
                     @php
-                    $nota = $periodo->notas->where('materia_id', $asignacion->materia_id)
-                    ->where('matricula_id', $usuarioSesion->estudiante->matriculas->last()->matricula_id)
-                    ->first();
+                    $nota = $notas->where('periodo_academico_id', $periodo->periodo_academico_id)->first();
                     @endphp
                     <div class="text-2xl font-bold {{ $nota ? 'text-primary' : 'text-base-content/50' }}">
                         {{ $nota ? number_format($nota->nota_valor, 1) : 'N/A' }}
@@ -60,6 +58,29 @@
                 @empty
                 <p class="text-gray-500">No hay períodos académicos registrados</p>
                 @endforelse
+                <div class="w-full text-center">
+                    <h3 class="font-medium mb-2">Promedio</h3>
+                    <div class="text-2xl font-bold text-primary tooltip tooltip-left" data-tip="
+                        @php
+                            $promedio = $notas->avg('nota_valor');
+                            $periodosTotales = count($periodos);
+                            $restantes = $periodosTotales - $notas->count();
+                            $notaNecesaria = $restantes > 0 ? (($institucion->nota_aprobatoria * $periodosTotales) - $notas->sum('nota_valor')) / $restantes : 9999;
+                        @endphp
+                        @if($institucion->nota_aprobatoria > $promedio)
+                            El estudiante no ha alcanzado la nota mínima aprobatoria ({{ $institucion->nota_aprobatoria }}).
+                            @if($notaNecesaria && $notaNecesaria > $institucion->nota_maxima)
+                                El estudiante ya no puede alcanzar la nota mínima aprobatoria.
+                            @elseif($notaNecesaria && $notaNecesaria > 0)
+                                Necesita al menos {{ number_format($notaNecesaria, 2) }} en cada periodo restante.
+                            @endif
+                        @else
+                            El estudiante ha alcanzado la nota mínima aprobatoria ({{ $institucion->nota_aprobatoria }}).
+                        @endif
+                    ">
+                        {{ number_format($notas->avg('nota_valor'), 2) }}
+                    </div>
+                </div>
             </div>
         </div>
 

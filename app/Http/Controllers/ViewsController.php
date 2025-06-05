@@ -449,7 +449,7 @@ class ViewsController
     {
         $usuarioSesion = Auth::user()->load('rol', 'estudiante', 'estudiante.matriculas', 'estudiante.matriculas.grupo');
         $institucion_id = $usuarioSesion->estudiante->institucion_id;
-        $matricula_id = $usuarioSesion->estudiante->matriculas->first()->matricula_id;
+        $matricula_id = $usuarioSesion->estudiante->matriculas->last()->matricula_id;
 
         $asignacion = Asignacion::with(['materia', 'docente.usuario', 'grupo'])
             ->findOrFail($asignacion_id);
@@ -464,7 +464,13 @@ class ViewsController
             ->orderBy('asistencia_fecha', 'desc')
             ->get();
 
-        return view('app.student.subject', compact('usuarioSesion', 'asignacion', 'periodos', 'asistencias'));
+        $notas = Nota::where('matricula_id', $matricula_id)
+            ->where('asignacion_id', $asignacion_id)
+            ->get();
+
+        $institucion = Institucion::findOrFail($institucion_id);
+
+        return view('app.student.subject', compact('usuarioSesion', 'asignacion', 'periodos', 'asistencias', 'notas', 'institucion'));
     }
 
     public function studentAbsences()
