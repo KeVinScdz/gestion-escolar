@@ -626,15 +626,35 @@ class ViewsController
         return view('app.tutor.observations', compact('usuarioSesion', 'observaciones'));
     }
 
-    public function tutorEnroll()
+    public function studentProfile($id)
     {
-        $usuarioSesion = Auth::user()->load('rol', 'tutor', 'tutor.estudiante', 'tutor.estudiante.usuario');
-        $institucion_id = $usuarioSesion->tutor->estudiante->institucion_id;
+        $usuarioSesion = Auth::user()->load('rol', 'estudiante', 'estudiante.matriculas', 'estudiante.matriculas.grupo');
 
-        $grupos = Grupo::where('institucion_id', $institucion_id)
-            ->where('grupo_año', date('Y'))
-            ->get();
+        $estudiante = Estudiante::with(
+            'usuario',
+            'matriculas',
+            'matriculas.grupo',
+            'matriculas.grupo.asignaciones',
+            'matriculas.grupo.asignaciones.materia',
+            'matriculas.grupo.asignaciones.docente',
+            'matriculas.grupo.asignaciones.docente.usuario',
+            'matriculas.observaciones'
+        )
+            ->where('estudiante_id', $id)
+            ->first();
 
-        return view('app.tutor.enroll', compact('usuarioSesion', 'grupos'));
+        $institucion_id = $estudiante->institucion_id;
+
+        $periodo = PeriodoAcademico::where('institucion_id', $institucion_id)
+            ->where('periodo_academico_año', date('Y'))
+            ->orderBy('periodo_academico_inicio', 'asc')
+            ->orderBy('periodo_academico_fin', 'asc')
+            ->first();
+
+        $promedio = Nota::where('matricula_id', $estudiante->matriculas->last()->matricula_id)
+            ->get()
+            ->avg('nota_valor');
+
+        return view('app.student-profile', compact('usuarioSesion', 'estudiante', 'periodo', 'promedio'));
     }
 }

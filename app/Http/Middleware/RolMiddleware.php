@@ -14,10 +14,16 @@ class RolMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, int $rol): Response
+    public function handle(Request $request, Closure $next, ...$roles): Response
     {
         $usuarioSesion = Auth::user();
-        if ($usuarioSesion->rol_id !== $rol) {
+        
+        // Convert roles to integers if they are strings
+        $roles = array_map(function($role) {
+            return is_numeric($role) ? (int)$role : $role;
+        }, $roles);
+
+        if (!in_array($usuarioSesion->rol_id, $roles)) {
             return response()->redirectTo('/');
         }
 

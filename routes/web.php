@@ -69,3 +69,8 @@ Route::middleware(['auth', 'rol:5'])->prefix('/dashboard/tutor')->group(function
     Route::get('/inasistencias', [ViewsController::class, 'tutorAbsences']);
     Route::get('/observaciones', [ViewsController::class, 'tutorObservations']);
 });
+
+// Administrative, Teacher and Tutor Dashboard
+Route::middleware(['auth', 'rol:2,3,5'])->prefix('/dashboard')->group(function () {
+    Route::get('/estudiantes/{id}', [ViewsController::class, 'studentProfile']);
+});

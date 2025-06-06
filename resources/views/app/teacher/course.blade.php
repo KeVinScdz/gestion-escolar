@@ -70,7 +70,7 @@
                             <tr>
                                 <td>{{ $estudiante->usuario->usuario_documento_tipo }}: {{ $estudiante->usuario->usuario_documento }}</td>
                                 <td>
-                                    <a href="/dashboard/docente/estudiantes/{{ $estudiante->estudiante_id }}" target="_blank" class="hover:text-primary hover:underline tooltip" data-tip="Ver perfil">
+                                    <a href="/dashboard/estudiantes/{{ $estudiante->estudiante_id }}" target="_blank" class="hover:text-primary hover:underline tooltip" data-tip="Ver perfil">
                                         {{ $estudiante->usuario->usuario_apellido }} {{ $estudiante->usuario->usuario_nombre }}
                                     </a>
                                 </td>
@@ -149,7 +149,7 @@
                         @endphp
                         <tr>
                             <td>
-                                <a href="/dashboard/docente/estudiantes/{{ $estudiante->estudiante_id }}" target="_blank" class="hover:text-primary hover:underline tooltip" data-tip="Ver perfil">
+                                <a href="/dashboard/estudiantes/{{ $estudiante->estudiante_id }}" target="_blank" class="hover:text-primary hover:underline tooltip" data-tip="Ver perfil">
                                     {{ $estudiante->usuario->usuario_apellido }} {{ $estudiante->usuario->usuario_nombre }}
                                 </a>
                             </td>
@@ -237,7 +237,7 @@
                 @foreach($observaciones as $observacion)
                 <tr>
                     <td>
-                        <a href="/dashboard/docente/estudiantes/{{ $observacion->matricula->estudiante_id }}" target="_blank" class="hover:text-primary hover:underline tooltip" data-tip="Ver perfil">
+                        <a href="/dashboard/estudiantes/{{ $observacion->matricula->estudiante_id }}" target="_blank" class="hover:text-primary hover:underline tooltip" data-tip="Ver perfil">
                             {{ $observacion->matricula->estudiante->usuario->usuario_apellido }} {{ $observacion->matricula->estudiante->usuario->usuario_nombre }}
                         </a>
                     </td>
