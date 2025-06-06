@@ -22,6 +22,7 @@ use App\Models\PeriodoAcademico;
 use App\Models\Permiso;
 use App\Models\Rol;
 use App\Models\Usuario;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ViewsController
 {
@@ -534,12 +535,48 @@ class ViewsController
     {
         $usuarioSesion = Auth::user()->load('rol', 'tutor', 'tutor.estudiante', 'tutor.estudiante.matriculas', 'tutor.estudiante.usuario');
         $institucion_id = $usuarioSesion->tutor->estudiante->institucion_id;
+        $matricula_id = $usuarioSesion->tutor->estudiante->matriculas->last()->matricula_id;
 
-        $asignaciones = Nota::with('asignacion', 'asignacion.materia')
-            ->where('matricula_id', $usuarioSesion->tutor->estudiante->matriculas->last()->matricula_id)
+        $institucion = Institucion::findOrFail($institucion_id);
+
+        $asignaciones = Asignacion::with('notas', 'materia')
+            ->where('grupo_id', $usuarioSesion->tutor->estudiante->matriculas->first()->grupo_id)
             ->get();
 
-        return view('app.tutor.grades', compact('usuarioSesion', 'asignaciones'));
+        $periodos = PeriodoAcademico::where('institucion_id', $institucion_id)->where('periodo_academico_año', date('Y'))->orderBy('periodo_academico_inicio', 'asc')->get();
+        $notas = Nota::where('matricula_id', $matricula_id)->get();
+
+        return view('app.tutor.grades', compact('usuarioSesion', 'asignaciones', 'institucion', 'notas', 'periodos'));
+    }
+
+    public function tutorGradesExport()
+    {
+        $usuarioSesion = Auth::user()->load('rol', 'tutor', 'tutor.estudiante', 'tutor.estudiante.matriculas', 'tutor.estudiante.usuario');
+        $institucion_id = $usuarioSesion->tutor->estudiante->institucion_id;
+        $matricula_id = $usuarioSesion->tutor->estudiante->matriculas->last()->matricula_id;
+
+        $estudiante = $usuarioSesion->tutor->estudiante;
+
+        $institucion = Institucion::findOrFail($institucion_id);
+
+        $asignaciones = Asignacion::with('notas', 'materia')
+            ->where('grupo_id', $usuarioSesion->tutor->estudiante->matriculas->first()->grupo_id)
+            ->get();
+
+        $notas = Nota::where('matricula_id', $matricula_id)->get();
+        $periodos = PeriodoAcademico::where('institucion_id', $institucion_id)->where('periodo_academico_año', date('Y'))->orderBy('periodo_academico_inicio', 'asc')->get();
+
+        $data = [
+            'estudiante' => $estudiante,
+            'asignaciones' => $asignaciones,
+            'promedio_general' => $notas->avg('nota_valor'),
+            'notas' => $notas,
+            'periodos' => $periodos,
+            'institucion' => $institucion
+        ];
+
+        $pdf = PDF::loadView('exports.grades-pdf', $data);
+        return $pdf->download('boletin_' . $estudiante->usuario->usuario_documento . '.pdf');
     }
 
     public function tutorSchedule()

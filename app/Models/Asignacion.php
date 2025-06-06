@@ -41,4 +41,9 @@ class Asignacion extends Model
     {
         return $this->hasMany(Horario::class, 'asignacion_id', 'asignacion_id');
     }
+
+    public function notas()
+    {
+        return $this->hasMany(Nota::class, 'asignacion_id', 'asignacion_id');
+    }
 }
