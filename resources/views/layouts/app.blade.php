@@ -84,7 +84,10 @@
                     @if($usuarioSesion->rol_id == 2)
                     @if ($usuarioSesion->administrativo->permisos->contains('permiso_id', 1))
                     <li>
-                        <a href="/dashboard/institucion" class="hover:bg-primary/50 {{ request()->is('dashboard/instituciones')? 'bg-primary' : '' }}">Gestionar Institucion</a>
+                        <a href="/dashboard/institucion" class="hover:bg-primary/50 {{ request()->is('dashboard/instituciones')? 'bg-primary' : '' }}">Gestionar Institución</a>
+                    </li>
+                    <li>
+                        <a href="/dashboard/institucion/estadisticas" class="hover:bg-primary/50 {{ request()->is('dashboard/institucion/estadisticas') ? 'bg-primary' : '' }}">Estadísticas de la Institución</a>
                     </li>
                     @endif
                     @if ($usuarioSesion->administrativo->permisos->contains('permiso_id', 2))

@@ -33,6 +33,7 @@ Route::middleware(['auth', 'rol:1'])->group(function () {
 // Administrative Dashboard
 Route::middleware(['auth', 'rol:2'])->group(function () {
     Route::middleware('permiso:1')->get("/dashboard/institucion", [ViewsController::class, 'institution']);
+    Route::middleware('permiso:1')->get("/dashboard/institucion/estadisticas", [ViewsController::class, 'institutionStatistics']);
     Route::middleware('permiso:2')->get("/dashboard/administrativos", [ViewsController::class, 'administratives']);
     Route::middleware('permiso:3')->get("/dashboard/docentes", [ViewsController::class, 'teachers']);
     Route::middleware('permiso:4')->get("/dashboard/estudiantes", [ViewsController::class, 'students']);

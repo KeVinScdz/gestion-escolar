@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 use App\Models\Estudiante;
 use App\Models\Grado;
@@ -177,6 +178,145 @@ class ViewsController
         $institucion = Institucion::where('institucion_id', $usuarioSesion->administrativo->institucion_id)->first();
 
         return view('app.administrative.institution', compact('usuarioSesion', 'institucion'));
+    }
+
+    public function institutionStatistics()
+    {
+        $usuarioSesion = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
+        $institucion_id = $usuarioSesion->administrativo->institucion_id;
+        $institucion = Institucion::findOrFail($institucion_id);
+
+        // Totales básicos
+        $totalEstudiantes = Estudiante::where('institucion_id', $institucion_id)
+            ->whereHas('matriculas', function ($query) {
+                $query->where('matricula_año', date('Y'));
+            })
+            ->count();
+
+        $totalDocentes = Docente::where('institucion_id', $institucion_id)->count();
+        $totalAdministrativos = Usuario::where('rol_id', 2)
+            ->whereHas('administrativo', function ($query) use ($institucion_id) {
+                $query->where('institucion_id', $institucion_id);
+            })
+            ->count();
+
+        $totalMaterias = Materia::where('institucion_id', $institucion_id)->count();
+        $totalGrupos = Grupo::where('institucion_id', $institucion_id)
+            ->where('grupo_año', date('Y'))
+            ->count();
+
+        // Calendario académico
+        $periodos = PeriodoAcademico::where('institucion_id', $institucion_id)
+            ->where('periodo_academico_año', date('Y'))
+            ->orderBy('periodo_academico_inicio')
+            ->get();
+
+        $fechaInicio = $periodos->first()?->periodo_academico_inicio;
+        $fechaFin = $periodos->last()?->periodo_academico_fin;
+        $fechaActual = now();
+
+        $diasTotales = $fechaInicio && $fechaFin ? Carbon::parse($fechaInicio)->diffInDays(Carbon::parse($fechaFin)) : 0;
+        $diasTranscurridos = $fechaInicio ? Carbon::parse($fechaInicio)->diffInDays(Carbon::parse($fechaActual)) : 0;
+        $porcentajeAvance = $diasTotales > 0 ? round(($diasTranscurridos / $diasTotales) * 100) : 0;
+
+        // Estadísticas de asistencia
+        $inasistenciasPorGrupo = Grupo::where('institucion_id', $institucion_id)
+            ->where('grupo_año', date('Y'))
+            ->withCount(['matriculas' => function ($query) {
+                $query->whereHas('asistencias', function ($q) {
+                    $q->where('asistencia_estado', 'ausente');
+                });
+            }])
+            ->get()
+            ->map(function ($grupo) {
+                return [
+                    'nombre' => $grupo->grupo_nombre,
+                    'inasistencias' => $grupo->matriculas_count
+                ];
+            });
+
+        // Inasistencias por día
+        $inasistenciasPorDia = Asistencia::whereHas('matricula.estudiante', function ($query) use ($institucion_id) {
+                $query->where('institucion_id', $institucion_id);
+            })
+            ->where('asistencia_estado', 'ausente')
+            ->selectRaw('DATE(asistencia_fecha) as fecha, COUNT(*) as total')
+            ->groupBy('fecha')
+            ->orderByDesc('total')
+            ->take(5)
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'nombre' => Carbon::parse($item->fecha)->format('d/m/Y'),
+                    'inasistencias' => $item->total
+                ];
+            });
+
+        // Estadísticas de rendimiento
+        $rendimientoPorPeriodo = [];
+        foreach ($periodos as $periodo) {
+            $notas = Nota::whereHas('matricula', function ($query) use ($institucion_id) {
+                $query->whereHas('estudiante', function ($q) use ($institucion_id) {
+                    $q->where('institucion_id', $institucion_id);
+                });
+            })
+            ->where('periodo_academico_id', $periodo->periodo_academico_id)
+            ->get();
+
+            $totalNotas = $notas->count();
+            $aprobados = $notas->where('nota_valor', '>=', 3.0)->count();
+            $reprobados = $totalNotas - $aprobados;
+
+            $rendimientoPorPeriodo[] = [
+                'periodo' => $periodo->periodo_academico_nombre,
+                'aprobados' => $totalNotas > 0 ? round(($aprobados / $totalNotas) * 100) : 0,
+                'reprobados' => $totalNotas > 0 ? round(($reprobados / $totalNotas) * 100) : 0
+            ];
+        }
+
+        $promediosPorGrupo = Grupo::where('institucion_id', $institucion_id)
+            ->where('grupo_año', date('Y'))
+            ->with(['matriculas' => function ($query) {
+                $query->with('notas');
+            }])
+            ->get()
+            ->map(function ($grupo) {
+                $promedio = $grupo->matriculas->flatMap->notas->avg('nota_valor');
+                return [
+                    'nombre' => $grupo->grupo_nombre,
+                    'promedio' => round($promedio, 2)
+                ];
+            });
+
+        $promediosPorMateria = Materia::where('institucion_id', $institucion_id)
+            ->with(['asignaciones' => function ($query) {
+                $query->with('notas');
+            }])
+            ->get()
+            ->map(function ($materia) {
+                $promedio = $materia->asignaciones->flatMap->notas->avg('nota_valor');
+                return [
+                    'nombre' => $materia->materia_nombre,
+                    'promedio' => round($promedio, 2)
+                ];
+            })
+            ->sortByDesc('promedio');
+
+        return view('app.administrative.statistics', compact(
+            'usuarioSesion',
+            'institucion',
+            'totalEstudiantes',
+            'totalDocentes',
+            'totalAdministrativos',
+            'totalMaterias',
+            'totalGrupos',
+            'porcentajeAvance',
+            'inasistenciasPorGrupo',
+            'inasistenciasPorDia',
+            'rendimientoPorPeriodo',
+            'promediosPorGrupo',
+            'promediosPorMateria'
+        ));
     }
 
     public function administratives()
