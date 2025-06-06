@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'rol:1'])->group(function () {
     Route::get("/dashboard/instituciones", [ViewsController::class, 'institutions']);
     Route::get("/dashboard/usuarios", [ViewsController::class, 'users']);
+    Route::get("/dashboard/estadisticas", [ViewsController::class, 'adminStatistics']);
 });
 
 // Administrative Dashboard

@@ -75,6 +75,101 @@ class ViewsController
         return view('app.admin.users', compact('usuarioSesion', 'usuarios', 'roles', 'instituciones', 'estudiantes', 'permisos'));
     }
 
+    public function adminStatistics()
+    {
+        $usuarioSesion = Auth::user()->load('rol');
+
+        // Total de instituciones
+        $totalInstituciones = Institucion::count();
+
+        // Usuarios administrativos por institución
+        $administrativosPorInstitucion = Institucion::withCount('administrativos')
+            ->get()
+            ->map(function ($institucion) {
+                return [
+                    'nombre' => $institucion->institucion_nombre,
+                    'total' => $institucion->administrativos_count
+                ];
+            });
+
+        // Docentes por institución
+        $docentesPorInstitucion = Institucion::withCount('docentes')
+            ->get()
+            ->map(function ($institucion) {
+                return [
+                    'nombre' => $institucion->institucion_nombre,
+                    'total' => $institucion->docentes_count
+                ];
+            });
+
+        // Estudiantes por institución
+        $estudiantesPorInstitucion = Institucion::withCount('estudiantes')
+            ->get()
+            ->map(function ($institucion) {
+                return [
+                    'nombre' => $institucion->institucion_nombre,
+                    'total' => $institucion->estudiantes_count
+                ];
+            });
+
+        // Total de grupos académicos
+        $totalGrupos = Grupo::count();
+
+        // Total de materias
+        $totalMaterias = Materia::count();
+
+        // Periodos académicos activos e inactivos
+        $periodosActivos = PeriodoAcademico::where('periodo_academico_fin', '>=', now())->count();
+        $periodosInactivos = PeriodoAcademico::where('periodo_academico_fin', '<', now())->count();
+
+        // Tasa de crecimiento mensual
+        $mesActual = now()->startOfMonth();
+        $mesAnterior = now()->subMonth()->startOfMonth();
+
+        $nuevasInstituciones = Institucion::where('created_at', '>=', $mesActual)->count();
+        $nuevosEstudiantes = Estudiante::where('created_at', '>=', $mesActual)->count();
+        $nuevosDocentes = Docente::where('created_at', '>=', $mesActual)->count();
+
+        // Datos para gráficos de tendencia
+        $tendencias = [
+            'instituciones' => $this->getTendenciaMensual(Institucion::class),
+            'estudiantes' => $this->getTendenciaMensual(Estudiante::class),
+            'docentes' => $this->getTendenciaMensual(Docente::class)
+        ];
+
+        return view('app.admin.statistics', compact(
+            'usuarioSesion',
+            'totalInstituciones',
+            'administrativosPorInstitucion',
+            'docentesPorInstitucion',
+            'estudiantesPorInstitucion',
+            'totalGrupos',
+            'totalMaterias',
+            'periodosActivos',
+            'periodosInactivos',
+            'nuevasInstituciones',
+            'nuevosEstudiantes',
+            'nuevosDocentes',
+            'tendencias'
+        ));
+    }
+
+    private function getTendenciaMensual($model)
+    {
+        $tendencia = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $mes = now()->subMonths($i);
+            $tendencia[] = [
+                'mes' => $mes->format('M Y'),
+                'total' => $model::whereYear('created_at', $mes->year)
+                    ->whereMonth('created_at', $mes->month)
+                    ->count()
+            ];
+        }
+        return $tendencia;
+    }
+
+    // Administrative Views
     public function institution()
     {
         $usuarioSesion = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');

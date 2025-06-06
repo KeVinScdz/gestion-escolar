@@ -70,6 +70,9 @@
                     {{-- Administrador --}}
                     @if($usuarioSesion->rol_id == 1)
                     <li>
+                        <a href="/dashboard/estadisticas" class="hover:bg-primary/50 {{ request()->is('dashboard/estadisticas') ? 'bg-primary' : '' }}">Estadísticas</a>
+                    </li>
+                    <li>
                         <a href="/dashboard/instituciones" class="hover:bg-primary/50 {{ request()->is('dashboard/instituciones') ? 'bg-primary' : '' }}">Instituciones</a>
                     </li>
                     <li>
