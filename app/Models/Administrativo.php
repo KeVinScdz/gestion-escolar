@@ -13,13 +13,15 @@ class Administrativo extends Model
     protected $primaryKey = 'administrativo_id';
     public $incrementing = false;
     protected $keyType = 'string';
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         // 'administrativo_id',
         'usuario_id',
         'administrativo_cargo',
-        'institucion_id'
+        'institucion_id',
+        'created_at',
+        'updated_at'
     ];
 
     public function usuario()

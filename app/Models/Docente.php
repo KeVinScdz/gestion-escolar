@@ -13,13 +13,15 @@ class Docente extends Model
     protected $primaryKey = 'docente_id';
     public $incrementing = false;
     protected $keyType = 'string';
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         // 'docente_id',
         'usuario_id',
         'institucion_id',
         'docente_titulo',
+        'created_at',
+        'updated_at'
     ];
 
     public function usuario()

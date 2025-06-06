@@ -471,51 +471,71 @@ class create_users extends Seeder
                 'estudiante_id' => '61417e28-03b5-425e-9553-4a900f22b47e',
                 'usuario_id' => 'acc7f7c7-3b60-4a5d-bb2b-433d18d4bca4',
                 'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'estudiante_id' => 'e16fa3a8-ac43-4d70-8bf1-9826a7547fc7',
                 'usuario_id' => 'abaaee03-dec0-409f-98e7-082c24f86424',
                 'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'created_at' => now(),
+                'updated_at' => now()
             ],
             [
                 'estudiante_id' => '1712b8e4-f374-48fe-8b67-c55e678f5289',
                 'usuario_id' => '05253f46-4b3e-4c0e-ac55-b1ab50aa36f3',
                 'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'created_at' => now(),
+                'updated_at' => now()
             ],
             [
                 'estudiante_id' => '0becf5c7-b3a5-46b3-b91d-ceb6694dbac5',
                 'usuario_id' => 'ecfa31b1-529a-40cf-adca-a959672fb16a',
                 'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'created_at' => now(),
+                'updated_at' => now()
             ],
             [
                 'estudiante_id' => 'a4cb54b8-5910-4dbf-9a6d-4b5d08e2ba26',
                 'usuario_id' => '99ff4b18-85c5-4086-a50c-cf6bb5371ebe',
                 'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'created_at' => now(),
+                'updated_at' => now()
             ],
             [
                 'estudiante_id' => '8583ffac-e87d-496a-ae23-5253236c3d0a',
                 'usuario_id' => '9bd53343-7286-44d1-b54e-cbbf480f84c1',
                 'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'created_at' => now(),
+                'updated_at' => now()
             ],
             [
                 'estudiante_id' => '34bcd5fe-b2e3-4eeb-ba0a-5f275d41cbb4',
                 'usuario_id' => '629d01c9-3cea-4403-97bd-6da95c5e44bf',
                 'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'created_at' => now(),
+                'updated_at' => now()
             ],
             [
                 'estudiante_id' => 'bb89ea00-07a4-4aa0-a489-4d5c276bd04c',
                 'usuario_id' => '43a51cd2-ceda-46ea-b723-801d101e88a4',
                 'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'created_at' => now(),
+                'updated_at' => now()
             ],
             [
                 'estudiante_id' => '3e5735bd-cc18-4a5e-b725-424f05764ba3',
                 'usuario_id' => 'a530f503-2040-4658-a0ac-0fb1f10c727f',
                 'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'created_at' => now(),
+                'updated_at' => now()
             ],
             [
                 'estudiante_id' => 'c97d9f17-5ad3-4232-8bda-dc1a77326c77',
                 'usuario_id' => 'ed9cd8f0-4f51-4101-bd3b-3466991168c6',
                 'institucion_id' => 'dbf5dd93-aa04-486a-a6d5-a9a1f9129137',
+                'created_at' => now(),
+                'updated_at' => now()
             ],
         ]);
 

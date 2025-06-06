@@ -78,6 +78,8 @@ class create_info extends Seeder
                 'nota_minima' => 0,
                 'nota_maxima' => 5,
                 'nota_aprobatoria' => 3.5,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'institucion_id' => '205117f9-fa69-4003-9446-b747e6655ec9',
@@ -89,6 +91,8 @@ class create_info extends Seeder
                 'nota_minima' => 0,
                 'nota_maxima' => 5,
                 'nota_aprobatoria' => 3.5,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'institucion_id' => 'c07a0727-853b-4120-a568-b6901f371256',
@@ -100,6 +104,8 @@ class create_info extends Seeder
                 'nota_minima' => 0,
                 'nota_maxima' => 5,
                 'nota_aprobatoria' => 3,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'institucion_id' => '3b97a2ee-f1d1-4529-9587-35b207da718d',
@@ -111,6 +117,8 @@ class create_info extends Seeder
                 'nota_minima' => 0,
                 'nota_maxima' => 5,
                 'nota_aprobatoria' => 3,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'institucion_id' => '01a3265b-de79-4411-98dc-ef0ff1a97afd',
@@ -122,6 +130,8 @@ class create_info extends Seeder
                 'nota_minima' => 0,
                 'nota_maxima' => 5,
                 'nota_aprobatoria' => 3,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'institucion_id' => '988fa2bc-c42e-4fd6-beb7-2bb2e368f671',
@@ -133,6 +143,8 @@ class create_info extends Seeder
                 'nota_minima' => 0,
                 'nota_maxima' => 5,
                 'nota_aprobatoria' => 3,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
         ]);
     }

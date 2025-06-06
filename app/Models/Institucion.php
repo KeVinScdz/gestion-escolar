@@ -10,7 +10,7 @@ class Institucion extends Model
     use HasUuids;
 
     protected $table = 'instituciones';
-    public $timestamps = false;
+    public $timestamps = true;
     protected $primaryKey = 'institucion_id';
     public $incrementing = false;
     protected $keyType = 'string';
@@ -25,6 +25,8 @@ class Institucion extends Model
         'nota_minima',
         'nota_maxima',
         'nota_aprobatoria',
+        'created_at',
+        'updated_at'
     ];
 
     public function niveles()
@@ -46,5 +48,20 @@ class Institucion extends Model
                 ->orWhere('institucion_nit', 'like', "%{$term}%")
                 ->orWhere('institucion_direccion', 'like', "%{$term}%");
         });
+    }
+
+    public function administrativos()
+    {
+        return $this->hasMany(Administrativo::class, 'institucion_id', 'institucion_id');
+    }
+
+    public function docentes()
+    {
+        return $this->hasMany(Docente::class, 'institucion_id', 'institucion_id');
+    }
+
+    public function estudiantes()
+    {
+        return $this->hasMany(Estudiante::class, 'institucion_id', 'institucion_id');
     }
 }

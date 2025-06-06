@@ -48,6 +48,7 @@ return new class extends Migration
             $table->uuid('estudiante_id')->primary();
             $table->uuid('institucion_id');
             $table->uuid('usuario_id');
+            $table->timestamps();
         });
 
         Schema::create('tutores', function (Blueprint $table) {
@@ -61,6 +62,7 @@ return new class extends Migration
             $table->uuid('usuario_id');
             $table->uuid('institucion_id');
             $table->string('docente_titulo');
+            $table->timestamps();
         });
 
         Schema::create('administrativos', function (Blueprint $table) {
@@ -68,6 +70,7 @@ return new class extends Migration
             $table->uuid('institucion_id');
             $table->uuid('usuario_id');
             $table->string('administrativo_cargo');
+            $table->timestamps();
         });
 
         // Estructura academica
@@ -81,6 +84,7 @@ return new class extends Migration
             $table->float('nota_minima');
             $table->float('nota_maxima');
             $table->float('nota_aprobatoria');
+            $table->timestamps();
         });
 
         Schema::create('periodos_academicos', function (Blueprint $table) {

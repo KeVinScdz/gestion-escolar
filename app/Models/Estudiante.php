@@ -13,12 +13,14 @@ class Estudiante extends Model
     protected $primaryKey = 'estudiante_id';
     public $incrementing = false;
     protected $keyType = 'string';
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         // 'estudiante_id',
         'institucion_id',
         'usuario_id',
+        'created_at',
+        'updated_at'
     ];
 
     public function usuario()
