@@ -17,16 +17,23 @@
             </div>
             <nav>
                 <ul class="flex gap-5">
-                    <li><a href="/">Inicio</a></li>
-                    <li><a href="/login">Iniciar Sesión</a></li>
-                    <li><a href="/register">Registrarse</a></li>
+                    <li class="text-lg hover:scale-[1.02] hover:text-primary transition-all duration-300"><a href="/">Inicio</a></li>
+                    <li class="text-lg hover:scale-[1.02] hover:text-primary transition-all duration-300"><a href="/funcionalidades">Funcionalidades</a></li>
+                    <li class="text-lg hover:scale-[1.02] hover:text-primary transition-all duration-300"><a href="/matricular">Matricular</a></li>
                 </ul>
             </nav>
             <div class="flex-1 flex justify-end">
+                @if (Auth::check())
+                <a href="/dashboard" class="btn btn-primary btn-outline py-1">
+                    <i class="fa-solid fa-user text-sm"></i>
+                    <span class="ml-1">Panel</span>
+                </a>
+                @else
                 <a href="/login" class="btn btn-primary btn-outline py-1">
                     <i class="fa-solid fa-right-to-bracket text-sm"></i>
                     <span class="ml-1">Autenticate</span>
                 </a>
+                @endif
             </div>
         </div>
     </header>

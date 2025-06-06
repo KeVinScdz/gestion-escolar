@@ -7,6 +7,7 @@ use App\Http\Controllers\Web\AuthController;
 
 // Public Routes
 Route::get('/', [ViewsController::class, 'index']);
+Route::get('/funcionalidades', [ViewsController::class, 'features']);
 
 // Guest Routes
 Route::middleware('guest')->group(function () {

@@ -32,6 +32,11 @@ class ViewsController
         return view('welcome');
     }
 
+    public function features()
+    {
+        return view('features');
+    }
+
     public function login()
     {
         return view('auth.login');
@@ -237,8 +242,8 @@ class ViewsController
 
         // Inasistencias por día
         $inasistenciasPorDia = Asistencia::whereHas('matricula.estudiante', function ($query) use ($institucion_id) {
-                $query->where('institucion_id', $institucion_id);
-            })
+            $query->where('institucion_id', $institucion_id);
+        })
             ->where('asistencia_estado', 'ausente')
             ->selectRaw('DATE(asistencia_fecha) as fecha, COUNT(*) as total')
             ->groupBy('fecha')
@@ -260,8 +265,8 @@ class ViewsController
                     $q->where('institucion_id', $institucion_id);
                 });
             })
-            ->where('periodo_academico_id', $periodo->periodo_academico_id)
-            ->get();
+                ->where('periodo_academico_id', $periodo->periodo_academico_id)
+                ->get();
 
             $totalNotas = $notas->count();
             $aprobados = $notas->where('nota_valor', '>=', 3.0)->count();

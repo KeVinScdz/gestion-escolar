@@ -3,31 +3,34 @@
 @section('title', 'Inicio')
 
 @section('content')
+
+{{-- HERO SECTION --}}
 <section class="w-full px-5">
     <div class="w-full max-w-[1200px] mx-auto py-10">
         <div class="w-full flex items-center justify-center flex-col text-center space-y-5 min-h-[700px]">
             <div class="badge badge-primary badge-soft badge-lg border-[var(--color-primary)_!important]">
                 ¡Nueva versión disponible!
             </div>
-            <h1 class="text-7xl font-extrabold">Solución de <span class="text-primary italic">gestión</span> para centros educativos</h1>
-            <p class="text-pretty text-lg text-base-content/80">
-                <span class="semibold">Matryerse</span> es la plataforma en nube de gestión académica, resultado de profesionales del sector educativo y tecnológico, pioneros en España de la solución 100% nube en 2010, y en constante evolución
+            <h1 class="text-7xl font-extrabold">La <span class="text-primary italic">plataforma integral</span> para tu institución educativa</h1>
+            <p class="text-pretty text-lg text-base-content/80 max-w-[800px]">
+                <span class="font-semibold">Matryerse</span> digitaliza y simplifica la gestión académica, administrativa y financiera en una sola plataforma web, segura, moderna y siempre disponible en la nube.
             </p>
             <a href="/login" class="btn btn-ghost text-base py-2 group pr-6 mt-8">
-                <span class="mr-1">Empezar ahora</span>
+                <span class="mr-1">Explorar plataforma</span>
                 <i class="fa-solid fa-arrow-right group-hover:translate-x-2 duration-300"></i>
             </a>
         </div>
     </div>
 </section>
 
+{{-- DESCRIPCIÓN BREVE --}}
 <section class="w-full px-5">
     <div class="w-full max-w-[1200px] mx-auto py-15 pt-0">
         <div class="w-full flex items-center gap-10">
             <div class="md:w-1/2 space-y-6">
-                <h2 class="text-4xl font-bold">Todo lo que necesitas en un solo lugar</h2>
+                <h2 class="text-4xl font-bold">Todo en un solo lugar</h2>
                 <p class="text-base-content/80 text-lg">
-                    Desde la gestión académica, financiera y administrativa hasta la comunicación con familias, Matryerse centraliza todas las operaciones escolares en una única plataforma intuitiva.
+                    Desde la matrícula de estudiantes, horarios de docentes, boletines automáticos, hasta comunicaciones con padres y reportes financieros: centraliza la operación de tu institución con Matryerse.
                 </p>
                 <a href="#info" class="btn btn-primary w-max">Solicitar información</a>
             </div>
@@ -42,29 +45,43 @@
     </div>
 </section>
 
+{{-- POR QUÉ ELEGIRNOS --}}
 <section class="w-full px-5">
     <div class="max-w-[1200px] mx-auto py-15 space-y-20">
         <h2 class="text-4xl font-bold text-center">¿Por qué elegir Matryerse?</h2>
         <div class="grid md:grid-cols-3 gap-10 text-center">
             <div>
-                <i class="fa-solid fa-fingerprint text-primary text-4xl mb-4"></i>
-                <h3 class="text-xl font-semibold">Identidad educativa sólida</h3>
-                <p class="text-base-content/80 mt-2">Cada institución puede personalizar su experiencia y fortalecer su comunidad.</p>
+                <i class="fa-solid fa-lock text-primary text-4xl mb-4"></i>
+                <h3 class="text-xl font-semibold">Seguridad y respaldo</h3>
+                <p class="text-base-content/80 mt-2">Tus datos protegidos con infraestructura en la nube de última generación.</p>
             </div>
             <div>
-                <i class="fa-solid fa-check-circle text-primary text-4xl mb-4"></i>
-                <h3 class="text-xl font-semibold">Calidad académica garantizada</h3>
-                <p class="text-base-content/80 mt-2">Seguimiento en tiempo real de desempeño, asistencia y más.</p>
+                <i class="fa-solid fa-handshake text-primary text-4xl mb-4"></i>
+                <h3 class="text-xl font-semibold">Soporte dedicado</h3>
+                <p class="text-base-content/80 mt-2">Asistencia personalizada durante y después de la implementación.</p>
             </div>
             <div>
-                <i class="fa-solid fa-leaf text-primary text-4xl mb-4"></i>
-                <h3 class="text-xl font-semibold">Sostenibilidad a largo plazo</h3>
-                <p class="text-base-content/80 mt-2">Solución escalable, modular y siempre disponible en la nube.</p>
+                <i class="fa-solid fa-rocket text-primary text-4xl mb-4"></i>
+                <h3 class="text-xl font-semibold">Innovación constante</h3>
+                <p class="text-base-content/80 mt-2">Mejoras continuas, integraciones y nuevas funciones todo el año.</p>
             </div>
         </div>
     </div>
 </section>
 
+{{-- CTA FINAL --}}
+<section class="w-full px-5 bg-primary/5 py-20">
+    <div class="max-w-[900px] mx-auto text-center space-y-6">
+        <h2 class="text-3xl font-bold">¿Listo para transformar tu institución?</h2>
+        <p class="text-base-content/80 text-lg">Contáctanos y agenda una demostración gratuita. Te mostraremos cómo Matryerse puede ayudarte a mejorar la gestión educativa.</p>
+        <div class="flex justify-center gap-4 flex-wrap">
+            <a href="#info" class="btn btn-primary">Solicitar información</a>
+            <a href="/login" class="btn btn-outline">Ingresar al sistema</a>
+        </div>
+    </div>
+</section>
+
+{{-- FUNCIONALIDADES PRINCIPALES --}}
 <section class="w-full px-5">
     <div class="max-w-[1200px] mx-auto py-15">
         <h2 class="text-4xl font-bold text-center mb-12">Principales funcionalidades</h2>
@@ -72,34 +89,35 @@
             <div class="p-6 bg-base-200 rounded-lg">
                 <i class="fa-solid fa-users text-3xl text-primary mb-4"></i>
                 <h3 class="text-xl font-semibold mb-2">Gestión de usuarios y roles</h3>
-                <p class="text-base-content/80">Control total sobre accesos, permisos y perfiles de cada actor del sistema.</p>
+                <p class="text-base-content/80">Control total sobre accesos, permisos y perfiles para cada miembro de la comunidad educativa.</p>
             </div>
             <div class="p-6 bg-base-200 rounded-lg">
                 <i class="fa-solid fa-calendar-days text-3xl text-primary mb-4"></i>
                 <h3 class="text-xl font-semibold mb-2">Matrículas, horarios y notas</h3>
-                <p class="text-base-content/80">Automatiza el ciclo académico desde la inscripción hasta la evaluación.</p>
+                <p class="text-base-content/80">Automatización de ciclos académicos, creación de horarios sin choques, boletines automáticos.</p>
             </div>
             <div class="p-6 bg-base-200 rounded-lg">
                 <i class="fa-solid fa-credit-card text-3xl text-primary mb-4"></i>
                 <h3 class="text-xl font-semibold mb-2">Módulo financiero</h3>
-                <p class="text-base-content/80">Facturación, pagos y control de cartera con trazabilidad completa.</p>
+                <p class="text-base-content/80">Facturación, control de pagos y reportes financieros adaptados a cada institución.</p>
             </div>
             <div class="p-6 bg-base-200 rounded-lg">
                 <i class="fa-solid fa-bullhorn text-3xl text-primary mb-4"></i>
-                <h3 class="text-xl font-semibold mb-2">Comunicación efectiva</h3>
-                <p class="text-base-content/80">Notificaciones, observaciones y reportes para familias y docentes.</p>
+                <h3 class="text-xl font-semibold mb-2">Comunicación con tutores</h3>
+                <p class="text-base-content/80">Observaciones, reportes de asistencia, notas y mensajes centralizados.</p>
             </div>
             <div class="p-6 bg-base-200 rounded-lg">
                 <i class="fa-solid fa-building text-3xl text-primary mb-4"></i>
                 <h3 class="text-xl font-semibold mb-2">Multi-institución</h3>
-                <p class="text-base-content/80">Administra varias sedes o instituciones desde un solo entorno.</p>
+                <p class="text-base-content/80">Administra múltiples sedes o instituciones desde una sola cuenta.</p>
             </div>
             <div class="p-6 bg-base-200 rounded-lg">
                 <i class="fa-solid fa-chart-line text-3xl text-primary mb-4"></i>
-                <h3 class="text-xl font-semibold mb-2">Reportes y analítica</h3>
-                <p class="text-base-content/80">Paneles visuales y métricas clave para la toma de decisiones.</p>
+                <h3 class="text-xl font-semibold mb-2">Estadísticas</h3>
+                <p class="text-base-content/80">Métricas clave: asistencia, rendimiento académico y más.</p>
             </div>
         </div>
     </div>
 </section>
+
 @endsection
