@@ -32,7 +32,7 @@
                 <p class="text-base-content/80 text-lg">
                     Desde la matrícula de estudiantes, horarios de docentes, boletines automáticos, hasta comunicaciones con padres y reportes financieros: centraliza la operación de tu institución con Matryerse.
                 </p>
-                <a href="#info" class="btn btn-primary w-max">Solicitar información</a>
+                <a href="/info" class="btn btn-primary w-max">Solicitar información</a>
             </div>
             <div class="md:w-1/2">
                 <figure class="w-full aspect-square max-w-[500px] mx-auto bg-base-300/20 border border-base-300 rounded-lg backdrop-blur-lg overflow-hidden">
@@ -75,7 +75,7 @@
         <h2 class="text-3xl font-bold">¿Listo para transformar tu institución?</h2>
         <p class="text-base-content/80 text-lg">Contáctanos y agenda una demostración gratuita. Te mostraremos cómo Matryerse puede ayudarte a mejorar la gestión educativa.</p>
         <div class="flex justify-center gap-4 flex-wrap">
-            <a href="#info" class="btn btn-primary">Solicitar información</a>
+            <a href="/info" class="btn btn-primary">Solicitar información</a>
             <a href="/login" class="btn btn-outline">Ingresar al sistema</a>
         </div>
     </div>

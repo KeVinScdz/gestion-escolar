@@ -37,6 +37,11 @@ class ViewsController
         return view('features');
     }
 
+    public function info()
+    {
+        return view('info');
+    }
+
     public function login()
     {
         return view('auth.login');
