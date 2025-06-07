@@ -14,7 +14,7 @@
                 </p>
             </div>
             <div class="flex-1 w-full bg-base-200 border border-base-300 rounded-lg p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
-                <form id="contactForm" action="" class="space-y-6 w-full">
+                <form id="contactForm" class="upload-form space-y-6 w-full" data-method="POST" data-target="/api/info" data-show-alert="true">
                     <fieldset class="fieldset">
                         <label for="fullName" class="fieldset-label text-base after:content-['*'] after:text-red-500 after:ml-1">
                             Nombre Completo

@@ -50,22 +50,14 @@ class InfoController
                 ->send(new Info($validated));
 
             return response()->json([
+                'success' => true,
                 'message' => 'Información enviada correctamente',
-                'status' => 'success'
             ], 201);
 
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json([
-                'message' => 'Error de validación',
-                'errors' => $e->errors(),
-                'status' => 'error'
-            ], 422);
         } catch (\Exception $e) {
-            Log::error('Error al enviar información de contacto: ' . $e->getMessage());
-            
             return response()->json([
-                'message' => 'Error al enviar la información',
-                'status' => 'error'
+                'success' => false,
+                'message' => 'Error al enviar la información: ' . $e->getMessage(),
             ], 500);
         }
     }

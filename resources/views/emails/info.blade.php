@@ -74,7 +74,7 @@
 
         <div class="message">
             <span class="label">Mensaje:</span>
-            <p>{{ $message }}</p>
+            <p>{{ $emailMessage }}</p>
         </div>
     </div>
 </body>

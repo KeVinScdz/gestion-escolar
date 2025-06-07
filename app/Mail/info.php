@@ -46,7 +46,7 @@ class Info extends Mailable
                 'phone' => $this->formData['phone'],
                 'institution' => $this->formData['institution'],
                 'role' => $this->formData['role'],
-                'message' => $this->formData['message'],
+                'emailMessage' => $this->formData['message'],
             ],
         );
     }
