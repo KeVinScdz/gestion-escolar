@@ -7,6 +7,10 @@ use App\Http\Controllers\Api\UsuarioController;
 use App\Http\Controllers\Api\InstitucionController;
 use App\Http\Controllers\Api\AcademicStructureController;
 use App\Http\Controllers\Api\BackupController;
+use App\Http\Controllers\Api\InfoController;
+
+// Info Routes
+Route::post('/info', [InfoController::class, 'store']);
 
 // Backup Routes
 Route::get("/info", [BackupController::class, 'exportData']);
