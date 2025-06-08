@@ -581,6 +581,7 @@ class create_users extends Seeder
 
 
         DB::table('administrativos_permisos')->insert([
+            // RECTOR
             [
                 'administrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
                 'permiso_id' => 1,
@@ -623,6 +624,61 @@ class create_users extends Seeder
             ],
             [
                 'administrativo_id' => 'ad9c4683-46ee-4ed6-96c6-5e3c9415919a',
+                'permiso_id' => 11,
+            ],
+            // COORDINADOR ACADÉMICO
+            [
+                'administrativo_id' => '4e2561c2-04e1-4cdc-891c-be91b8608879',
+                'permiso_id' => 1,
+            ],
+            [
+                'administrativo_id' => '4e2561c2-04e1-4cdc-891c-be91b8608879',
+                'permiso_id' => 2,
+            ],
+            [
+                'administrativo_id' => '4e2561c2-04e1-4cdc-891c-be91b8608879',
+                'permiso_id' => 3,
+            ],
+            [
+                'administrativo_id' => '4e2561c2-04e1-4cdc-891c-be91b8608879',
+                'permiso_id' => 4,
+            ],
+            [
+                'administrativo_id' => '4e2561c2-04e1-4cdc-891c-be91b8608879',
+                'permiso_id' => 5,
+            ],
+            [
+                'administrativo_id' => '4e2561c2-04e1-4cdc-891c-be91b8608879',
+                'permiso_id' => 6,
+            ],
+            [
+                'administrativo_id' => '4e2561c2-04e1-4cdc-891c-be91b8608879',
+                'permiso_id' => 7,
+            ],
+            [
+                'administrativo_id' => '4e2561c2-04e1-4cdc-891c-be91b8608879',
+                'permiso_id' => 8,
+            ],
+            [
+                'administrativo_id' => '4e2561c2-04e1-4cdc-891c-be91b8608879',
+                'permiso_id' => 9,
+            ],
+            // COORDINADOR DE CONVIVENCIA
+            [
+                'administrativo_id' => '95a75839-ae5f-4e07-b366-a568ec1a35ab',
+                'permiso_id' => 4,
+            ],
+            [
+                'administrativo_id' => '95a75839-ae5f-4e07-b366-a568ec1a35ab',
+                'permiso_id' => 9,
+            ],
+            [
+                'administrativo_id' => '95a75839-ae5f-4e07-b366-a568ec1a35ab',
+                'permiso_id' => 10,
+            ],
+            // CONTABILIDAD
+            [
+                'administrativo_id' => 'ed63f2b9-9c47-4434-9de8-c9cbc8b0fb59',
                 'permiso_id' => 11,
             ],
         ]);

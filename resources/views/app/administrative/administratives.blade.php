@@ -252,9 +252,11 @@
 
         document.querySelector('#edit-user form').dataset.target = '/api/users/' + id;
 
-        const permisos = usuario.administrativo.permisos.map(permiso => permiso.permiso_id);
-        permisos.forEach(permiso_id => {
-            document.querySelector(`#edit-user input[value="${permiso_id}"]`).checked = true;
+        const permisos = usuario.administrativo.permisos.map(permiso => parseInt(permiso.permiso_id));
+        const permisosCheckboxes = document.querySelectorAll('#edit-user input[name="permisos[]"]');
+
+        permisosCheckboxes.forEach(checkbox => {
+            checkbox.checked = permisos.includes(parseInt(checkbox.value));
         });
 
         document.getElementById('edit-user').show();
