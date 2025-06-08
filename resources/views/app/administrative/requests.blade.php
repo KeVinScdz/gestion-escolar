@@ -64,11 +64,11 @@
                                         Ver detalles
                                     </button>
                                     @if($solicitud->estudiante)
-                                    <button onclick="showEnrollModal('{{ $solicitud->solicitud_id }}')" class="btn btn-sm py-1 btn-primary">
+                                    <button onclick="showEnrollModal('{{ $solicitud->solicitud_id }}', '{{ json_encode($solicitud) }}')" class="btn btn-sm py-1 btn-primary">
                                         Renovar matrícula
                                     </button>
                                     @else
-                                    <button onclick="showCreateModal('{{ $solicitud->solicitud_id }}')" class="btn btn-sm py-1 btn-primary">
+                                    <button onclick="showCreateModal('{{ $solicitud->solicitud_id }}', '{{ json_encode($solicitud) }}')" class="btn btn-sm py-1 btn-primary">
                                         Crear y matricular
                                     </button>
                                     @endif
@@ -187,30 +187,200 @@
         </form>
     </dialog>
 
-    <!-- Enrollment Modal -->
-    <div id="enrollModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
-        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-            <div class="mt-3">
-                <!-- Content will be loaded dynamically -->
-                <form action="" class="upload-form space-y-5" data-method="put" data-target="/api/enrollments-requests/{{ $solicitud->solicitud_id }}" data-show-alert="true" data-reload="true">
-                    <!-- Create Tutor Form -->
+    <!-- Enroll new student Modal -->
+    <dialog id="createEnrollModal" class="modal">
+        <div class="modal-box max-w-4xl bg-base-200">
+            <form method="dialog">
+                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+            </form>
 
-                    <!-- Create Student Form -->
+            <h3 class="text-lg font-bold mb-4">Proceso de Matrícula</h3>
 
-                    <!-- Assign enrollment -->
+            <form id="matriculaForm" class="upload-form space-y-6" data-method="put" data-target="/api/enrollments-requests/{id}" data-debug="true" data-show-alert="true" data-reload="true">
+                <input type="hidden" name="matricula_año" id="create_matricula_año" value="">
+                <input type="hidden" name="institucion_id" id="create_institucion_id" value="{{ $institucion->institucion_id }}">
+                <input type="hidden" name="es_nuevo" id="create_es_nuevo" value="true">
 
-                </form>
-                <div class="mt-4 flex justify-end space-x-3">
-                    <button onclick="closeEnrollModal()" class="inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm">
-                        Cancelar
-                    </button>
-                    <button onclick="enrollStudent()" class="inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:text-sm">
-                        Confirmar
-                    </button>
+                <!-- ESTUDIANTE -->
+                <div class="card bg-base-100">
+                    <div class="card-body">
+                        <h4 class="card-title text-base">1. Datos del nuevo estudiante</h4>
+                        <div class="space-y-2">
+                            <fieldset class="w-full fieldset">
+                                <label class="fieldset-label after:content-['*'] after:text-red-500" for="create_estudiante_nombre">Nombre:</label>
+                                <input id="create_estudiante_nombre" name="estudiante_nombre" class="input input-bordered w-full" placeholder="Nombre del estudiante">
+                            </fieldset>
+                            <fieldset class="w-full fieldset">
+                                <label class="fieldset-label after:content-['*'] after:text-red-500" for="create_estudiante_apellido">Apellido:</label>
+                                <input id="create_estudiante_apellido" name="estudiante_apellido" class="input input-bordered w-full" placeholder="Apellido del estudiante">
+                            </fieldset>
+                            <fieldset class="w-full fieldset">
+                                <label class="fieldset-label after:content-['*'] after:text-red-500" for="create_estudiante_correo">Correo:</label>
+                                <input type="email" id="create_estudiante_correo" name="estudiante_correo" class="input input-bordered w-full" placeholder="Correo del estudiante">
+                            </fieldset>
+                            <fieldset class="w-full fieldset">
+                                <label class="fieldset-label after:content-['*'] after:text-red-500" for="create_estudiante_telefono">Teléfono:</label>
+                                <input type="number" id="create_estudiante_telefono" name="estudiante_telefono" class="input input-bordered w-full" placeholder="Teléfono del estudiante">
+                            </fieldset>
+                            <div class="w-full flex gap-2">
+                                <fieldset class="fieldset w-fit">
+                                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="create_estudiante_documento_tipo">Tipo de Documento:</label>
+                                    <select id="create_estudiante_documento_tipo" name="estudiante_documento_tipo" class="select select-bordered w-fit">
+                                        <option value="CC">Cédula de Ciudadanía</option>
+                                        <option value="TI">Tarjeta de Identidad</option>
+                                        <option value="CE">Cédula de Extranjería</option>
+                                    </select>
+                                </fieldset>
+                                <fieldset class="w-full fieldset grow">
+                                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="create_estudiante_documento">Número de Documento:</label>
+                                    <input id="create_estudiante_documento" name="estudiante_documento" class="input input-bordered w-full" placeholder="Documento del estudiante">
+                                </fieldset>
+                            </div>
+                            <fieldset class="w-full fieldset">
+                                <label class="fieldset-label after:content-['*'] after:text-red-500" for="create_estudiante_nacimiento">Fecha de Nacimiento:</label>
+                                <input type="date" id="create_estudiante_nacimiento" name="estudiante_nacimiento" class="input input-bordered w-full">
+                            </fieldset>
+                            <fieldset class="w-full fieldset">
+                                <label class="fieldset-label after:content-['*'] after:text-red-500" for="create_estudiante_direccion">Dirección:</label>
+                                <input id="create_estudiante_direccion" name="estudiante_direccion" class="input input-bordered w-full" placeholder="Dirección del estudiante">
+                            </fieldset>
+                            <fieldset class="w-full fieldset">
+                                <label class="fieldset-label after:content-['*'] after:text-red-500" for="create_estudiante_contra">Contraseña:</label>
+                                <input type="password" id="create_estudiante_contra" name="estudiante_contra" class="input input-bordered w-full" placeholder="Contraseña del estudiante">
+                            </fieldset>
+                        </div>
+                    </div>
                 </div>
-            </div>
+
+                <!-- TUTOR -->
+                <div class="card bg-base-100">
+                    <div class="card-body">
+                        <h4 class="card-title text-base">2. Datos del tutor</h4>
+                        <div class="space-y-2">
+                            <fieldset class="w-full fieldset">
+                                <label class="fieldset-label after:content-['*'] after:text-red-500" for="create_tutor_nombre">Nombre:</label>
+                                <input id="create_tutor_nombre" name="tutor_nombre" class="input input-bordered w-full" placeholder="Nombre del tutor">
+                            </fieldset>
+                            <fieldset class="w-full fieldset">
+                                <label class="fieldset-label after:content-['*'] after:text-red-500" for="create_tutor_apellido">Apellido:</label>
+                                <input id="create_tutor_apellido" name="tutor_apellido" class="input input-bordered w-full" placeholder="Apellido del tutor">
+                            </fieldset>
+                            <fieldset class="w-full fieldset">
+                                <label class="fieldset-label after:content-['*'] after:text-red-500" for="create_tutor_correo">Correo:</label>
+                                <input type="email" id="create_tutor_correo" name="tutor_correo" class="input input-bordered w-full" placeholder="Correo del tutor">
+                            </fieldset>
+                            <fieldset class="w-full fieldset">
+                                <label class="fieldset-label after:content-['*'] after:text-red-500" for="create_tutor_telefono">Teléfono:</label>
+                                <input type="number" id="create_tutor_telefono" name="tutor_telefono" class="input input-bordered w-full" placeholder="Teléfono del tutor">
+                            </fieldset>
+                            <div class="w-full flex gap-2">
+                                <fieldset class="fieldset w-fit">
+                                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="create_tutor_documento_tipo">Tipo de Documento:</label>
+                                    <select id="create_tutor_documento_tipo" name="tutor_documento_tipo" class="select select-bordered w-fit">
+                                        <option value="CC">Cédula de Ciudadanía</option>
+                                        <option value="TI">Tarjeta de Identidad</option>
+                                        <option value="CE">Cédula de Extranjería</option>
+                                    </select>
+                                </fieldset>
+                                <fieldset class="w-full fieldset grow">
+                                    <label class="fieldset-label after:content-['*'] after:text-red-500" for="create_tutor_documento">Número de Documento:</label>
+                                    <input id="create_tutor_documento" name="tutor_documento" class="input input-bordered w-full" placeholder="Documento del tutor">
+                                </fieldset>
+                            </div>
+                            <fieldset class="w-full fieldset">
+                                <label class="fieldset-label after:content-['*'] after:text-red-500" for="create_tutor_nacimiento">Fecha de Nacimiento:</label>
+                                <input type="date" id="create_tutor_nacimiento" name="tutor_nacimiento" class="input input-bordered w-full">
+                            </fieldset>
+                            <fieldset class="w-full fieldset">
+                                <label class="fieldset-label after:content-['*'] after:text-red-500" for="create_tutor_direccion">Dirección:</label>
+                                <input id="create_tutor_direccion" name="tutor_direccion" class="input input-bordered w-full" placeholder="Dirección del tutor">
+                            </fieldset>
+                            <fieldset class="w-full fieldset">
+                                <label class="fieldset-label after:content-['*'] after:text-red-500" for="create_tutor_contra">Contraseña:</label>
+                                <input type="password" id="create_tutor_contra" name="tutor_contra" class="input input-bordered w-full" placeholder="Contraseña del tutor">
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MATRÍCULA -->
+                <div class="card bg-base-100">
+                    <div class="card-body">
+                        <h4 class="card-title text-base">3. Matrícula</h4>
+                        <div class="space-y-2">
+                            <fieldset class="w-full fieldset">
+                                <label class="fieldset-label after:content-['*'] after:text-red-500" for="create_grupo_id">Grupo:</label>
+                                <select name="grupo_id" id="create_grupo_id" class="select select-bordered w-full">
+                                    <option disabled selected>Seleccione un grupo</option>
+                                    @foreach ($grupos as $grupo)
+                                    <option value="{{ $grupo->grupo_id }}" data-grado="{{ $grupo->grado->grado_id }}" data-año="{{ $grupo->grupo_año }}" data-cupo="{{ $grupo->grupo_cupo - $grupo->matriculas->count() }}">
+                                        {{ $grupo->grupo_nombre }}:
+                                        {{ $grupo->grupo_cupo - $grupo->matriculas->count() }} cupos disponibles
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-4 pt-4">
+                    <button type="button" class="btn" onclick="document.getElementById('createEnrollModal').close()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Matricular</button>
+                </div>
+            </form>
         </div>
-    </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+
+    <!-- Enroll old student Modal -->
+    <dialog id="showEnrollModal" class="modal">
+        <div class="modal-box max-w-4xl bg-base-200">
+            <form method="dialog">
+                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+            </form>
+
+            <h3 class="text-lg font-bold mb-4">Proceso de Matrícula</h3>
+
+            <form id="enrollForm" class="upload-form space-y-6" data-method="put" data-target="/api/enrollments-requests/{id}" data-debug="true" data-show-alert="true" data-reload="true">
+                <input type="hidden" name="matricula_año" id="enroll_matricula_año" value="">
+                <input type="hidden" name="institucion_id" id="enroll_institucion_id" value="{{ $institucion->institucion_id }}">
+                <input type="hidden" name="estudiante_id" id="enroll_estudiante_id" value="">
+                <input type="hidden" name="es_nuevo" id="enroll_es_nuevo" value="0">
+
+                <!-- MATRÍCULA -->
+                <div class="card bg-base-100">
+                    <div class="card-body">
+                        <h4 class="card-title text-base">Datos de la Matrícula</h4>
+                        <fieldset class="w-full fieldset">
+                            <label class="fieldset-label after:content-['*'] after:text-red-500" for="enroll_grupo_id">Salón:</label>
+                            <select id="enroll_grupo_id" name="grupo_id" class="select select-bordered w-full">
+                                <option disabled selected>Seleccione un grupo</option>
+                                @forelse ($grupos as $grupo)
+                                <option value="{{ $grupo->grupo_id }}" data-grado="{{ $grupo->grado->grado_id }}" data-año="{{ $grupo->grupo_año }}" data-cupo="{{ $grupo->grupo_cupo - $grupo->matriculas->count() }}">
+                                    {{ $grupo->grupo_nombre }}: {{ $grupo->grupo_cupo - $grupo->matriculas->count() }} cupos disponibles
+                                </option>
+                                @empty
+                                <option disabled>No hay grupos disponibles</option>
+                                @endforelse
+                            </select>
+                        </fieldset>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-4 pt-4">
+                    <button type="button" class="btn" onclick="document.getElementById('showEnrollModal').close()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Matricular</button>
+                </div>
+            </form>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+
 </section>
 @endsection
 
@@ -218,7 +388,7 @@
 <script>
     function showDetails(id, requestJSONString) {
         const request = JSON.parse(requestJSONString);
-        const modal = document.getElementById('detailsModal');
+        const $modal = document.getElementById('detailsModal');
 
         const cupoCursos = request.grado.grupos.reduce((acc, grupo) => acc + parseInt(grupo.grupo_cupo) - parseInt(grupo.matriculas.length), 0);
 
@@ -275,7 +445,76 @@
         document.getElementById('tutor_correo').textContent = request.tutor_nuevo.tutor_correo;
         document.getElementById('tutor_direccion').textContent = request.tutor_nuevo.tutor_direccion;
 
-        modal.showModal();
+        $modal.show();
+    }
+
+    function showCreateModal(id, requestJSONString) {
+        const request = JSON.parse(requestJSONString);
+        const $modal = document.getElementById('createEnrollModal');
+
+        document.getElementById('create_matricula_año').value = request.solicitud_año;
+        document.getElementById('create_institucion_id').value = request.institucion_id;
+        document.getElementById('create_es_nuevo').value = request.estudiante ? '0' : '1';
+
+        // Datos del estudiante
+        document.getElementById('create_estudiante_nombre').value = request.estudiante_nuevo.estudiante_nombre;
+        document.getElementById('create_estudiante_apellido').value = request.estudiante_nuevo.estudiante_apellido;
+        document.getElementById('create_estudiante_documento_tipo').value = request.estudiante_nuevo.estudiante_documento_tipo;
+        document.getElementById('create_estudiante_documento').value = request.estudiante_nuevo.estudiante_documento;
+        document.getElementById('create_estudiante_nacimiento').value = request.estudiante_nuevo.estudiante_nacimiento;
+        document.getElementById('create_estudiante_direccion').value = request.tutor_nuevo.tutor_direccion;
+
+        // Datos del tutor
+        document.getElementById('create_tutor_nombre').value = request.tutor_nuevo.tutor_nombre;
+        document.getElementById('create_tutor_apellido').value = request.tutor_nuevo.tutor_apellido;
+        document.getElementById('create_tutor_documento_tipo').value = request.tutor_nuevo.tutor_documento_tipo;
+        document.getElementById('create_tutor_documento').value = request.tutor_nuevo.tutor_documento;
+        document.getElementById('create_tutor_nacimiento').value = request.tutor_nuevo.tutor_nacimiento;
+        document.getElementById('create_tutor_direccion').value = request.tutor_nuevo.tutor_direccion;
+        document.getElementById('create_tutor_telefono').value = request.tutor_nuevo.tutor_telefono;
+        document.getElementById('create_tutor_correo').value = request.tutor_nuevo.tutor_correo;
+
+        // Matrícula
+        document.querySelectorAll('option[data-grado]').forEach(option => {
+            if (option.dataset.grado == request.grado.grado_id && option.dataset.año == request.solicitud_año && option.dataset.cupo > 0) {
+                option.classList.remove('hidden');
+            } else {
+                option.classList.add('hidden');
+            }
+        });
+
+        const $form = document.getElementById('matriculaForm');
+        $form.dataset.target = $form.dataset.target.replace('{id}', id);
+
+        $modal.show();
+    }
+
+    function showEnrollModal(id, requestJSONString) {
+        const request = JSON.parse(requestJSONString);
+        const $modal = document.getElementById('showEnrollModal');
+
+        // Set hidden fields
+        document.getElementById('enroll_matricula_año').value = request.solicitud_año;
+        document.getElementById('enroll_estudiante_id').value = request.estudiante.estudiante_id;
+        document.getElementById('enroll_institucion_id').value = request.institucion_id;
+        document.getElementById('enroll_es_nuevo').value = request.estudiante ? '0' : '1';
+
+        // Filter groups based on grade and year
+        document.querySelectorAll('#enroll_grupo_id option[data-grado]').forEach(option => {
+            if (option.dataset.grado == request.grado.grado_id &&
+                option.dataset.año == request.solicitud_año &&
+                option.dataset.cupo > 0) {
+                option.classList.remove('hidden');
+            } else {
+                option.classList.add('hidden');
+            }
+        });
+
+        // Update form target
+        const $form = document.getElementById('enrollForm');
+        $form.dataset.target = $form.dataset.target.replace('{id}', id);
+
+        $modal.show();
     }
 </script>
 @endsection

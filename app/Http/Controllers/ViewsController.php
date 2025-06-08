@@ -411,6 +411,8 @@ class ViewsController
         $usuarioSesion = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
         $institucion_id = $usuarioSesion->administrativo->institucion_id;
 
+        $institucion = Institucion::findOrFail($institucion_id);
+
         $solicitudes = SolicitudMatricula::with('estudiante', 'estudianteNuevo', 'tutorNuevo', 'grado', 'grado.grupos', 'grado.grupos.matriculas', 'institucion')
             ->where('institucion_id', $institucion_id)
             ->where('solicitud_estado', 'pendiente')
@@ -420,7 +422,11 @@ class ViewsController
             })
             ->paginate(10);
 
-        return view('app.administrative.requests', compact('usuarioSesion', 'solicitudes'));
+        $grupos = Grupo::with('grado', 'grado.nivel')
+            ->where('institucion_id', $institucion_id)
+            ->get();
+
+        return view('app.administrative.requests', compact('usuarioSesion', 'solicitudes', 'grupos', 'institucion'));
     }
 
     public function periods()
