@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ViewsController;
 use App\Http\Controllers\Web\AuthController;
+use App\Http\Controllers\Auth\GoogleController;
 
 // Public Routes
 Route::get('/', [ViewsController::class, 'index']);
@@ -17,6 +18,8 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [ViewsController::class, 'register']);
 
     Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle']);
+    Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 });
 
 // Authenticated Routes

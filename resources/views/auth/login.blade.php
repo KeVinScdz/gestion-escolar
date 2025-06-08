@@ -11,7 +11,7 @@
         <h2 class="font-semibold text-2xl">Ingresa a tu cuenta</h2>
 
         <div class="space-y-4">
-            <button class="btn bg-white text-black border-[#e5e5e5] w-full relative">
+            <a href="/auth/google" class="btn bg-white text-black border-[#e5e5e5] w-full relative">
                 <svg class="absolute left-2" aria-label="Google logo" width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                     <g>
                         <path d="m0 0H512V512H0" fill="#fff"></path>
@@ -22,7 +22,7 @@
                     </g>
                 </svg>
                 Continua con Google
-            </button>
+            </a>
         </div>
 
         <div class="my-8">
