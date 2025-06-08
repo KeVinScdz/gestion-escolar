@@ -105,6 +105,11 @@
                         <a href="/dashboard/estudiantes" class="hover:bg-primary/50 {{ request()->is('dashboard/estudiantes') ? 'bg-primary' : '' }}">Gestión de Estudiantes</a>
                     </li>
                     @endif
+                    @if ($usuarioSesion->administrativo->permisos->contains('permiso_id', 4))
+                    <li>
+                        <a href="/dashboard/solicitudes" class="hover:bg-primary/50 {{ request()->is('dashboard/solicitudes') ? 'bg-primary' : '' }}">Solicitudes de Matrícula</a>
+                    </li>
+                    @endif
                     @if ($usuarioSesion->administrativo->permisos->contains('permiso_id', 8))
                     <li>
                         <a href="/dashboard/periodos" class="hover:bg-primary/50 {{ request()->is('dashboard/periodos')? 'bg-primary' : '' }}">Gestión de Periodos</a>

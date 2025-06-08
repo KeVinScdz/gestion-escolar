@@ -22,6 +22,7 @@ use App\Models\Pago;
 use App\Models\PeriodoAcademico;
 use App\Models\Permiso;
 use App\Models\Rol;
+use App\Models\SolicitudMatricula;
 use App\Models\Usuario;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -403,6 +404,23 @@ class ViewsController
             ->get();
 
         return view('app.administrative.students', compact('usuarioSesion', 'estudiantes', 'grupos'));
+    }
+
+    public function enrollmentsRequests()
+    {
+        $usuarioSesion = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
+        $institucion_id = $usuarioSesion->administrativo->institucion_id;
+
+        $solicitudes = SolicitudMatricula::with('estudiante', 'estudianteNuevo', 'tutorNuevo', 'grado', 'grado.grupos', 'grado.grupos.matriculas', 'institucion')
+            ->where('institucion_id', $institucion_id)
+            ->where('solicitud_estado', 'pendiente')
+            ->whereHas('grado.grupos', function ($query) use ($institucion_id) {
+                $query->where('institucion_id', $institucion_id)
+                    ->where('grupo_año', date('Y'));
+            })
+            ->paginate(10);
+
+        return view('app.administrative.requests', compact('usuarioSesion', 'solicitudes'));
     }
 
     public function periods()
