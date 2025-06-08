@@ -9,6 +9,7 @@ use App\Http\Controllers\Web\AuthController;
 Route::get('/', [ViewsController::class, 'index']);
 Route::get('/funcionalidades', [ViewsController::class, 'features']);
 Route::get('/info', [ViewsController::class, 'info']);
+Route::get('/matricular', [ViewsController::class, 'enroll']);
 
 // Guest Routes
 Route::middleware('guest')->group(function () {

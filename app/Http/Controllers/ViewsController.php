@@ -52,6 +52,14 @@ class ViewsController
         return view('auth.register');
     }
 
+    public function enroll()
+    {
+        $instituciones = Institucion::all();
+        $grados = Grado::with('grupos')->get();
+
+        return view('enroll', compact('instituciones', 'grados'));
+    }
+
     public function dashboard()
     {
         $usuarioSesion = Auth::user()->load('rol', 'administrativo', 'administrativo.permisos');
