@@ -54,10 +54,9 @@ class ViewsController
 
     public function enroll()
     {
-        $instituciones = Institucion::all();
-        $grados = Grado::with('grupos')->get();
+        $grupos = Grupo::with('institucion', 'grado')->get()->groupBy('institucion_id');
 
-        return view('enroll', compact('instituciones', 'grados'));
+        return view('enroll', compact('grupos'));
     }
 
     public function dashboard()

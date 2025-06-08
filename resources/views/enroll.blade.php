@@ -18,8 +18,7 @@
             </div>
 
             <div class="w-full bg-base-200 border border-base-300 rounded-lg p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
-                <form id="enrollForm" class="upload-form space-y-6 w-full" data-debug="true" data-method="POST" data-target="/api/enrollments-requests" data-show-alert="true" data-reload="true">
-
+                <form id="enrollForm" class="upload-form space-y-6 w-full" data-debug="true" data-method="POST" data-target="/api/enrollments-requests" data-show-alert="true" data-reset="true">
                     <h3 class="text-lg font-semibold text-base-content">Información del Tutor</h3>
 
                     <fieldset class="fieldset">
@@ -113,9 +112,13 @@
 
                     <fieldset class="fieldset">
                         <label class="fieldset-label">Seleccione una institución</label>
-                        <select name="institucion_id" class="select select-bordered w-full" required>
-                            @foreach($instituciones as $institucion)
-                            <option value="{{ $institucion->institucion_id }}">{{ $institucion->institucion_nombre }}</option>
+                        <select name="institucion_id" class="select select-bordered w-full" required onchange="cambiarGrado(this)">
+                            @foreach($grupos as $institucion_id => $grupos)
+                            @php
+                                $institucion = $grupos->first()->institucion;
+                                $cupos = $grupos->sum('grupo_cupo');
+                            @endphp 
+                            <option value="{{ $institucion_id }}">{{ $institucion->institucion_nombre }} - ({{ $cupos }} cupos disponibles)</option>
                             @endforeach
                         </select>
                     </fieldset>
@@ -132,11 +135,15 @@
                     <fieldset class="fieldset">
                         <label class="fieldset-label">Grado</label>
                         <select name="grado_id" id="grado_id" class="select select-bordered w-full" required>
-                            @foreach($grados as $grado)
+                            @foreach($grupos->groupBy('grado_id') as $grado_id => $grupos)
                             @php
-                            $cupos = $grado->grupos->sum('grupo_cupo');
-                            @endphp
-                            <option value="{{ $grado->grado_id }}" data-institucion-id="{{ $grado->institucion_id }}">{{ $grado->grado_nombre }} - ({{ $cupos }} cupos disponibles)</option>
+                                $grado = $grupos->first()->grado;
+                                $cupos = $grupos->sum('grupo_cupo');
+                                $numeroCursos = $grupos->count();
+                            @endphp 
+                            <option value="{{ $grado->grado_id }}" data-institucion="{{ $grado->institucion_id }}">
+                                {{ $grado->grado_nombre }} - ({{ $numeroCursos }} cursos) - ({{ $cupos }} cupos disponibles)
+                            </option>
                             @endforeach
                         </select>
                     </fieldset>
@@ -167,6 +174,20 @@
             nuevo.classList.remove('hidden');
             registrado.classList.add('hidden');
         }
+    }
+
+    function cambiarGrado(select) {
+        const gradoId = select.value;
+        const gradoSelect = document.getElementById('grado_id');
+        
+        const options = gradoSelect.querySelectorAll('option');
+        options.forEach(option => {
+            if (option.dataset.institucion !== select.value) {
+                option.classList.add('hidden');
+            } else {
+                option.classList.remove('hidden');
+            }
+        });
     }
 
     document.addEventListener('DOMContentLoaded', function() {

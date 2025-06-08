@@ -45,4 +45,9 @@ class Grupo extends Model
     {
         return $this->hasMany(Asignacion::class, 'grupo_id', 'grupo_id');
     }
+
+    public function institucion()
+    {
+        return $this->belongsTo(Institucion::class, 'institucion_id', 'institucion_id');
+    }
 }
