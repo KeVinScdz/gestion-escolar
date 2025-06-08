@@ -11,7 +11,7 @@
             <div class="badge badge-primary badge-soft badge-lg border-[var(--color-primary)_!important]">
                 ¡Nueva versión disponible!
             </div>
-            <h1 class="text-7xl font-extrabold">La <span class="text-primary italic">plataforma integral</span> para tu institución educativa</h1>
+            <h1 class="text-5xl sm:text-6xl md:text-7xl font-extrabold">La <span class="text-primary italic">plataforma integral</span> para tu institución educativa</h1>
             <p class="text-pretty text-lg text-base-content/80 max-w-[800px]">
                 <span class="font-semibold">Matryerse</span> digitaliza y simplifica la gestión académica, administrativa y financiera en una sola plataforma web, segura, moderna y siempre disponible en la nube.
             </p>
@@ -26,7 +26,7 @@
 {{-- DESCRIPCIÓN BREVE --}}
 <section class="w-full px-5">
     <div class="w-full max-w-[1200px] mx-auto py-15 pt-0">
-        <div class="w-full flex items-center gap-10">
+        <div class="w-full flex flex-col-reverse md:flex-row items-center gap-10">
             <div class="md:w-1/2 space-y-6">
                 <h2 class="text-4xl font-bold">Todo en un solo lugar</h2>
                 <p class="text-base-content/80 text-lg">

@@ -4,7 +4,7 @@
 
 @section('content')
 <section class="container mx-auto px-4 py-6 space-y-5">
-    <div class="flex justify-between items-center">
+    <div class="flex flex-col md:flex-row gap-5 justify-between items-center">
         <h1 class="text-2xl font-bold flex-1">Instituciones Registradas</h1>
         <div class="flex items-center justify-end gap-5">
             <form method="get" class="flex gap-2">

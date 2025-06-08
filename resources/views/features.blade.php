@@ -3,7 +3,7 @@
 @section('title', 'Funcionalidad')
 
 @section('content')
-<section class="w-full">
+<section class="w-full px-5">
     <div class="w-full max-w-[1200px] mx-auto py-10 space-y-10">
         <div class="text-center">
             <h1 class="text-4xl font-bold mb-4">Funcionalidades por Rol</h1>
