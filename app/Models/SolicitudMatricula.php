@@ -25,11 +25,6 @@ class SolicitudMatricula extends Model
         'solicitud_comentario',
     ];
 
-    protected $casts = [
-        'solicitud_año' => 'integer',
-        'solicitud_estado' => 'string',
-    ];
-
     public function institucion(): BelongsTo
     {
         return $this->belongsTo(Institucion::class, 'institucion_id');

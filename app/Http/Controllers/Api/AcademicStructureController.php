@@ -22,6 +22,7 @@ use App\Models\Observacion;
 use App\Models\SolicitudEstudiante;
 use App\Models\SolicitudMatricula;
 use App\Models\SolicitudTutor;
+use App\Models\Tutor;
 use App\Models\Usuario;
 
 class AcademicStructureController
@@ -720,6 +721,191 @@ class AcademicStructureController
                 'success' => false,
                 'message' => 'Error al crear la solicitud de matrícula: ' . $e->getMessage(),
                 'data' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function updateEnrollmentRequest(Request $request, $id)
+    {
+        try {
+            DB::beginTransaction();
+
+            $request->validate([
+                'grupo_id' => 'required|exists:grupos,grupo_id',
+                'matricula_año' => 'required|numeric',
+                'es_nuevo' => 'required|boolean',
+            ], [
+                'grupo_id.required' => 'El ID del grupo es requerido',
+                'grupo_id.exists' => 'El grupo no existe',
+                'matricula_año.required' => 'El año de matrícula es requerido',
+                'matricula_año.numeric' => 'El año de matrícula debe ser numérico',
+                'es_nuevo.required' => 'El estado de la solicitud es requerido',
+                'es_nuevo.boolean' => 'El estado de la solicitud debe ser un booleano',
+            ]);
+
+            $solicitud = SolicitudMatricula::find($id);
+            $estudiante = null;
+
+            if (!$solicitud) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Solicitud de matrícula no encontrada',
+                ], 404);
+            }
+
+            if ($request->input('es_nuevo')) {
+                $request->validate([
+                    'estudiante_nombre' => 'required|string',
+                    'estudiante_apellido' => 'required|string',
+                    'estudiante_correo' => 'required|email',
+                    'estudiante_documento_tipo' => 'required|string',
+                    'estudiante_documento' => 'required|string',
+                    'estudiante_nacimiento' => 'required|date',
+                    'estudiante_direccion' => 'required|string',
+                    'estudiante_telefono' => 'required|string',
+                    'estudiante_contra' => 'required|string',
+                    'tutor_nombre' => 'required|string',
+                    'tutor_apellido' => 'required|string',
+                    'tutor_correo' => 'required|email',
+                    'tutor_documento_tipo' => 'required|string',
+                    'tutor_documento' => 'required|string',
+                    'tutor_nacimiento' => 'required|date',
+                    'tutor_direccion' => 'required|string',
+                    'tutor_telefono' => 'required|string',
+                    'tutor_contra' => 'required|string',
+                ], [
+                    'estudiante_nombre.required' => 'El nombre del estudiante es requerido',
+                    'estudiante_nombre.string' => 'El nombre del estudiante debe ser una cadena de caracteres',
+                    'estudiante_apellido.required' => 'El apellido del estudiante es requerido',
+                    'estudiante_apellido.string' => 'El apellido del estudiante debe ser una cadena de caracteres',
+                    'estudiante_correo.required' => 'El correo del estudiante es requerido',
+                    'estudiante_correo.email' => 'El correo del estudiante debe ser una dirección de correo electrónico válida',
+                    'estudiante_documento_tipo.required' => 'El tipo de documento del estudiante es requerido',
+                    'estudiante_documento.required' => 'El documento del estudiante es requerido',
+                    'estudiante_documento.string' => 'El documento del estudiante debe ser una cadena de caracteres',
+                    'estudiante_nacimiento.required' => 'La fecha de nacimiento del estudiante es requerida',
+                    'estudiante_nacimiento.date' => 'La fecha de nacimiento del estudiante debe ser una fecha',
+                    'estudiante_direccion.required' => 'La dirección del estudiante es requerida',
+                    'estudiante_direccion.string' => 'La dirección del estudiante debe ser una cadena de caracteres',
+                    'estudiante_telefono.required' => 'El teléfono del estudiante es requerido',
+                    'estudiante_telefono.string' => 'El teléfono del estudiante debe ser una cadena de caracteres',
+                    'estudiante_contra.required' => 'La contraseña del estudiante es requerida',
+                    'estudiante_contra.string' => 'La contraseña del estudiante debe ser una cadena de caracteres',
+                    'tutor_nombre.required' => 'El nombre del tutor es requerido',
+                    'tutor_nombre.string' => 'El nombre del tutor debe ser una cadena de caracteres',
+                    'tutor_apellido.required' => 'El apellido del tutor es requerido',
+                    'tutor_apellido.string' => 'El apellido del tutor debe ser una cadena de caracteres',
+                    'tutor_correo.required' => 'El correo del tutor es requerido',
+                    'tutor_correo.email' => 'El correo del tutor debe ser una dirección de correo electrónico válida',
+                    'tutor_documento_tipo.required' => 'El tipo de documento del tutor es requerido',
+                    'tutor_documento_tipo.string' => 'El tipo de documento del tutor debe ser una cadena de caracteres',
+                    'tutor_documento.required' => 'El documento del tutor es requerido',
+                    'tutor_documento.string' => 'El documento del tutor debe ser una cadena de caracteres',
+                    'tutor_nacimiento.required' => 'La fecha de nacimiento del tutor es requerida',
+                    'tutor_nacimiento.date' => 'La fecha de nacimiento del tutor debe ser una fecha',
+                    'tutor_direccion.required' => 'La dirección del tutor es requerida',
+                    'tutor_direccion.string' => 'La dirección del tutor debe ser una cadena de caracteres',
+                    'tutor_telefono.required' => 'El teléfono del tutor es requerido',
+                    'tutor_telefono.string' => 'El teléfono del tutor debe ser una cadena de caracteres',
+                    'tutor_contra.required' => 'La contraseña del tutor es requerida',
+                    'tutor_contra.string' => 'La contraseña del tutor debe ser una cadena de caracteres',
+                ]);
+
+                $estudianteUsuario = Usuario::create([
+                    'usuario_nombre' => $request->input('estudiante_nombre'),
+                    'usuario_apellido' => $request->input('estudiante_apellido'),
+                    'usuario_correo' => $request->input('estudiante_correo'),
+                    'usuario_documento_tipo' => $request->input('estudiante_documento_tipo'),
+                    'usuario_documento' => $request->input('estudiante_documento'),
+                    'usuario_nacimiento' => $request->input('estudiante_nacimiento'),
+                    'usuario_direccion' => $request->input('estudiante_direccion'),
+                    'usuario_telefono' => $request->input('estudiante_telefono'),
+                    'usuario_contra' => $request->input('estudiante_contra'),
+                    'rol_id' => 4,
+                ]);
+
+                $tutorUsuario = Usuario::create([
+                    'usuario_nombre' => $request->input('tutor_nombre'),
+                    'usuario_apellido' => $request->input('tutor_apellido'),
+                    'usuario_correo' => $request->input('tutor_correo'),
+                    'usuario_documento_tipo' => $request->input('tutor_documento_tipo'),
+                    'usuario_documento' => $request->input('tutor_documento'),
+                    'usuario_nacimiento' => $request->input('tutor_nacimiento'),
+                    'usuario_direccion' => $request->input('tutor_direccion'),
+                    'usuario_telefono' => $request->input('tutor_telefono'),
+                    'usuario_contra' => $request->input('tutor_contra'),
+                    'rol_id' => 5,
+                ]);
+
+                $estudiante = Estudiante::create([
+                    'usuario_id' => $estudianteUsuario->usuario_id,
+                    'institucion_id' => $request->input('institucion_id'),
+                ]);
+
+                $tutor = Tutor::create([
+                    'usuario_id' => $tutorUsuario->usuario_id,
+                    'estudiante_id' => $estudiante->estudiante_id,
+                ]);
+            } else {
+                $estudiante = Estudiante::find($request->input('estudiante_id'));
+
+                if (!$estudiante) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Estudiante no encontrado',
+                    ], 404);
+                }
+
+                $matricula = Matricula::where('estudiante_id', $estudiante->estudiante_id)
+                    ->where('matricula_año', $request->input('matricula_año'))
+                    ->first();
+
+                if ($matricula) {
+                    DB::rollBack();
+
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'El estudiante ya está matriculado en este año (' . $matricula->matricula_año . ')',
+                    ], 409);
+                }
+            }
+
+            $grupo = Grupo::find($request->input('grupo_id'));
+
+            if (!$grupo) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Grupo no encontrado',
+                ], 404);
+            }
+
+            if ($grupo->grupo_cupo - $grupo->matriculas->count() <= 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No hay cupos disponibles para este grupo',
+                ], 409);
+            }
+
+            $matricula = Matricula::create([
+                'estudiante_id' => $estudiante->estudiante_id,
+                'grupo_id' => $request->input('grupo_id'),
+                'matricula_año' => $request->input('matricula_año'),
+            ]);
+
+            $solicitud->update(['solicitud_estado' => 'aprobada']);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Solicitud de matrícula actualizada con éxito',
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar la solicitud de matrícula: ' . $e->getMessage(),
             ], 500);
         }
     }

@@ -24,7 +24,6 @@
                     </a>
                     @endif
                 </form>
-                {{-- Add button for creating new matricula if needed --}}
                 <a onclick="document.getElementById('create-student').show()" class="btn btn-primary">
                     + Nueva Matrícula
                 </a>

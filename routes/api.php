@@ -27,6 +27,7 @@ Route::put('/enrollments/{id}', [AcademicStructureController::class, 'updateEnro
 Route::delete('/enrollments/{id}', [AcademicStructureController::class, 'destroyEnrollment']);
 
 Route::post('/enrollments-requests', [AcademicStructureController::class, 'storeEnrollmentRequest']);
+Route::put('/enrollments-requests/{id}', [AcademicStructureController::class, 'updateEnrollmentRequest']);
 
 // Institution Routes
 Route::post('/institutions', [InstitucionController::class, 'store']);
