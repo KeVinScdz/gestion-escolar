@@ -15,7 +15,7 @@
         </div>
 
         <!-- Información del Estudiante -->
-        <div class="bg-white rounded-lg shadow p-6">
+        <div class="bg-base-200 border border-base-300 rounded-lg shadow p-6">
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <h2 class="text-xl font-semibold mb-4">Información del Estudiante</h2>
@@ -42,40 +42,46 @@
         </div>
 
         <!-- Tabla de Notas -->
-        <div class="bg-white rounded-lg shadow overflow-hidden">
+        <div class="bg-base-200 border border-base-300 rounded-lg shadow overflow-hidden">
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+                <table class="min-w-full divide-y divide-base-300">
+                    <thead>
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Asignatura</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Asignatura</th>
                             @foreach($periodos as $periodo)
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                                     {{ $periodo->periodo_academico_nombre }}
                                 </th>
                             @endforeach
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Promedio</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Promedio</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        @foreach($asignaciones as $asignacion)
+                    <tbody class="divide-y divide-gray-200">
+                        @forelse($asignaciones as $asignacion)
                             @php
                                 $asignacionNotas = $notas->where('asignacion_id', $asignacion->asignacion_id);
                                 $promedio = $asignacionNotas->avg('nota_valor');
                             @endphp
                             <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     {{ $asignacion->materia->materia_nombre }}
                                     </td>
                                     @foreach($periodos as $periodo)
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
                                             {{ $asignacionNotas->where('periodo_academico_id', $periodo->periodo_academico_id)->first()->nota_valor ?? '-' }}
                                         </td>
                                     @endforeach
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-semibold {{ isset($promedio) ? $promedio >= $institucion->nota_aprobatoria ? 'text-green-600' : 'text-red-600' : '' }}">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold {{ isset($promedio) ? $promedio >= $institucion->nota_aprobatoria ? 'text-green-600' : 'text-red-600' : '' }}">
                                     {{ $promedio ? number_format($promedio, 1) : 'N/A' }}
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="{{ count($periodos) + 2 }}" class="text-center px-6 py-4">
+                                No hay asignaciones
+                            </td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

@@ -13,7 +13,7 @@
         <div class="p-5 rounded-lg bg-base-200 border border-base-300">
             <div class="flex justify-between items-center">
                 <h2 class="card-title">Conceptos de Pago</h2>
-                <button class="btn btn-primary btn-sm" onclick="document.getElementById('create_concepto_modal').showModal()">Crear Concepto</button>
+                <button class="btn btn-primary btn-sm" onclick="document.getElementById('create_concepto_modal').show()">Crear Concepto</button>
             </div>
 
             <div class="overflow-x-auto mt-4">
@@ -174,9 +174,9 @@
 <dialog id="registrar_pago_modal" class="modal">
     <div class="modal-box">
         <h3 class="font-bold text-lg">Registrar Pago para <span id="student_name_for_payment"></span></h3>
-        <form class="upload-form space-y-4 mt-4" data-target="/api/pagos" data-method="post" data-reset="true" data-reload="true">
-            @csrf
+        <form class="upload-form space-y-4 mt-4" data-target="/api/payments" data-method="post" data-reset="true" data-reload="true" data-show-alert="true">
             <input type="hidden" id="registrar_pago_matricula_id" name="matricula_id">
+
             <div>
                 <label class="label" for="registrar_pago_concepto_id">Concepto de Pago:</label>
                 <select id="registrar_pago_concepto_id" name="concepto_id" class="select select-bordered w-full" required>
@@ -220,7 +220,7 @@
         document.getElementById('edit_concepto_nombre_input').value = nombre;
         document.getElementById('edit_concepto_valor_input').value = valor;
         document.getElementById('edit_concepto_form').setAttribute('data-target', '/api/conceptos-pago/' + id);
-        document.getElementById('edit_concepto_modal').showModal();
+        document.getElementById('edit_concepto_modal').show();
     }
 
     async function deleteConcepto(id) {
@@ -260,7 +260,7 @@
             const valor = selectedOption.dataset.valor;
             document.getElementById('registrar_pago_valor').value = valor ? parseFloat(valor).toFixed(2) : '';
         };
-        document.getElementById('registrar_pago_modal').showModal();
+        document.getElementById('registrar_pago_modal').show();
     }
 </script>
 @endsection
