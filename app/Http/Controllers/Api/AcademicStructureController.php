@@ -19,6 +19,7 @@ use App\Models\Institucion;
 use App\Models\Matricula;
 use App\Models\Nota;
 use App\Models\Observacion;
+use App\Models\Pago;
 use App\Models\SolicitudEstudiante;
 use App\Models\SolicitudMatricula;
 use App\Models\SolicitudTutor;
@@ -1438,6 +1439,53 @@ class AcademicStructureController
             return response()->json([
                 'success' => false,
                 'message' => 'Error al crear las notas: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    // Payments functions
+    public function storePayment(Request $request)
+    {
+        try {
+            $request->validate([
+                'matricula_id' => 'required|exists:matriculas,matricula_id',
+                'concepto_id' => 'required|exists:conceptos_pago,concepto_id',
+                'pago_fecha' => 'required|date',
+                'pago_valor' => 'required|numeric',
+                'pago_estado' => 'required|string',
+            ], [
+                'matricula_id.required' => 'El ID de matrícula es requerido',
+                'matricula_id.exists' => 'La matrícula no existe',
+                'concepto_id.required' => 'El ID de concepto es requerido',
+                'concepto_id.exists' => 'El concepto no existe',
+                'pago_fecha.required' => 'La fecha de pago es requerida',
+                'pago_fecha.date' => 'La fecha de pago debe ser una fecha válida',
+                'pago_valor.required' => 'El valor de pago es requerido',
+                'pago_valor.numeric' => 'El valor de pago debe ser un número',
+                'pago_estado.required' => 'El estado de pago es requerido',
+                'pago_estado.string' => 'El estado de pago debe ser una cadena de caracteres',
+            ]);
+
+            $existingPayment = Pago::where('matricula_id', $request->input('matricula_id'))->where('concepto_id', $request->input('concepto_id'))->first();
+
+            if ($existingPayment) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'El pago ya existe',
+                ], 400);
+            }
+
+            $payment = Pago::create($request->all());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Pago creado con éxito',
+                'data' => $payment,
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear el pago: ' . $e->getMessage(),
             ], 500);
         }
     }

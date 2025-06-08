@@ -70,3 +70,6 @@ Route::put('/attendances/{id}', [AcademicStructureController::class, 'updateAtte
 
 // Grades Routes
 Route::post('/grades', [AcademicStructureController::class, 'storeGrade']);
+
+// Payments Routes
+Route::post('/payments', [AcademicStructureController::class, 'storePayment']);
