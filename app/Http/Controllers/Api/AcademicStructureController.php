@@ -640,6 +640,17 @@ class AcademicStructureController
                     ], 409);
                 }
 
+                $existingEnrollment = Matricula::where('estudiante_id', $student->estudiante_id)
+                    ->where('matricula_año', $data['solicitud_año'])
+                    ->first();
+
+                if ($existingEnrollment) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'El estudiante ya está matriculado en este año (' . $existingEnrollment->matricula_año . ')',
+                    ], 409);
+                }
+
                 $solicitud->estudiante_id = $student->estudiante_id;
                 $solicitud->save();
 

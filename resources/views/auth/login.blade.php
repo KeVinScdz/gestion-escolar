@@ -11,11 +11,6 @@
         <h2 class="font-semibold text-2xl">Ingresa a tu cuenta</h2>
 
         <div class="space-y-4">
-            <button class="btn bg-black text-white border-black w-full relative">
-                <i class="fa-brands fa-github absolute left-3 text-lg"></i>
-                Continua con GitHub
-            </button>
-
             <button class="btn bg-white text-black border-[#e5e5e5] w-full relative">
                 <svg class="absolute left-2" aria-label="Google logo" width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                     <g>
