@@ -171,6 +171,41 @@ return new class extends Migration
             $table->primary(['asistencia_id', 'matricula_id', 'asistencia_fecha']);
         });
 
+        Schema::create('solicitudes_matricula', function (Blueprint $table) {
+            $table->uuid('solicitud_id')->primary();
+            $table->uuid('institucion_id');
+            $table->uuid('estudiante_id')->nullable();
+            $table->uuid('grado_id');
+            $table->integer('solicitud_año');
+            $table->enum('solicitud_estado', ['pendiente', 'aprobada', 'rechazada'])->default('pendiente');
+            $table->text('solicitud_comentario')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('solicitudes_tutores', function (Blueprint $table) {
+            $table->uuid('solicitud_tutor_id')->primary();
+            $table->uuid('solicitud_id');
+            $table->string('tutor_nombre');
+            $table->string('tutor_apellido');
+            $table->enum('tutor_documento_tipo', ['CC', 'TI', 'CE']);
+            $table->string('tutor_documento');
+            $table->string('tutor_direccion');
+            $table->decimal('tutor_telefono', 12, 0);
+            $table->string('tutor_correo');
+            $table->timestamps();
+        });
+
+        Schema::create('solicitudes_estudiantes', function (Blueprint $table) {
+            $table->uuid('solicitud_estudiante_id')->primary();
+            $table->uuid('solicitud_id');
+            $table->string('estudiante_nombre');
+            $table->string('estudiante_apellido');
+            $table->enum('estudiante_documento_tipo', ['CC', 'TI', 'CE']);
+            $table->string('estudiante_documento');
+            $table->date('estudiante_nacimiento');
+            $table->timestamps();
+        });
+
         // Financiero
         Schema::create('conceptos_pago', function (Blueprint $table) {
             $table->uuid('concepto_id')->primary();
@@ -233,6 +268,9 @@ return new class extends Migration
         Schema::dropIfExists('matriculas');
         Schema::dropIfExists('notas');
         Schema::dropIfExists('asistencias');
+        Schema::dropIfExists('solicitudes_matricula');
+        Schema::dropIfExists('solicitudes_tutores');
+        Schema::dropIfExists('solicitudes_estudiantes');
 
         // Financiero
         Schema::dropIfExists('pagos');

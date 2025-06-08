@@ -14,10 +14,15 @@ use App\Models\Horario;
 use App\Models\Bloque;
 use App\Models\Docente;
 use App\Models\Asistencia;
+use App\Models\Estudiante;
 use App\Models\Institucion;
 use App\Models\Matricula;
 use App\Models\Nota;
 use App\Models\Observacion;
+use App\Models\SolicitudEstudiante;
+use App\Models\SolicitudMatricula;
+use App\Models\SolicitudTutor;
+use App\Models\Usuario;
 
 class AcademicStructureController
 {
@@ -539,6 +544,171 @@ class AcademicStructureController
             return response()->json([
                 'success' => false,
                 'message' => 'Error al eliminar la matrícula: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    // Enrollment Request Functions
+    public function storeEnrollmentRequest(Request $request)
+    {
+        try {
+            $data = $request->all();
+
+            DB::beginTransaction();
+
+            $request->validate([
+                'institucion_id' => 'required|exists:instituciones,institucion_id',
+                'grado_id' => 'required|exists:grados,grado_id',
+                'solicitud_año' => 'required|numeric',
+                'estudiante_existente' => 'required|string',
+                'solicitud_comentario' => 'required|string',
+                'tutor_nombre' => 'required|string',
+                'tutor_apellido' => 'required|string',
+                'tutor_documento_tipo' => 'required|string',
+                'tutor_documento' => 'required|string',
+                'tutor_direccion' => 'required|string',
+                'tutor_telefono' => 'required|string',
+                'tutor_correo' => 'required|email',
+            ], [
+                'institucion_id.required' => 'La institución es requerida',
+                'institucion_id.exists' => 'La institución no existe',
+                'grado_id.required' => 'El grado es requerido',
+                'grado_id.exists' => 'El grado no existe',
+                'solicitud_año.required' => 'El año de solicitud es requerido',
+                'solicitud_año.numeric' => 'El año de solicitud debe ser numérico',
+                'estudiante_existente.required' => 'El estudiante existe es requerido',
+                'estudiante_existente.string' => 'El estudiante existe debe ser una cadena de caracteres',
+                'solicitud_comentario.required' => 'El comentario es requerido',
+                'tutor_nombre.required' => 'El nombre del tutor es requerido',
+                'tutor_nombre.string' => 'El nombre del tutor debe ser una cadena de caracteres',
+                'tutor_apellido.required' => 'El apellido del tutor es requerido',
+                'tutor_apellido.string' => 'El apellido del tutor debe ser una cadena de caracteres',
+                'tutor_documento_tipo.required' => 'El tipo de documento del tutor es requerido',
+                'tutor_documento_tipo.string' => 'El tipo de documento del tutor debe ser una cadena de caracteres',
+                'tutor_documento.required' => 'El documento del tutor es requerido',
+                'tutor_direccion.required' => 'La dirección del tutor es requerida',
+                'tutor_direccion.string' => 'La dirección del tutor debe ser una cadena de caracteres',
+                'tutor_telefono.required' => 'El teléfono del tutor es requerido',
+                'tutor_telefono.string' => 'El teléfono del tutor debe ser una cadena de caracteres',
+                'tutor_correo.required' => 'El correo del tutor es requerido',
+                'tutor_correo.email' => 'El correo del tutor debe ser una dirección de correo electrónico válida',
+            ]);
+
+            $solicitud = SolicitudMatricula::create([
+                'institucion_id' => $data['institucion_id'],
+                'grado_id' => $data['grado_id'],
+                'solicitud_año' => $data['solicitud_año'],
+                'solicitud_estado' => 'pendiente',
+                'solicitud_comentario' => $data['solicitud_comentario'],
+            ]);
+
+            $tutor = SolicitudTutor::create([
+                'solicitud_id' => $solicitud->solicitud_id,
+                'tutor_nombre' => $data['tutor_nombre'],
+                'tutor_apellido' => $data['tutor_apellido'],
+                'tutor_documento_tipo' => $data['tutor_documento_tipo'],
+                'tutor_documento' => $data['tutor_documento'],
+                'tutor_direccion' => $data['tutor_direccion'],
+                'tutor_telefono' => $data['tutor_telefono'],
+                'tutor_correo' => $data['tutor_correo'],
+            ]);
+
+            // buscar usuario por documento
+            if ($data['estudiante_existente'] === "si") {
+                $student = Estudiante::with('usuario')
+                    ->whereHas('usuario', function ($query) use ($data) {
+                        $query->where('usuario_documento', $data['estudiante_documento_existente'])
+                            ->where('rol_id', 4);
+                    })
+                    ->first();
+
+                if (!$student) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Estudiante no encontrado',
+                    ], 404);
+                }
+
+                $existingRequest = SolicitudMatricula::where('estudiante_id', $student->estudiante_id)
+                    ->where('solicitud_estado', 'pendiente')
+                    ->first();
+
+                if ($existingRequest) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'El estudiante ya tiene una solicitud de matrícula pendiente',
+                    ], 409);
+                }
+
+                $solicitud->estudiante_id = $student->estudiante_id;
+                $solicitud->save();
+
+                DB::commit();
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Estudiante encontrado y asignado a la solicitud',
+                    'data' => $student,
+                ], 201);
+            }
+
+            $request->validate([
+                'estudiante_nombre' => 'required|string',
+                'estudiante_apellido' => 'required|string',
+                'estudiante_documento_tipo' => 'required|string',
+                'estudiante_documento' => 'required|string',
+                'estudiante_nacimiento' => 'required|date',
+            ], [
+                'estudiante_nombre.required' => 'El nombre del estudiante es requerido',
+                'estudiante_nombre.string' => 'El nombre del estudiante debe ser una cadena de caracteres',
+                'estudiante_apellido.required' => 'El apellido del estudiante es requerido',
+                'estudiante_apellido.string' => 'El apellido del estudiante debe ser una cadena de caracteres',
+                'estudiante_documento_tipo.required' => 'El tipo de documento del estudiante es requerido',
+                'estudiante_documento_tipo.string' => 'El tipo de documento del estudiante debe ser una cadena de caracteres',
+                'estudiante_documento.required' => 'El documento del estudiante es requerido',
+                'estudiante_documento.string' => 'El documento del estudiante debe ser una cadena de caracteres',
+                'estudiante_nacimiento.required' => 'La fecha de nacimiento del estudiante es requerida',
+                'estudiante_nacimiento.date' => 'La fecha de nacimiento del estudiante debe ser una fecha',
+            ]);
+
+            // validar si el estudiante ya hay un solicitudEstudiante con el mismo documento y su solicitud este pendiente
+            $existingStudentRequest = SolicitudEstudiante::with('solicitud')
+                ->where('estudiante_documento', $data['estudiante_documento'])
+                ->whereHas('solicitud', function ($query) {
+                    $query->where('solicitud_estado', 'pendiente');
+                })
+                ->first();
+
+            if ($existingStudentRequest) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'El estudiante ya tiene una solicitud de matrícula pendiente',
+                ], 409);
+            }
+
+            $student = SolicitudEstudiante::create([
+                'solicitud_id' => $solicitud->solicitud_id,
+                'estudiante_nombre' => $data['estudiante_nombre'],
+                'estudiante_apellido' => $data['estudiante_apellido'],
+                'estudiante_documento_tipo' => $data['estudiante_documento_tipo'],
+                'estudiante_documento' => $data['estudiante_documento'],
+                'estudiante_nacimiento' => $data['estudiante_nacimiento'],
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Solicitud de matrícula creada con éxito',
+                'data' => null,
+            ], 201);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear la solicitud de matrícula: ' . $e->getMessage(),
+                'data' => $e->getMessage(),
             ], 500);
         }
     }
