@@ -46,7 +46,7 @@ class InfoController
             );
 
             // Enviar email
-            Mail::to(config('mail.contact_email', 'andres52885241@gmail.com'))
+            Mail::to(config('mail.contact_email', 'cordobasantiagokevin@gmail.com'))
                 ->send(new Info($validated));
 
             return response()->json([
