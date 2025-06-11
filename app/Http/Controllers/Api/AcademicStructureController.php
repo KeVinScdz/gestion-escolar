@@ -1570,6 +1570,73 @@ class AcademicStructureController
         }
     }
 
+    /**
+ * Elimina una matrícula existente
+ * 
+ * @OA\Delete(
+ *     path="/api/enrollments/{id}",
+ *     tags={"Matrículas"},
+ *     summary="Eliminar matrícula",
+ *     description="Elimina una matrícula existente siempre que no tenga dependencias asociadas (como calificaciones)",
+ *     operationId="destroyEnrollment",
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         description="ID de la matrícula a eliminar",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="integer",
+ *             format="int64",
+ *             minimum=1,
+ *             example=1
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Matrícula eliminada exitosamente",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Matrícula eliminada con éxito")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Matrícula no encontrada",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="Matrícula no encontrada")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=409,
+ *         description="Conflicto - Dependencias existentes",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(
+ *                 property="message", 
+ *                 type="string", 
+ *                 example="No se puede eliminar la matrícula porque tiene notas asociadas"
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Error interno del servidor",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(
+ *                 property="message", 
+ *                 type="string", 
+ *                 example="Error al eliminar la matrícula: Mensaje de error específico"
+ *             )
+ *         )
+ *     ),
+ *     security={
+ *         {"api_key": {}}
+ *     }
+ * )
+ */
+
     public function destroyEnrollment($id)
     {
         try {
