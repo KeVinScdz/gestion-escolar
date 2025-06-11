@@ -1298,6 +1298,506 @@
                     }
                 ]
             }
+        },
+        "/api/subjects/{id}": {
+            "put": {
+                "tags": [
+                    "Materias"
+                ],
+                "summary": "Actualizar materia existente",
+                "description": "Actualiza la información de una materia académica identificada por su ID",
+                "operationId": "updateSubject",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la materia a actualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1,
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Datos de la materia a actualizar",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "materia_nombre"
+                                ],
+                                "properties": {
+                                    "materia_nombre": {
+                                        "description": "Nuevo nombre de la materia",
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "example": "Matemáticas Superiores"
+                                    },
+                                    "materia_descripcion": {
+                                        "description": "Nueva descripción de la materia",
+                                        "type": "string",
+                                        "example": "Curso actualizado de matemáticas avanzadas",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Materia actualizada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Materia actualizada con éxito"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "materia_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "materia_nombre": {
+                                                    "type": "string",
+                                                    "example": "Matemáticas Superiores"
+                                                },
+                                                "institucion_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "materia_descripcion": {
+                                                    "type": "string",
+                                                    "example": "Curso actualizado de matemáticas avanzadas",
+                                                    "nullable": true
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-05-15T14:30:00Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Materia no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Materia no encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Los datos proporcionados no son válidos"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "materia_nombre": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El nombre de la materia es requerido"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error al actualizar la materia: Mensaje de error específico"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Materias"
+                ],
+                "summary": "Eliminar materia académica",
+                "description": "Elimina permanentemente una materia académica siempre que no tenga asignaciones activas",
+                "operationId": "destroySubject",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la materia a eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1,
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Materia eliminada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Materia eliminada con éxito"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Materia no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Materia no encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflicto - Asignaciones activas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No se puede eliminar la materia porque tiene asignaciones activas"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error al eliminar la materia: Mensaje de error específico"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/api/enrollments": {
+            "post": {
+                "tags": [
+                    "Matrículas"
+                ],
+                "summary": "Registrar nueva matrícula",
+                "description": "Crea una nueva matrícula para un estudiante en un grupo específico, verificando disponibilidad de cupo y duplicados",
+                "operationId": "storeEnrollment",
+                "requestBody": {
+                    "description": "Datos de la matrícula a crear",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "estudiante_id",
+                                    "grupo_id",
+                                    "matricula_año"
+                                ],
+                                "properties": {
+                                    "estudiante_id": {
+                                        "description": "ID del estudiante a matricular",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "grupo_id": {
+                                        "description": "ID del grupo donde se matriculará al estudiante",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "matricula_año": {
+                                        "description": "Año académico de la matrícula",
+                                        "type": "integer",
+                                        "maximum": 2025,
+                                        "minimum": 1900,
+                                        "example": 2023
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Matrícula creada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Matrícula creada con éxito"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "matricula_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "estudiante_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "grupo_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "matricula_año": {
+                                                    "type": "integer",
+                                                    "example": 2023
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-03-01T12:00:00Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Recurso no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Grupo no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflictos de matrícula",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "properties": {
+                                                "success": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "El estudiante ya está matriculado en este periodo académico (2023) en el grupo Grupo A"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        {
+                                            "properties": {
+                                                "success": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "El grupo Grupo A ya ha alcanzado su cupo máximo de estudiantes"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Los datos proporcionados no son válidos"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "estudiante_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El estudiante no existe"
+                                                    }
+                                                },
+                                                "grupo_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El grupo no existe"
+                                                    }
+                                                },
+                                                "matricula_año": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El año de matrícula debe ser numérico"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error al crear la matrícula: Mensaje de error específico"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
         }
     },
     "tags": [
@@ -1312,6 +1812,10 @@
         {
             "name": "Materias",
             "description": "Materias"
+        },
+        {
+            "name": "Matrículas",
+            "description": "Matrículas"
         }
     ]
 }

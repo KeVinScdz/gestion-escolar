@@ -1000,6 +1000,103 @@ class AcademicStructureController
         }
     }
 
+    /**
+ * Actualiza una materia académica existente
+ * 
+ * @OA\Put(
+ *     path="/api/subjects/{id}",
+ *     tags={"Materias"},
+ *     summary="Actualizar materia existente",
+ *     description="Actualiza la información de una materia académica identificada por su ID",
+ *     operationId="updateSubject",
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         description="ID de la materia a actualizar",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="integer",
+ *             format="int64",
+ *             minimum=1,
+ *             example=1
+ *         )
+ *     ),
+ *     @OA\RequestBody(
+ *         required=true,
+ *         description="Datos de la materia a actualizar",
+ *         @OA\JsonContent(
+ *             required={"materia_nombre"},
+ *             @OA\Property(
+ *                 property="materia_nombre", 
+ *                 type="string", 
+ *                 maxLength=255,
+ *                 example="Matemáticas Superiores",
+ *                 description="Nuevo nombre de la materia"
+ *             ),
+ *             @OA\Property(
+ *                 property="materia_descripcion", 
+ *                 type="string", 
+ *                 example="Curso actualizado de matemáticas avanzadas",
+ *                 description="Nueva descripción de la materia",
+ *                 nullable=true
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Materia actualizada exitosamente",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Materia actualizada con éxito"),
+ *             @OA\Property(
+ *                 property="data",
+ *                 type="object",
+ *                 @OA\Property(property="materia_id", type="integer", example=1),
+ *                 @OA\Property(property="materia_nombre", type="string", example="Matemáticas Superiores"),
+ *                 @OA\Property(property="institucion_id", type="integer", example=1),
+ *                 @OA\Property(property="materia_descripcion", type="string", example="Curso actualizado de matemáticas avanzadas", nullable=true),
+ *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2023-05-15T14:30:00Z")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Materia no encontrada",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="Materia no encontrada")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Error de validación",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Los datos proporcionados no son válidos"),
+ *             @OA\Property(
+ *                 property="errors",
+ *                 type="object",
+ *                 @OA\Property(
+ *                     property="materia_nombre",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="El nombre de la materia es requerido")
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Error interno del servidor",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="Error al actualizar la materia: Mensaje de error específico")
+ *         )
+ *     ),
+ *     security={
+ *         {"api_key": {}}
+ *     }
+ * )
+ */
+
     public function updateSubject(Request $request, $id)
     {
         try {
@@ -1033,6 +1130,73 @@ class AcademicStructureController
         }
     }
 
+    /**
+ * Elimina una materia académica del sistema
+ * 
+ * @OA\Delete(
+ *     path="/api/subjects/{id}",
+ *     tags={"Materias"},
+ *     summary="Eliminar materia académica",
+ *     description="Elimina permanentemente una materia académica siempre que no tenga asignaciones activas",
+ *     operationId="destroySubject",
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         description="ID de la materia a eliminar",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="integer",
+ *             format="int64",
+ *             minimum=1,
+ *             example=1
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Materia eliminada exitosamente",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Materia eliminada con éxito")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Materia no encontrada",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="Materia no encontrada")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=409,
+ *         description="Conflicto - Asignaciones activas",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(
+ *                 property="message", 
+ *                 type="string", 
+ *                 example="No se puede eliminar la materia porque tiene asignaciones activas"
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Error interno del servidor",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(
+ *                 property="message", 
+ *                 type="string", 
+ *                 example="Error al eliminar la materia: Mensaje de error específico"
+ *             )
+ *         )
+ *     ),
+ *     security={
+ *         {"api_key": {}}
+ *     }
+ * )
+ */
+
     public function destroySubject($id)
     {
         try {
@@ -1065,6 +1229,123 @@ class AcademicStructureController
             ], 500);
         }
     }
+
+/**
+ * Crea una nueva matrícula de estudiante
+ * 
+ * @OA\Post(
+ *     path="/api/enrollments",
+ *     tags={"Matrículas"},
+ *     summary="Registrar nueva matrícula",
+ *     description="Crea una nueva matrícula para un estudiante en un grupo específico, verificando disponibilidad de cupo y duplicados",
+ *     operationId="storeEnrollment",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         description="Datos de la matrícula a crear",
+ *         @OA\JsonContent(
+ *             required={"estudiante_id", "grupo_id", "matricula_año"},
+ *             @OA\Property(
+ *                 property="estudiante_id", 
+ *                 type="integer", 
+ *                 example=1,
+ *                 description="ID del estudiante a matricular"
+ *             ),
+ *             @OA\Property(
+ *                 property="grupo_id", 
+ *                 type="integer", 
+ *                 example=1,
+ *                 description="ID del grupo donde se matriculará al estudiante"
+ *             ),
+ *             @OA\Property(
+ *                 property="matricula_año", 
+ *                 type="integer", 
+ *                 example=2023,
+ *                 description="Año académico de la matrícula",
+ *                 minimum=1900,
+ *                 maximum=2025
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Matrícula creada exitosamente",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Matrícula creada con éxito"),
+ *             @OA\Property(
+ *                 property="data",
+ *                 type="object",
+ *                 @OA\Property(property="matricula_id", type="integer", example=1),
+ *                 @OA\Property(property="estudiante_id", type="integer", example=1),
+ *                 @OA\Property(property="grupo_id", type="integer", example=1),
+ *                 @OA\Property(property="matricula_año", type="integer", example=2023),
+ *                 @OA\Property(property="created_at", type="string", format="date-time", example="2023-03-01T12:00:00Z")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Recurso no encontrado",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="Grupo no encontrado")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=409,
+ *         description="Conflictos de matrícula",
+ *         @OA\JsonContent(
+ *             oneOf={
+ *                 @OA\Schema(
+ *                     @OA\Property(property="success", type="boolean", example=false),
+ *                     @OA\Property(property="message", type="string", example="El estudiante ya está matriculado en este periodo académico (2023) en el grupo Grupo A")
+ *                 ),
+ *                 @OA\Schema(
+ *                     @OA\Property(property="success", type="boolean", example=false),
+ *                     @OA\Property(property="message", type="string", example="El grupo Grupo A ya ha alcanzado su cupo máximo de estudiantes")
+ *                 )
+ *             }
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Error de validación",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Los datos proporcionados no son válidos"),
+ *             @OA\Property(
+ *                 property="errors",
+ *                 type="object",
+ *                 @OA\Property(
+ *                     property="estudiante_id",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="El estudiante no existe")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="grupo_id",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="El grupo no existe")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="matricula_año",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="El año de matrícula debe ser numérico")
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Error interno del servidor",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="Error al crear la matrícula: Mensaje de error específico")
+ *         )
+ *     ),
+ *     security={
+ *         {"api_key": {}}
+ *     }
+ * )
+ */
 
     // Enrollment Functions
     public function storeEnrollment(Request $request)
