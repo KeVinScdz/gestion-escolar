@@ -69,6 +69,7 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+        L5Swagger\L5SwaggerServiceProvider::class,
     ],
 
     /*

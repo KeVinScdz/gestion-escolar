@@ -1,0 +1,1317 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Documentacion API",
+        "description": "Descripcion",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000"
+        }
+    ],
+    "paths": {
+        "/ api/attendances": {
+            "post": {
+                "tags": [
+                    "Periodos Académicos"
+                ],
+                "summary": "Crear un nuevo período académico",
+                "description": "Registra un nuevo período académico con año, fechas de inicio/fin e institución asociada",
+                "operationId": "87e2718f5b778f6bbde53257a93ba09e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "periodo_academico_año",
+                                    "periodo_academico_inicio",
+                                    "periodo_academico_fin",
+                                    "institucion_id"
+                                ],
+                                "properties": {
+                                    "periodo_academico_año": {
+                                        "description": "Año del período académico",
+                                        "type": "integer",
+                                        "example": 2023
+                                    },
+                                    "periodo_academico_inicio": {
+                                        "description": "Fecha de inicio del período",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-03-01"
+                                    },
+                                    "periodo_academico_fin": {
+                                        "description": "Fecha de fin del período",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-12-15"
+                                    },
+                                    "institucion_id": {
+                                        "description": "ID de la institución asociada",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Periodo creado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Periodo creado con éxito"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "periodo_academico_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "periodo_academico_año": {
+                                                    "type": "integer",
+                                                    "example": 2023
+                                                },
+                                                "periodo_academico_inicio": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "example": "2023-03-01"
+                                                },
+                                                "periodo_academico_fin": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "example": "2023-12-15"
+                                                },
+                                                "institucion_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-03-01T12:00:00Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-03-01T12:00:00Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Los datos proporcionados no son válidos"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "periodo_academico_año": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El año es requerido"
+                                                    }
+                                                },
+                                                "periodo_academico_inicio": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "La fecha de inicio es requerida"
+                                                    }
+                                                },
+                                                "periodo_academico_fin": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "La fecha de fin debe ser una fecha válida"
+                                                    }
+                                                },
+                                                "institucion_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "La institución no existe"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error al crear el periodo: Mensaje de error específico"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/attendances/{id}": {
+            "put": {
+                "tags": [
+                    "Periodos Académicos"
+                ],
+                "summary": "Actualizar un período académico",
+                "description": "Actualiza la información de un período académico existente identificado por su ID",
+                "operationId": "9275eff45593d0af772634de199e5837",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del período académico a actualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Datos del período académico a actualizar",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "periodo_academico_año",
+                                    "periodo_academico_inicio",
+                                    "periodo_academico_fin"
+                                ],
+                                "properties": {
+                                    "periodo_academico_año": {
+                                        "description": "Nuevo año del período académico",
+                                        "type": "integer",
+                                        "example": 2024
+                                    },
+                                    "periodo_academico_inicio": {
+                                        "description": "Nueva fecha de inicio",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-03-01"
+                                    },
+                                    "periodo_academico_fin": {
+                                        "description": "Nueva fecha de fin",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-12-20"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Periodo actualizado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Periodo actualizado con éxito"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "periodo_academico_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "periodo_academico_año": {
+                                                    "type": "integer",
+                                                    "example": 2024
+                                                },
+                                                "periodo_academico_inicio": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "example": "2024-03-01"
+                                                },
+                                                "periodo_academico_fin": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "example": "2024-12-20"
+                                                },
+                                                "institucion_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-03-01T12:00:00Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-03-05T15:30:00Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Periodo no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Periodo no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Los datos proporcionados no son válidos"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "periodo_academico_año": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El año debe ser numérico"
+                                                    }
+                                                },
+                                                "periodo_academico_inicio": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "La fecha de inicio debe ser una fecha válida"
+                                                    }
+                                                },
+                                                "periodo_academico_fin": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "La fecha de fin es requerida"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error al actualizar el periodo: Mensaje de error específico"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/periods/{id}": {
+            "delete": {
+                "tags": [
+                    "Periodos Académicos"
+                ],
+                "summary": "Eliminar período académico",
+                "description": "Elimina permanentemente un período académico identificado por su ID",
+                "operationId": "destroyPeriod",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del período académico a eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1,
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Éxito en la operación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Periodo eliminado con éxito"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Recurso no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Periodo no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error al eliminar el periodo: Error específico del sistema"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/api/groups": {
+            "post": {
+                "tags": [
+                    "Grupos Académicos"
+                ],
+                "summary": "Crear un nuevo grupo",
+                "description": "Registra un nuevo grupo académico con nombre, año, cupo y relaciones con grado e institución",
+                "operationId": "storeGroup",
+                "requestBody": {
+                    "description": "Datos del grupo a crear",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "grupo_nombre",
+                                    "grupo_año",
+                                    "grupo_cupo",
+                                    "grado_id",
+                                    "institucion_id"
+                                ],
+                                "properties": {
+                                    "grupo_nombre": {
+                                        "description": "Nombre del grupo",
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "example": "Grupo A"
+                                    },
+                                    "grupo_año": {
+                                        "description": "Año académico del grupo",
+                                        "type": "integer",
+                                        "example": 2023
+                                    },
+                                    "grupo_cupo": {
+                                        "description": "Cupo máximo de estudiantes",
+                                        "type": "integer",
+                                        "example": 30
+                                    },
+                                    "grado_id": {
+                                        "description": "ID del grado asociado",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "institucion_id": {
+                                        "description": "ID de la institución asociada",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Grupo creado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Grupo creado con éxito"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "grupo_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "grupo_nombre": {
+                                                    "type": "string",
+                                                    "example": "Grupo A"
+                                                },
+                                                "grupo_año": {
+                                                    "type": "integer",
+                                                    "example": 2023
+                                                },
+                                                "grupo_cupo": {
+                                                    "type": "integer",
+                                                    "example": 30
+                                                },
+                                                "grado_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "institucion_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-03-01T12:00:00Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-03-01T12:00:00Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Los datos proporcionados no son válidos"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "grupo_nombre": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El nombre debe ser una cadena de caracteres"
+                                                    }
+                                                },
+                                                "grupo_año": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El año debe ser numérico"
+                                                    }
+                                                },
+                                                "grupo_cupo": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El cupo debe ser numérico"
+                                                    }
+                                                },
+                                                "grado_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El grado no existe"
+                                                    }
+                                                },
+                                                "institucion_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "La institución no existe"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error al crear el grupo: Mensaje de error específico"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/api/groups/{id}": {
+            "put": {
+                "tags": [
+                    "Grupos Académicos"
+                ],
+                "summary": "Actualizar un grupo",
+                "description": "Actualiza la información de un grupo académico existente",
+                "operationId": "updateGroup",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del grupo a actualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1,
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Datos del grupo a actualizar",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "grupo_nombre",
+                                    "grupo_año",
+                                    "grupo_cupo"
+                                ],
+                                "properties": {
+                                    "grupo_nombre": {
+                                        "description": "Nuevo nombre del grupo",
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "example": "Grupo B"
+                                    },
+                                    "grupo_año": {
+                                        "description": "Nuevo año académico",
+                                        "type": "integer",
+                                        "example": 2024
+                                    },
+                                    "grupo_cupo": {
+                                        "description": "Nuevo cupo máximo",
+                                        "type": "integer",
+                                        "example": 35
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Grupo actualizado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Grupo actualizado con éxito"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "grupo_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "grupo_nombre": {
+                                                    "type": "string",
+                                                    "example": "Grupo B"
+                                                },
+                                                "grupo_año": {
+                                                    "type": "integer",
+                                                    "example": 2024
+                                                },
+                                                "grupo_cupo": {
+                                                    "type": "integer",
+                                                    "example": 35
+                                                },
+                                                "grado_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "institucion_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-03-01T12:00:00Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-02-15T09:30:45Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Grupo no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Grupo no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Los datos proporcionados no son válidos"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "grupo_nombre": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El nombre debe ser una cadena de caracteres"
+                                                    }
+                                                },
+                                                "grupo_año": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El año debe ser numérico"
+                                                    }
+                                                },
+                                                "grupo_cupo": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El cupo debe ser numérico"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error al actualizar el grupo: Mensaje de error específico"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Grupos Académicos"
+                ],
+                "summary": "Eliminar grupo académico",
+                "description": "Elimina permanentemente un grupo académico identificado por su ID. Esta acción no puede deshacerse.",
+                "operationId": "destroyGroup",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del grupo a eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1,
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Grupo eliminado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Grupo eliminado con éxito"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Grupo no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Grupo no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflicto - Restricción de integridad",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No se puede eliminar el grupo porque tiene asignaciones relacionadas"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error al eliminar el grupo: Mensaje de error específico"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/api/groups/{id}/assignments": {
+            "put": {
+                "tags": [
+                    "Grupos Académicos"
+                ],
+                "summary": "Actualizar asignaciones de grupo",
+                "description": "Asigna o actualiza docentes a materias en un grupo específico, eliminando asignaciones no utilizadas",
+                "operationId": "updateGroupAssignments",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del grupo a actualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1,
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Asignaciones de materias y docentes",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "materias",
+                                    "docentes"
+                                ],
+                                "properties": {
+                                    "materias": {
+                                        "type": "array",
+                                        "items": {
+                                            "description": "ID de la materia",
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "example": [
+                                            1,
+                                            2,
+                                            3
+                                        ]
+                                    },
+                                    "docentes": {
+                                        "type": "array",
+                                        "items": {
+                                            "description": "ID del docente",
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "example": [
+                                            4,
+                                            5,
+                                            6
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Asignaciones actualizadas exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Asignaciones actualizadas con éxito"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Solicitud incorrecta",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Las listas de materias y docentes deben tener la misma longitud"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Grupo no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Grupo no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error al actualizar las asignaciones: Mensaje de error específico"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/api/subjects": {
+            "post": {
+                "tags": [
+                    "Materias"
+                ],
+                "summary": "Crear nueva materia",
+                "description": "Registra una nueva materia académica en el sistema",
+                "operationId": "storeSubject",
+                "requestBody": {
+                    "description": "Datos de la materia a crear",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "materia_nombre",
+                                    "institucion_id"
+                                ],
+                                "properties": {
+                                    "materia_nombre": {
+                                        "description": "Nombre de la materia",
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "example": "Matemáticas Avanzadas"
+                                    },
+                                    "institucion_id": {
+                                        "description": "ID de la institución a la que pertenece la materia",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "materia_descripcion": {
+                                        "description": "Descripción opcional de la materia",
+                                        "type": "string",
+                                        "example": "Curso de matemáticas para nivel avanzado",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Materia creada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Materia creada con éxito"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "materia_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "materia_nombre": {
+                                                    "type": "string",
+                                                    "example": "Matemáticas Avanzadas"
+                                                },
+                                                "institucion_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-03-01T12:00:00Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-03-01T12:00:00Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Los datos proporcionados no son válidos"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "materia_nombre": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El nombre de la materia es requerido"
+                                                    }
+                                                },
+                                                "institucion_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "La institución seleccionada no existe"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error al crear la materia: Mensaje de error específico"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Periodos Académicos",
+            "description": "Periodos Académicos"
+        },
+        {
+            "name": "Grupos Académicos",
+            "description": "Grupos Académicos"
+        },
+        {
+            "name": "Materias",
+            "description": "Materias"
+        }
+    ]
+}

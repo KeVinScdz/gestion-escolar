@@ -26,8 +26,97 @@ use App\Models\SolicitudTutor;
 use App\Models\Tutor;
 use App\Models\Usuario;
 
+/**
+* @OA\Info(
+*             title="Documentacion API",
+*             version="1.0",
+*             description="Descripcion"
+* )
+*
+* @OA\Server(url="http://localhost:8000")
+*/
+
+
 class AcademicStructureController
 {
+    /**
+ * Crea un nuevo período académico
+ * 
+ * @OA\Post(
+ *     path="/ api/attendances",
+ *     tags={"Periodos Académicos"},
+ *     summary="Crear un nuevo período académico",
+ *     description="Registra un nuevo período académico con año, fechas de inicio/fin e institución asociada",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"periodo_academico_año", "periodo_academico_inicio", "periodo_academico_fin", "institucion_id"},
+ *             @OA\Property(property="periodo_academico_año", type="integer", example=2023, description="Año del período académico"),
+ *             @OA\Property(property="periodo_academico_inicio", type="string", format="date", example="2023-03-01", description="Fecha de inicio del período"),
+ *             @OA\Property(property="periodo_academico_fin", type="string", format="date", example="2023-12-15", description="Fecha de fin del período"),
+ *             @OA\Property(property="institucion_id", type="integer", example=1, description="ID de la institución asociada")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Periodo creado exitosamente",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Periodo creado con éxito"),
+ *             @OA\Property(
+ *                 property="data",
+ *                 type="object",
+ *                 @OA\Property(property="periodo_academico_id", type="integer", example=1),
+ *                 @OA\Property(property="periodo_academico_año", type="integer", example=2023),
+ *                 @OA\Property(property="periodo_academico_inicio", type="string", format="date", example="2023-03-01"),
+ *                 @OA\Property(property="periodo_academico_fin", type="string", format="date", example="2023-12-15"),
+ *                 @OA\Property(property="institucion_id", type="integer", example=1),
+ *                 @OA\Property(property="created_at", type="string", format="date-time", example="2023-03-01T12:00:00Z"),
+ *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2023-03-01T12:00:00Z")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Error de validación",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Los datos proporcionados no son válidos"),
+ *             @OA\Property(
+ *                 property="errors",
+ *                 type="object",
+ *                 @OA\Property(
+ *                     property="periodo_academico_año",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="El año es requerido")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="periodo_academico_inicio",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="La fecha de inicio es requerida")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="periodo_academico_fin",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="La fecha de fin debe ser una fecha válida")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="institucion_id",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="La institución no existe")
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Error interno del servidor",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="Error al crear el periodo: Mensaje de error específico")
+ *         )
+ *     )
+ * )
+ */
     public function storePeriod(Request $request)
     {
         try {
@@ -65,7 +154,94 @@ class AcademicStructureController
             ], 500);
         }
     }
-
+/**
+ * Actualiza un período académico existente
+ * 
+ * @OA\Put(
+ *     path="/api/attendances/{id}",
+ *     tags={"Periodos Académicos"},
+ *     summary="Actualizar un período académico",
+ *     description="Actualiza la información de un período académico existente identificado por su ID",
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         description="ID del período académico a actualizar",
+ *         required=true,
+ *         @OA\Schema(type="integer", format="int64", example=1)
+ *     ),
+ *     @OA\RequestBody(
+ *         required=true,
+ *         description="Datos del período académico a actualizar",
+ *         @OA\JsonContent(
+ *             required={"periodo_academico_año", "periodo_academico_inicio", "periodo_academico_fin"},
+ *             @OA\Property(property="periodo_academico_año", type="integer", example=2024, description="Nuevo año del período académico"),
+ *             @OA\Property(property="periodo_academico_inicio", type="string", format="date", example="2024-03-01", description="Nueva fecha de inicio"),
+ *             @OA\Property(property="periodo_academico_fin", type="string", format="date", example="2024-12-20", description="Nueva fecha de fin")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Periodo actualizado exitosamente",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Periodo actualizado con éxito"),
+ *             @OA\Property(
+ *                 property="data",
+ *                 type="object",
+ *                 @OA\Property(property="periodo_academico_id", type="integer", example=1),
+ *                 @OA\Property(property="periodo_academico_año", type="integer", example=2024),
+ *                 @OA\Property(property="periodo_academico_inicio", type="string", format="date", example="2024-03-01"),
+ *                 @OA\Property(property="periodo_academico_fin", type="string", format="date", example="2024-12-20"),
+ *                 @OA\Property(property="institucion_id", type="integer", example=1),
+ *                 @OA\Property(property="created_at", type="string", format="date-time", example="2023-03-01T12:00:00Z"),
+ *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2024-03-05T15:30:00Z")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Periodo no encontrado",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="Periodo no encontrado")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Error de validación",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Los datos proporcionados no son válidos"),
+ *             @OA\Property(
+ *                 property="errors",
+ *                 type="object",
+ *                 @OA\Property(
+ *                     property="periodo_academico_año",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="El año debe ser numérico")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="periodo_academico_inicio",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="La fecha de inicio debe ser una fecha válida")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="periodo_academico_fin",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="La fecha de fin es requerida")
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Error interno del servidor",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="Error al actualizar el periodo: Mensaje de error específico")
+ *         )
+ *     )
+ * )
+ */
     public function updatePeriod(Request $request, $id)
     {
         try {
@@ -108,7 +284,60 @@ class AcademicStructureController
             ], 500);
         }
     }
-
+/**
+ * Elimina un período académico del sistema
+ * 
+ * @OA\Delete(
+ *     path="/api/periods/{id}",
+ *     tags={"Periodos Académicos"},
+ *     summary="Eliminar período académico",
+ *     description="Elimina permanentemente un período académico identificado por su ID",
+ *     operationId="destroyPeriod",
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         description="ID del período académico a eliminar",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="integer",
+ *             format="int64",
+ *             minimum=1,
+ *             example=1
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Éxito en la operación",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Periodo eliminado con éxito")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Recurso no encontrado",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="Periodo no encontrado")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Error interno del servidor",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(
+ *                 property="message", 
+ *                 type="string", 
+ *                 example="Error al eliminar el periodo: Error específico del sistema"
+ *             )
+ *         )
+ *     ),
+ *     security={
+ *         {"api_key": {}}
+ *     }
+ * )
+ */
     public function destroyPeriod($id)
     {
         try {
@@ -131,6 +360,97 @@ class AcademicStructureController
             ]);
         }
     }
+
+    /**
+ * Crea un nuevo grupo académico
+ * 
+ * @OA\Post(
+ *     path="/api/groups",
+ *     tags={"Grupos Académicos"},
+ *     summary="Crear un nuevo grupo",
+ *     description="Registra un nuevo grupo académico con nombre, año, cupo y relaciones con grado e institución",
+ *     operationId="storeGroup",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         description="Datos del grupo a crear",
+ *         @OA\JsonContent(
+ *             required={"grupo_nombre", "grupo_año", "grupo_cupo", "grado_id", "institucion_id"},
+ *             @OA\Property(property="grupo_nombre", type="string", maxLength=255, example="Grupo A", description="Nombre del grupo"),
+ *             @OA\Property(property="grupo_año", type="integer", example=2023, description="Año académico del grupo"),
+ *             @OA\Property(property="grupo_cupo", type="integer", example=30, description="Cupo máximo de estudiantes"),
+ *             @OA\Property(property="grado_id", type="integer", example=1, description="ID del grado asociado"),
+ *             @OA\Property(property="institucion_id", type="integer", example=1, description="ID de la institución asociada")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Grupo creado exitosamente",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Grupo creado con éxito"),
+ *             @OA\Property(
+ *                 property="data",
+ *                 type="object",
+ *                 @OA\Property(property="grupo_id", type="integer", example=1),
+ *                 @OA\Property(property="grupo_nombre", type="string", example="Grupo A"),
+ *                 @OA\Property(property="grupo_año", type="integer", example=2023),
+ *                 @OA\Property(property="grupo_cupo", type="integer", example=30),
+ *                 @OA\Property(property="grado_id", type="integer", example=1),
+ *                 @OA\Property(property="institucion_id", type="integer", example=1),
+ *                 @OA\Property(property="created_at", type="string", format="date-time", example="2023-03-01T12:00:00Z"),
+ *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2023-03-01T12:00:00Z")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Error de validación",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Los datos proporcionados no son válidos"),
+ *             @OA\Property(
+ *                 property="errors",
+ *                 type="object",
+ *                 @OA\Property(
+ *                     property="grupo_nombre",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="El nombre debe ser una cadena de caracteres")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="grupo_año",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="El año debe ser numérico")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="grupo_cupo",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="El cupo debe ser numérico")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="grado_id",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="El grado no existe")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="institucion_id",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="La institución no existe")
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Error interno del servidor",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="Error al crear el grupo: Mensaje de error específico")
+ *         )
+ *     ),
+ *     security={
+ *         {"api_key": {}}
+ *     }
+ * )
+ */
 
     public function storeGroup(Request $request)
     {
@@ -171,6 +491,105 @@ class AcademicStructureController
             ], 500);
         }
     }
+
+    /**
+ * Actualiza un grupo académico existente
+ * 
+ * @OA\Put(
+ *     path="/api/groups/{id}",
+ *     tags={"Grupos Académicos"},
+ *     summary="Actualizar un grupo",
+ *     description="Actualiza la información de un grupo académico existente",
+ *     operationId="updateGroup",
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         description="ID del grupo a actualizar",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="integer",
+ *             format="int64",
+ *             minimum=1,
+ *             example=1
+ *         )
+ *     ),
+ *     @OA\RequestBody(
+ *         required=true,
+ *         description="Datos del grupo a actualizar",
+ *         @OA\JsonContent(
+ *             required={"grupo_nombre", "grupo_año", "grupo_cupo"},
+ *             @OA\Property(property="grupo_nombre", type="string", maxLength=255, example="Grupo B", description="Nuevo nombre del grupo"),
+ *             @OA\Property(property="grupo_año", type="integer", example=2024, description="Nuevo año académico"),
+ *             @OA\Property(property="grupo_cupo", type="integer", example=35, description="Nuevo cupo máximo")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Grupo actualizado exitosamente",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Grupo actualizado con éxito"),
+ *             @OA\Property(
+ *                 property="data",
+ *                 type="object",
+ *                 @OA\Property(property="grupo_id", type="integer", example=1),
+ *                 @OA\Property(property="grupo_nombre", type="string", example="Grupo B"),
+ *                 @OA\Property(property="grupo_año", type="integer", example=2024),
+ *                 @OA\Property(property="grupo_cupo", type="integer", example=35),
+ *                 @OA\Property(property="grado_id", type="integer", example=1),
+ *                 @OA\Property(property="institucion_id", type="integer", example=1),
+ *                 @OA\Property(property="created_at", type="string", format="date-time", example="2023-03-01T12:00:00Z"),
+ *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2024-02-15T09:30:45Z")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Grupo no encontrado",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="Grupo no encontrado")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Error de validación",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Los datos proporcionados no son válidos"),
+ *             @OA\Property(
+ *                 property="errors",
+ *                 type="object",
+ *                 @OA\Property(
+ *                     property="grupo_nombre",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="El nombre debe ser una cadena de caracteres")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="grupo_año",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="El año debe ser numérico")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="grupo_cupo",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="El cupo debe ser numérico")
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Error interno del servidor",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="Error al actualizar el grupo: Mensaje de error específico")
+ *         )
+ *     ),
+ *     security={
+ *         {"api_key": {}}
+ *     }
+ * )
+ */
 
     public function updateGroup(Request $request, $id)
     {
@@ -214,6 +633,92 @@ class AcademicStructureController
             ], 500);
         }
     }
+
+    /**
+ * Actualiza las asignaciones de materias y docentes a un grupo
+ * 
+ * @OA\Put(
+ *     path="/api/groups/{id}/assignments",
+ *     tags={"Grupos Académicos"},
+ *     summary="Actualizar asignaciones de grupo",
+ *     description="Asigna o actualiza docentes a materias en un grupo específico, eliminando asignaciones no utilizadas",
+ *     operationId="updateGroupAssignments",
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         description="ID del grupo a actualizar",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="integer",
+ *             format="int64",
+ *             minimum=1,
+ *             example=1
+ *         )
+ *     ),
+ *     @OA\RequestBody(
+ *         required=true,
+ *         description="Asignaciones de materias y docentes",
+ *         @OA\JsonContent(
+ *             required={"materias", "docentes"},
+ *             @OA\Property(
+ *                 property="materias",
+ *                 type="array",
+ *                 @OA\Items(
+ *                     type="integer",
+ *                     example=1,
+ *                     description="ID de la materia"
+ *                 ),
+ *                 example={1, 2, 3}
+ *             ),
+ *             @OA\Property(
+ *                 property="docentes",
+ *                 type="array",
+ *                 @OA\Items(
+ *                     type="integer",
+ *                     example=1,
+ *                     description="ID del docente"
+ *                 ),
+ *                 example={4, 5, 6}
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Asignaciones actualizadas exitosamente",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Asignaciones actualizadas con éxito")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=400,
+ *         description="Solicitud incorrecta",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="Las listas de materias y docentes deben tener la misma longitud")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Grupo no encontrado",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="Grupo no encontrado")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Error interno del servidor",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="Error al actualizar las asignaciones: Mensaje de error específico")
+ *         )
+ *     ),
+ *     security={
+ *         {"api_key": {}}
+ *     }
+ * )
+ */
 
     public function updateGroupAssignments(Request $request, $id)
     {
@@ -289,6 +794,73 @@ class AcademicStructureController
         }
     }
 
+    /**
+ * Elimina un grupo académico del sistema
+ * 
+ * @OA\Delete(
+ *     path="/api/groups/{id}",
+ *     tags={"Grupos Académicos"},
+ *     summary="Eliminar grupo académico",
+ *     description="Elimina permanentemente un grupo académico identificado por su ID. Esta acción no puede deshacerse.",
+ *     operationId="destroyGroup",
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         description="ID del grupo a eliminar",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="integer",
+ *             format="int64",
+ *             minimum=1,
+ *             example=1
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Grupo eliminado exitosamente",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Grupo eliminado con éxito")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Grupo no encontrado",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="Grupo no encontrado")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=409,
+ *         description="Conflicto - Restricción de integridad",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(
+ *                 property="message", 
+ *                 type="string", 
+ *                 example="No se puede eliminar el grupo porque tiene asignaciones relacionadas"
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Error interno del servidor",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(
+ *                 property="message", 
+ *                 type="string", 
+ *                 example="Error al eliminar el grupo: Mensaje de error específico"
+ *             )
+ *         )
+ *     ),
+ *     security={
+ *         {"api_key": {}}
+ *     }
+ * )
+ */
+
     public function destroyGroup($id)
     {
         try {
@@ -314,6 +886,94 @@ class AcademicStructureController
             ], 500);
         }
     }
+
+    /**
+ * Crea una nueva materia académica
+ * 
+ * @OA\Post(
+ *     path="/api/subjects",
+ *     tags={"Materias"},
+ *     summary="Crear nueva materia",
+ *     description="Registra una nueva materia académica en el sistema",
+ *     operationId="storeSubject",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         description="Datos de la materia a crear",
+ *         @OA\JsonContent(
+ *             required={"materia_nombre", "institucion_id"},
+ *             @OA\Property(
+ *                 property="materia_nombre", 
+ *                 type="string", 
+ *                 maxLength=255,
+ *                 example="Matemáticas Avanzadas",
+ *                 description="Nombre de la materia"
+ *             ),
+ *             @OA\Property(
+ *                 property="institucion_id", 
+ *                 type="integer", 
+ *                 example=1,
+ *                 description="ID de la institución a la que pertenece la materia"
+ *             ),
+ *             @OA\Property(
+ *                 property="materia_descripcion", 
+ *                 type="string", 
+ *                 example="Curso de matemáticas para nivel avanzado",
+ *                 description="Descripción opcional de la materia",
+ *                 nullable=true
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Materia creada exitosamente",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Materia creada con éxito"),
+ *             @OA\Property(
+ *                 property="data",
+ *                 type="object",
+ *                 @OA\Property(property="materia_id", type="integer", example=1),
+ *                 @OA\Property(property="materia_nombre", type="string", example="Matemáticas Avanzadas"),
+ *                 @OA\Property(property="institucion_id", type="integer", example=1),
+ *                 @OA\Property(property="created_at", type="string", format="date-time", example="2023-03-01T12:00:00Z"),
+ *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2023-03-01T12:00:00Z")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Error de validación",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Los datos proporcionados no son válidos"),
+ *             @OA\Property(
+ *                 property="errors",
+ *                 type="object",
+ *                 @OA\Property(
+ *                     property="materia_nombre",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="El nombre de la materia es requerido")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="institucion_id",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="La institución seleccionada no existe")
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Error interno del servidor",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="Error al crear la materia: Mensaje de error específico")
+ *         )
+ *     ),
+ *     security={
+ *         {"api_key": {}}
+ *     }
+ * )
+ */
 
     public function storeSubject(Request $request)
     {
