@@ -1798,6 +1798,206 @@
                     }
                 ]
             }
+        },
+        "/api/enrollments/{id}": {
+            "put": {
+                "tags": [
+                    "Matrículas"
+                ],
+                "summary": "Actualizar matrícula",
+                "description": "Actualiza la información de una matrícula existente, verificando duplicados en el mismo año académico",
+                "operationId": "updateEnrollment",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la matrícula a actualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1,
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Datos de la matrícula a actualizar",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "grupo_id",
+                                    "matricula_año"
+                                ],
+                                "properties": {
+                                    "grupo_id": {
+                                        "description": "Nuevo ID del grupo para la matrícula",
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "matricula_año": {
+                                        "description": "Año académico de la matrícula",
+                                        "type": "integer",
+                                        "minimum": 1900,
+                                        "example": 2024
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Matrícula actualizada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Matrícula actualizada con éxito"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "matricula_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "estudiante_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "grupo_id": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "matricula_año": {
+                                                    "type": "integer",
+                                                    "example": 2024
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-02-20T14:30:00Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Matrícula no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Matrícula no encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflicto - Matrícula duplicada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "El estudiante ya está matriculado en este grupo para el año 2024"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Los datos proporcionados no son válidos"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "grupo_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El grupo no existe"
+                                                    }
+                                                },
+                                                "matricula_año": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El año de matrícula debe ser numérico"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error al actualizar la matrícula: Mensaje de error específico"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
         }
     },
     "tags": [

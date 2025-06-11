@@ -1407,6 +1407,119 @@ class AcademicStructureController
         }
     }
 
+    /**
+ * Actualiza una matrícula existente
+ * 
+ * @OA\Put(
+ *     path="/api/enrollments/{id}",
+ *     tags={"Matrículas"},
+ *     summary="Actualizar matrícula",
+ *     description="Actualiza la información de una matrícula existente, verificando duplicados en el mismo año académico",
+ *     operationId="updateEnrollment",
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         description="ID de la matrícula a actualizar",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="integer",
+ *             format="int64",
+ *             minimum=1,
+ *             example=1
+ *         )
+ *     ),
+ *     @OA\RequestBody(
+ *         required=true,
+ *         description="Datos de la matrícula a actualizar",
+ *         @OA\JsonContent(
+ *             required={"grupo_id", "matricula_año"},
+ *             @OA\Property(
+ *                 property="grupo_id", 
+ *                 type="integer", 
+ *                 example=2,
+ *                 description="Nuevo ID del grupo para la matrícula"
+ *             ),
+ *             @OA\Property(
+ *                 property="matricula_año", 
+ *                 type="integer", 
+ *                 example=2024,
+ *                 description="Año académico de la matrícula",
+ *                 minimum=1900
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Matrícula actualizada exitosamente",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Matrícula actualizada con éxito"),
+ *             @OA\Property(
+ *                 property="data",
+ *                 type="object",
+ *                 @OA\Property(property="matricula_id", type="integer", example=1),
+ *                 @OA\Property(property="estudiante_id", type="integer", example=1),
+ *                 @OA\Property(property="grupo_id", type="integer", example=2),
+ *                 @OA\Property(property="matricula_año", type="integer", example=2024),
+ *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2024-02-20T14:30:00Z")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Matrícula no encontrada",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="Matrícula no encontrada")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=409,
+ *         description="Conflicto - Matrícula duplicada",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(
+ *                 property="message", 
+ *                 type="string", 
+ *                 example="El estudiante ya está matriculado en este grupo para el año 2024"
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Error de validación",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Los datos proporcionados no son válidos"),
+ *             @OA\Property(
+ *                 property="errors",
+ *                 type="object",
+ *                 @OA\Property(
+ *                     property="grupo_id",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="El grupo no existe")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="matricula_año",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="El año de matrícula debe ser numérico")
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Error interno del servidor",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="Error al actualizar la matrícula: Mensaje de error específico")
+ *         )
+ *     ),
+ *     security={
+ *         {"api_key": {}}
+ *     }
+ * )
+ */
+
     public function updateEnrollment(Request $request, $id)
     {
         try {
