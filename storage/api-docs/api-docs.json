@@ -2107,6 +2107,2221 @@
                     }
                 ]
             }
+        },
+        "/api/enrollments-requests/{id}": {
+            "put": {
+                "tags": [
+                    "Matrículas"
+                ],
+                "summary": "Procesar solicitud de matrícula",
+                "description": "Actualiza el estado de una solicitud de matrícula y crea la matrícula correspondiente, manejando tanto estudiantes nuevos como existentes",
+                "operationId": "updateEnrollmentRequest",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la solicitud de matrícula a procesar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1,
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Datos para procesar la solicitud de matrícula",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "grupo_id",
+                                    "matricula_año",
+                                    "es_nuevo"
+                                ],
+                                "properties": {
+                                    "grupo_id": {
+                                        "description": "ID del grupo asignado",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "matricula_año": {
+                                        "description": "Año académico de la matrícula",
+                                        "type": "integer",
+                                        "example": 2023
+                                    },
+                                    "es_nuevo": {
+                                        "description": "Indica si es un estudiante nuevo",
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "estudiante_id": {
+                                        "description": "ID del estudiante existente (solo cuando es_nuevo = false)",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "estudiante_nombre": {
+                                        "description": "Nombre del estudiante (solo cuando es_nuevo = true)",
+                                        "type": "string",
+                                        "example": "Juan"
+                                    },
+                                    "estudiante_apellido": {
+                                        "description": "Apellido del estudiante (solo cuando es_nuevo = true)",
+                                        "type": "string",
+                                        "example": "Pérez"
+                                    },
+                                    "estudiante_correo": {
+                                        "description": "Correo del estudiante (solo cuando es_nuevo = true)",
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "juan@example.com"
+                                    },
+                                    "estudiante_documento_tipo": {
+                                        "description": "Tipo de documento del estudiante (solo cuando es_nuevo = true)",
+                                        "type": "string",
+                                        "example": "DNI"
+                                    },
+                                    "estudiante_documento": {
+                                        "description": "Documento del estudiante (solo cuando es_nuevo = true)",
+                                        "type": "string",
+                                        "example": "12345678"
+                                    },
+                                    "estudiante_nacimiento": {
+                                        "description": "Fecha de nacimiento del estudiante (solo cuando es_nuevo = true)",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2010-05-15"
+                                    },
+                                    "estudiante_direccion": {
+                                        "description": "Dirección del estudiante (solo cuando es_nuevo = true)",
+                                        "type": "string",
+                                        "example": "Calle 123"
+                                    },
+                                    "estudiante_telefono": {
+                                        "description": "Teléfono del estudiante (solo cuando es_nuevo = true)",
+                                        "type": "string",
+                                        "example": "+123456789"
+                                    },
+                                    "estudiante_contra": {
+                                        "description": "Contraseña del estudiante (solo cuando es_nuevo = true)",
+                                        "type": "string",
+                                        "example": "password123"
+                                    },
+                                    "tutor_nombre": {
+                                        "description": "Nombre del tutor (solo cuando es_nuevo = true)",
+                                        "type": "string",
+                                        "example": "María"
+                                    },
+                                    "tutor_apellido": {
+                                        "description": "Apellido del tutor (solo cuando es_nuevo = true)",
+                                        "type": "string",
+                                        "example": "Gómez"
+                                    },
+                                    "tutor_correo": {
+                                        "description": "Correo del tutor (solo cuando es_nuevo = true)",
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "maria@example.com"
+                                    },
+                                    "tutor_documento_tipo": {
+                                        "description": "Tipo de documento del tutor (solo cuando es_nuevo = true)",
+                                        "type": "string",
+                                        "example": "DNI"
+                                    },
+                                    "tutor_documento": {
+                                        "description": "Documento del tutor (solo cuando es_nuevo = true)",
+                                        "type": "string",
+                                        "example": "87654321"
+                                    },
+                                    "tutor_nacimiento": {
+                                        "description": "Fecha de nacimiento del tutor (solo cuando es_nuevo = true)",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1980-05-15"
+                                    },
+                                    "tutor_direccion": {
+                                        "description": "Dirección del tutor (solo cuando es_nuevo = true)",
+                                        "type": "string",
+                                        "example": "Avenida 456"
+                                    },
+                                    "tutor_telefono": {
+                                        "description": "Teléfono del tutor (solo cuando es_nuevo = true)",
+                                        "type": "string",
+                                        "example": "+987654321"
+                                    },
+                                    "tutor_contra": {
+                                        "description": "Contraseña del tutor (solo cuando es_nuevo = true)",
+                                        "type": "string",
+                                        "example": "password456"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Solicitud procesada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Solicitud de matrícula actualizada con éxito"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Recurso no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "properties": {
+                                                "success": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Solicitud de matrícula no encontrada"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        {
+                                            "properties": {
+                                                "success": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Estudiante no encontrado"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        {
+                                            "properties": {
+                                                "success": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Grupo no encontrado"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflictos detectados",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "properties": {
+                                                "success": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "El estudiante ya está matriculado en este año (2023)"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        {
+                                            "properties": {
+                                                "success": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "No hay cupos disponibles para este grupo"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Los datos proporcionados no son válidos"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "grupo_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El grupo no existe"
+                                                    }
+                                                },
+                                                "tutor_correo": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El correo del tutor debe ser una dirección de correo electrónico válida"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error al actualizar la solicitud de matrícula: Mensaje de error específico"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/api/blocks": {
+            "post": {
+                "tags": [
+                    "Horarios"
+                ],
+                "summary": "Crear bloque horario",
+                "description": "Crea un nuevo bloque horario para una institución, con validación de horarios",
+                "operationId": "storeBlock",
+                "requestBody": {
+                    "description": "Datos del bloque horario a crear",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "bloque_dia",
+                                    "bloque_inicio",
+                                    "bloque_fin",
+                                    "institucion_id"
+                                ],
+                                "properties": {
+                                    "bloque_dia": {
+                                        "description": "Día de la semana para el bloque",
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "example": "Lunes"
+                                    },
+                                    "bloque_inicio": {
+                                        "description": "Hora de inicio del bloque en formato HH:mm",
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "08:00"
+                                    },
+                                    "bloque_fin": {
+                                        "description": "Hora de fin del bloque en formato HH:mm (debe ser posterior a la hora de inicio)",
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "09:30"
+                                    },
+                                    "institucion_id": {
+                                        "description": "ID de la institución a la que pertenece el bloque",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Bloque creado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bloque creado con éxito"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "bloque_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "bloque_dia": {
+                                                    "type": "string",
+                                                    "example": "Lunes"
+                                                },
+                                                "bloque_inicio": {
+                                                    "type": "string",
+                                                    "example": "08:00"
+                                                },
+                                                "bloque_fin": {
+                                                    "type": "string",
+                                                    "example": "09:30"
+                                                },
+                                                "institucion_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-03-01T12:00:00Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Solicitud incorrecta",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "La hora de fin debe ser posterior a la hora de inicio"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Los datos proporcionados no son válidos"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "bloque_dia": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El día del bloque no puede exceder los 255 caracteres"
+                                                    }
+                                                },
+                                                "bloque_inicio": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "La hora de inicio debe tener el formato HH:mm"
+                                                    }
+                                                },
+                                                "institucion_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "La institución no existe"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error al crear el bloque: Mensaje de error específico"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/api/blocks/{id}": {
+            "put": {
+                "tags": [
+                    "Horarios"
+                ],
+                "summary": "Actualizar un bloque horario existente",
+                "description": "Actualiza la información de un bloque horario específico",
+                "operationId": "6053bbe1859b4f1acde082a9fdf61b8b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del bloque horario",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Datos del bloque horario a actualizar",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "bloque_dia": {
+                                        "description": "Día de la semana",
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "example": "Lunes"
+                                    },
+                                    "bloque_inicio": {
+                                        "description": "Hora de inicio en formato HH:mm",
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "08:00"
+                                    },
+                                    "bloque_fin": {
+                                        "description": "Hora de fin en formato HH:mm (debe ser posterior a la hora de inicio)",
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "09:30"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Bloque actualizado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bloque actualizado con éxito"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "bloque_dia": {
+                                                    "type": "string",
+                                                    "example": "Lunes"
+                                                },
+                                                "bloque_inicio": {
+                                                    "type": "string",
+                                                    "example": "08:00:00"
+                                                },
+                                                "bloque_fin": {
+                                                    "type": "string",
+                                                    "example": "09:30:00"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-01-01T00:00:00Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-01-02T12:00:00Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Bloque no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bloque no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "bloque_dia": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El día del bloque no puede exceder los 255 caracteres"
+                                                    }
+                                                },
+                                                "bloque_inicio": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "La hora de inicio debe tener el formato HH:mm:ss"
+                                                    }
+                                                },
+                                                "bloque_fin": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "La hora de fin debe ser posterior a la hora de inicio"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error al actualizar el bloque: Mensaje de error específico"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/schedules": {
+            "post": {
+                "tags": [
+                    "Horarios"
+                ],
+                "summary": "Crear un nuevo horario",
+                "description": "Crea una nueva asignación de horario para un docente",
+                "operationId": "37229ebcdbff4599e94c2ca1a7b00dbe",
+                "requestBody": {
+                    "description": "Datos para crear el horario",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "asignacion_id",
+                                    "bloque_id"
+                                ],
+                                "properties": {
+                                    "asignacion_id": {
+                                        "description": "ID de la asignación docente",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "bloque_id": {
+                                        "description": "ID del bloque horario",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Horario creado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Horario creado con éxito"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "horario_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "asignacion_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "bloque_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-01-01T00:00:00Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-01-01T00:00:00Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Recurso no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "description": "Puede indicar que no se encontró la asignación o el bloque",
+                                            "type": "string",
+                                            "example": "Asignación no encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflicto - Horario ya existe",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "El docente ya tiene una clase programada en este horario."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "asignacion_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "La asignación no existe"
+                                                    }
+                                                },
+                                                "bloque_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El bloque no existe"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error al crear el horario: Mensaje de error específico"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/schedules/{id}": {
+            "put": {
+                "tags": [
+                    "Horarios"
+                ],
+                "summary": "Update a schedule",
+                "description": "Updates an existing schedule with validation to prevent teacher double-booking",
+                "operationId": "updateSchedule",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the schedule to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Schedule data to update",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [],
+                                "properties": {
+                                    "asignacion_id": {
+                                        "description": "Assignment ID (optional)",
+                                        "type": "integer",
+                                        "example": 5
+                                    },
+                                    "horario_dia": {
+                                        "description": "Schedule date (optional)",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-12-15"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Schedule updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Horario actualizado con éxito"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Schedule"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "oneOf": [
+                                                {
+                                                    "type": "string",
+                                                    "example": "Horario no encontrado"
+                                                },
+                                                {
+                                                    "type": "string",
+                                                    "example": "Asignación no encontrada"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict - Teacher already has a class scheduled",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "El docente ya tiene una clase programada en este horario."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "asignacion_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The selected asignacion_id is invalid."
+                                                    }
+                                                },
+                                                "horario_dia": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The horario_dia must be a valid date."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error al actualizar el horario: [specific error message]"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Horarios"
+                ],
+                "summary": "Delete a schedule",
+                "description": "Deletes a specific schedule by its ID",
+                "operationId": "deleteSchedule",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the schedule to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Schedule deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Horario eliminado con éxito"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Schedule not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Horario no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error al eliminar el horario: [specific error message]"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/api/observations": {
+            "post": {
+                "tags": [
+                    "Observaciones"
+                ],
+                "summary": "Create a new observation",
+                "description": "Creates a new observation record for a student enrollment",
+                "operationId": "storeObservation",
+                "requestBody": {
+                    "description": "Observation data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "matricula_id",
+                                    "observacion_tipo",
+                                    "observacion_descripcion",
+                                    "observacion_fecha"
+                                ],
+                                "properties": {
+                                    "matricula_id": {
+                                        "description": "Enrollment ID",
+                                        "type": "integer",
+                                        "example": 123
+                                    },
+                                    "observacion_tipo": {
+                                        "description": "Type of observation",
+                                        "type": "string",
+                                        "example": "Comportamiento"
+                                    },
+                                    "observacion_descripcion": {
+                                        "description": "Observation details",
+                                        "type": "string",
+                                        "example": "El estudiante mostró comportamiento disruptivo en clase"
+                                    },
+                                    "observacion_fecha": {
+                                        "description": "Date when observation was made",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-05-15"
+                                    },
+                                    "institucion_id": {
+                                        "description": "Institution ID (if required)",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Observation created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Observación creada con éxito"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "observacion_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "matricula_id": {
+                                                    "type": "integer",
+                                                    "example": 123
+                                                },
+                                                "observacion_tipo": {
+                                                    "type": "string",
+                                                    "example": "Comportamiento"
+                                                },
+                                                "observacion_descripcion": {
+                                                    "type": "string",
+                                                    "example": "El estudiante mostró comportamiento disruptivo en clase"
+                                                },
+                                                "observacion_fecha": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "example": "2023-05-15"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-05-15T10:00:00Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-05-15T10:00:00Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "matricula_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "La matrícula no existe"
+                                                    }
+                                                },
+                                                "observacion_tipo": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El tipo de observación es requerido"
+                                                    }
+                                                },
+                                                "observacion_descripcion": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "La descripción de la observación es requerida"
+                                                    }
+                                                },
+                                                "observacion_fecha": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "La fecha de la observación debe ser una fecha válida"
+                                                    }
+                                                },
+                                                "institucion_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "La institución no existe"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error al crear la observación: [specific error message]"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/api/observations/{id}": {
+            "put": {
+                "tags": [
+                    "Observaciones"
+                ],
+                "summary": "Update an observation",
+                "description": "Updates an existing observation record",
+                "operationId": "updateObservation",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the observation to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Observation data to update",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "observacion_tipo": {
+                                        "description": "Type of observation (optional)",
+                                        "type": "string",
+                                        "example": "Comportamiento"
+                                    },
+                                    "observacion_descripcion": {
+                                        "description": "Observation details (optional)",
+                                        "type": "string",
+                                        "example": "El estudiante mostró mejoría en su comportamiento"
+                                    },
+                                    "observacion_fecha": {
+                                        "description": "Date of observation (optional)",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-06-20"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Observation updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Observación actualizada con éxito"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "observacion_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "matricula_id": {
+                                                    "type": "integer",
+                                                    "example": 123
+                                                },
+                                                "observacion_tipo": {
+                                                    "type": "string",
+                                                    "example": "Comportamiento"
+                                                },
+                                                "observacion_descripcion": {
+                                                    "type": "string",
+                                                    "example": "El estudiante mostró mejoría en su comportamiento"
+                                                },
+                                                "observacion_fecha": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "example": "2023-06-20"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-06-20T14:30:00Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Observation not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Observación no encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "observacion_tipo": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El tipo de observación debe ser una cadena de caracteres"
+                                                    }
+                                                },
+                                                "observacion_descripcion": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "La descripción de la observación es requerida"
+                                                    }
+                                                },
+                                                "observacion_fecha": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "La fecha de la observación debe ser una fecha válida"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error al actualizar la observación: [specific error message]"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Observaciones"
+                ],
+                "summary": "Eliminar una observación",
+                "description": "Elimina una observación específica del sistema",
+                "operationId": "destroyObservation",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la observación a eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Observación eliminada con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Observación eliminada con éxito"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Observación no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Observación no encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error al eliminar la observación: [mensaje de error]"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/attendances": {
+            "post": {
+                "tags": [
+                    "Asistencias"
+                ],
+                "summary": "Registrar o actualizar asistencias",
+                "description": "Registra o actualiza múltiples asistencias para un grupo en una fecha específica",
+                "operationId": "storeAttendance",
+                "requestBody": {
+                    "description": "Datos para registrar asistencias",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "asignacion_id",
+                                    "asistencia_fecha",
+                                    "matriculas",
+                                    "asistencias_estados",
+                                    "justificaciones"
+                                ],
+                                "properties": {
+                                    "asignacion_id": {
+                                        "description": "ID de la asignación (grupo)",
+                                        "type": "string",
+                                        "format": "uuid",
+                                        "example": "550e8400-e29b-41d4-a716-446655440000"
+                                    },
+                                    "asistencia_fecha": {
+                                        "description": "Fecha de la asistencia (YYYY-MM-DD)",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-05-15"
+                                    },
+                                    "matriculas": {
+                                        "description": "Array de IDs de matrículas",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "uuid",
+                                            "example": "550e8400-e29b-41d4-a716-446655440001"
+                                        }
+                                    },
+                                    "asistencias_estados": {
+                                        "description": "Estados de asistencia correspondientes (presente, ausente, etc.)",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "example": "presente"
+                                        }
+                                    },
+                                    "justificaciones": {
+                                        "description": "Justificaciones para ausencias (opcional)",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "example": "Enfermedad comprobada"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Asistencias registradas/actualizadas exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Asistencia creada con éxito"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error en los datos proporcionados",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "El número de asistencias no coincide con el número de matrículas o no se proporcionaron justificaciones"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Los datos proporcionados no son válidos"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "asignacion_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El campo asignacion_id es obligatorio"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error al crear la asistencia: [mensaje de error]"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/grades": {
+            "post": {
+                "tags": [
+                    "Calificaciones"
+                ],
+                "summary": "Registrar o actualizar notas",
+                "description": "Crea o actualiza múltiples calificaciones para estudiantes en una asignación específica",
+                "operationId": "storeGrade",
+                "requestBody": {
+                    "description": "Datos para registrar las notas",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "asignacion_id",
+                                    "notas",
+                                    "matriculas",
+                                    "periodos"
+                                ],
+                                "properties": {
+                                    "asignacion_id": {
+                                        "description": "ID de la asignación (grupo-materia)",
+                                        "type": "string",
+                                        "format": "uuid",
+                                        "example": "550e8400-e29b-41d4-a716-446655440000"
+                                    },
+                                    "notas": {
+                                        "description": "Valores numéricos de las notas",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 4.5
+                                        }
+                                    },
+                                    "matriculas": {
+                                        "description": "IDs de matrículas de los estudiantes",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "uuid",
+                                            "example": "550e8400-e29b-41d4-a716-446655440001"
+                                        }
+                                    },
+                                    "periodos": {
+                                        "description": "IDs de periodos académicos",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "uuid",
+                                            "example": "550e8400-e29b-41d4-a716-446655440002"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Notas creadas/actualizadas exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Notas creadas con éxito"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error en los datos de entrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "properties": {
+                                                "success": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "El número de notas no coincide con el número de matrículas o periodos"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        {
+                                            "properties": {
+                                                "success": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "La nota debe estar entre 0.0 y 5.0"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Los datos proporcionados no son válidos"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "asignacion_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El campo asignacion_id es obligatorio"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error al crear las notas: [mensaje de error]"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/payments": {
+            "post": {
+                "tags": [
+                    "Pagos"
+                ],
+                "summary": "Crear un nuevo pago",
+                "description": "Registra un nuevo pago en el sistema",
+                "operationId": "storePayment",
+                "requestBody": {
+                    "description": "Datos para registrar el pago",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "matricula_id",
+                                    "concepto_id",
+                                    "pago_fecha",
+                                    "pago_valor",
+                                    "pago_estado"
+                                ],
+                                "properties": {
+                                    "matricula_id": {
+                                        "description": "ID de la matrícula asociada",
+                                        "type": "string",
+                                        "format": "uuid",
+                                        "example": "550e8400-e29b-41d4-a716-446655440000"
+                                    },
+                                    "concepto_id": {
+                                        "description": "ID del concepto de pago",
+                                        "type": "string",
+                                        "format": "uuid",
+                                        "example": "550e8400-e29b-41d4-a716-446655440001"
+                                    },
+                                    "pago_fecha": {
+                                        "description": "Fecha del pago (YYYY-MM-DD)",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-05-15"
+                                    },
+                                    "pago_valor": {
+                                        "description": "Valor del pago",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 150.75
+                                    },
+                                    "pago_estado": {
+                                        "description": "Estado del pago (ej. pagado, pendiente, anulado)",
+                                        "type": "string",
+                                        "example": "pagado"
+                                    },
+                                    "pago_comprobante": {
+                                        "description": "Número de comprobante (opcional)",
+                                        "type": "string",
+                                        "example": "PAY-12345",
+                                        "nullable": true
+                                    },
+                                    "pago_observaciones": {
+                                        "description": "Observaciones adicionales (opcional)",
+                                        "type": "string",
+                                        "example": "Pago realizado por transferencia bancaria",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Pago creado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Pago creado con éxito"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "pago_id": {
+                                                    "type": "string",
+                                                    "format": "uuid",
+                                                    "example": "550e8400-e29b-41d4-a716-446655440002"
+                                                },
+                                                "matricula_id": {
+                                                    "type": "string",
+                                                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                                                },
+                                                "concepto_id": {
+                                                    "type": "string",
+                                                    "example": "550e8400-e29b-41d4-a716-446655440001"
+                                                },
+                                                "pago_fecha": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "example": "2023-05-15"
+                                                },
+                                                "pago_valor": {
+                                                    "type": "number",
+                                                    "example": 150.75
+                                                },
+                                                "pago_estado": {
+                                                    "type": "string",
+                                                    "example": "pagado"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-05-15T14:30:00Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-05-15T14:30:00Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "El pago ya existe",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "El pago ya existe"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Los datos proporcionados no son válidos"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "matricula_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "La matrícula no existe"
+                                                    }
+                                                },
+                                                "pago_valor": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El valor de pago debe ser un número"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error al crear el pago: [mensaje de error]"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Schedule": {
+                "properties": {
+                    "horario_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "asignacion_id": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "bloque_id": {
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "horario_dia": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2023-12-15"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-01-01T00:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-12-15T08:30:00Z"
+                    }
+                },
+                "type": "object"
+            }
         }
     },
     "tags": [
@@ -2125,6 +4340,26 @@
         {
             "name": "Matrículas",
             "description": "Matrículas"
+        },
+        {
+            "name": "Horarios",
+            "description": "Horarios"
+        },
+        {
+            "name": "Observaciones",
+            "description": "Observaciones"
+        },
+        {
+            "name": "Asistencias",
+            "description": "Asistencias"
+        },
+        {
+            "name": "Calificaciones",
+            "description": "Calificaciones"
+        },
+        {
+            "name": "Pagos",
+            "description": "Pagos"
         }
     ]
 }

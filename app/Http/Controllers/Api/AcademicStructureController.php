@@ -1671,6 +1671,8 @@ class AcademicStructureController
         }
     }
 
+    
+
     // Enrollment Request Functions
     public function storeEnrollmentRequest(Request $request)
     {
@@ -1846,6 +1848,234 @@ class AcademicStructureController
             ], 500);
         }
     }
+
+    /**
+ * Actualiza una solicitud de matrícula y crea la matrícula correspondiente
+ * 
+ * @OA\Put(
+ *     path="/api/enrollments-requests/{id}",
+ *     tags={"Matrículas"},
+ *     summary="Procesar solicitud de matrícula",
+ *     description="Actualiza el estado de una solicitud de matrícula y crea la matrícula correspondiente, manejando tanto estudiantes nuevos como existentes",
+ *     operationId="updateEnrollmentRequest",
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         description="ID de la solicitud de matrícula a procesar",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="integer",
+ *             format="int64",
+ *             minimum=1,
+ *             example=1
+ *         )
+ *     ),
+ *     @OA\RequestBody(
+ *         required=true,
+ *         description="Datos para procesar la solicitud de matrícula",
+ *         @OA\JsonContent(
+ *             required={"grupo_id", "matricula_año", "es_nuevo"},
+ *             @OA\Property(property="grupo_id", type="integer", example=1, description="ID del grupo asignado"),
+ *             @OA\Property(property="matricula_año", type="integer", example=2023, description="Año académico de la matrícula"),
+ *             @OA\Property(property="es_nuevo", type="boolean", example=true, description="Indica si es un estudiante nuevo"),
+ *             @OA\Property(
+ *                 property="estudiante_id", 
+ *                 type="integer", 
+ *                 example=1, 
+ *                 description="ID del estudiante existente (solo cuando es_nuevo = false)"
+ *             ),
+ *             @OA\Property(
+ *                 property="estudiante_nombre", 
+ *                 type="string", 
+ *                 example="Juan", 
+ *                 description="Nombre del estudiante (solo cuando es_nuevo = true)"
+ *             ),
+ *             @OA\Property(
+ *                 property="estudiante_apellido", 
+ *                 type="string", 
+ *                 example="Pérez", 
+ *                 description="Apellido del estudiante (solo cuando es_nuevo = true)"
+ *             ),
+ *             @OA\Property(
+ *                 property="estudiante_correo", 
+ *                 type="string", 
+ *                 format="email", 
+ *                 example="juan@example.com", 
+ *                 description="Correo del estudiante (solo cuando es_nuevo = true)"
+ *             ),
+ *             @OA\Property(
+ *                 property="estudiante_documento_tipo", 
+ *                 type="string", 
+ *                 example="DNI", 
+ *                 description="Tipo de documento del estudiante (solo cuando es_nuevo = true)"
+ *             ),
+ *             @OA\Property(
+ *                 property="estudiante_documento", 
+ *                 type="string", 
+ *                 example="12345678", 
+ *                 description="Documento del estudiante (solo cuando es_nuevo = true)"
+ *             ),
+ *             @OA\Property(
+ *                 property="estudiante_nacimiento", 
+ *                 type="string", 
+ *                 format="date", 
+ *                 example="2010-05-15", 
+ *                 description="Fecha de nacimiento del estudiante (solo cuando es_nuevo = true)"
+ *             ),
+ *             @OA\Property(
+ *                 property="estudiante_direccion", 
+ *                 type="string", 
+ *                 example="Calle 123", 
+ *                 description="Dirección del estudiante (solo cuando es_nuevo = true)"
+ *             ),
+ *             @OA\Property(
+ *                 property="estudiante_telefono", 
+ *                 type="string", 
+ *                 example="+123456789", 
+ *                 description="Teléfono del estudiante (solo cuando es_nuevo = true)"
+ *             ),
+ *             @OA\Property(
+ *                 property="estudiante_contra", 
+ *                 type="string", 
+ *                 example="password123", 
+ *                 description="Contraseña del estudiante (solo cuando es_nuevo = true)"
+ *             ),
+ *             @OA\Property(
+ *                 property="tutor_nombre", 
+ *                 type="string", 
+ *                 example="María", 
+ *                 description="Nombre del tutor (solo cuando es_nuevo = true)"
+ *             ),
+ *             @OA\Property(
+ *                 property="tutor_apellido", 
+ *                 type="string", 
+ *                 example="Gómez", 
+ *                 description="Apellido del tutor (solo cuando es_nuevo = true)"
+ *             ),
+ *             @OA\Property(
+ *                 property="tutor_correo", 
+ *                 type="string", 
+ *                 format="email", 
+ *                 example="maria@example.com", 
+ *                 description="Correo del tutor (solo cuando es_nuevo = true)"
+ *             ),
+ *             @OA\Property(
+ *                 property="tutor_documento_tipo", 
+ *                 type="string", 
+ *                 example="DNI", 
+ *                 description="Tipo de documento del tutor (solo cuando es_nuevo = true)"
+ *             ),
+ *             @OA\Property(
+ *                 property="tutor_documento", 
+ *                 type="string", 
+ *                 example="87654321", 
+ *                 description="Documento del tutor (solo cuando es_nuevo = true)"
+ *             ),
+ *             @OA\Property(
+ *                 property="tutor_nacimiento", 
+ *                 type="string", 
+ *                 format="date", 
+ *                 example="1980-05-15", 
+ *                 description="Fecha de nacimiento del tutor (solo cuando es_nuevo = true)"
+ *             ),
+ *             @OA\Property(
+ *                 property="tutor_direccion", 
+ *                 type="string", 
+ *                 example="Avenida 456", 
+ *                 description="Dirección del tutor (solo cuando es_nuevo = true)"
+ *             ),
+ *             @OA\Property(
+ *                 property="tutor_telefono", 
+ *                 type="string", 
+ *                 example="+987654321", 
+ *                 description="Teléfono del tutor (solo cuando es_nuevo = true)"
+ *             ),
+ *             @OA\Property(
+ *                 property="tutor_contra", 
+ *                 type="string", 
+ *                 example="password456", 
+ *                 description="Contraseña del tutor (solo cuando es_nuevo = true)"
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Solicitud procesada exitosamente",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Solicitud de matrícula actualizada con éxito")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Recurso no encontrado",
+ *         @OA\JsonContent(
+ *             oneOf={
+ *                 @OA\Schema(
+ *                     @OA\Property(property="success", type="boolean", example=false),
+ *                     @OA\Property(property="message", type="string", example="Solicitud de matrícula no encontrada")
+ *                 ),
+ *                 @OA\Schema(
+ *                     @OA\Property(property="success", type="boolean", example=false),
+ *                     @OA\Property(property="message", type="string", example="Estudiante no encontrado")
+ *                 ),
+ *                 @OA\Schema(
+ *                     @OA\Property(property="success", type="boolean", example=false),
+ *                     @OA\Property(property="message", type="string", example="Grupo no encontrado")
+ *                 )
+ *             }
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=409,
+ *         description="Conflictos detectados",
+ *         @OA\JsonContent(
+ *             oneOf={
+ *                 @OA\Schema(
+ *                     @OA\Property(property="success", type="boolean", example=false),
+ *                     @OA\Property(property="message", type="string", example="El estudiante ya está matriculado en este año (2023)")
+ *                 ),
+ *                 @OA\Schema(
+ *                     @OA\Property(property="success", type="boolean", example=false),
+ *                     @OA\Property(property="message", type="string", example="No hay cupos disponibles para este grupo")
+ *                 )
+ *             }
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Error de validación",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Los datos proporcionados no son válidos"),
+ *             @OA\Property(
+ *                 property="errors",
+ *                 type="object",
+ *                 @OA\Property(
+ *                     property="grupo_id",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="El grupo no existe")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="tutor_correo",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="El correo del tutor debe ser una dirección de correo electrónico válida")
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Error interno del servidor",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="Error al actualizar la solicitud de matrícula: Mensaje de error específico")
+ *         )
+ *     ),
+ *     security={
+ *         {"api_key": {}}
+ *     }
+ * )
+ */
 
     public function updateEnrollmentRequest(Request $request, $id)
     {
@@ -2032,6 +2262,116 @@ class AcademicStructureController
         }
     }
 
+    /**
+ * Crea un nuevo bloque horario
+ * 
+ * @OA\Post(
+ *     path="/api/blocks",
+ *     tags={"Horarios"},
+ *     summary="Crear bloque horario",
+ *     description="Crea un nuevo bloque horario para una institución, con validación de horarios",
+ *     operationId="storeBlock",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         description="Datos del bloque horario a crear",
+ *         @OA\JsonContent(
+ *             required={"bloque_dia", "bloque_inicio", "bloque_fin", "institucion_id"},
+ *             @OA\Property(
+ *                 property="bloque_dia", 
+ *                 type="string", 
+ *                 maxLength=255,
+ *                 example="Lunes",
+ *                 description="Día de la semana para el bloque"
+ *             ),
+ *             @OA\Property(
+ *                 property="bloque_inicio", 
+ *                 type="string", 
+ *                 format="time",
+ *                 example="08:00",
+ *                 description="Hora de inicio del bloque en formato HH:mm"
+ *             ),
+ *             @OA\Property(
+ *                 property="bloque_fin", 
+ *                 type="string", 
+ *                 format="time",
+ *                 example="09:30",
+ *                 description="Hora de fin del bloque en formato HH:mm (debe ser posterior a la hora de inicio)"
+ *             ),
+ *             @OA\Property(
+ *                 property="institucion_id", 
+ *                 type="integer", 
+ *                 example=1,
+ *                 description="ID de la institución a la que pertenece el bloque"
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Bloque creado exitosamente",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Bloque creado con éxito"),
+ *             @OA\Property(
+ *                 property="data",
+ *                 type="object",
+ *                 @OA\Property(property="bloque_id", type="integer", example=1),
+ *                 @OA\Property(property="bloque_dia", type="string", example="Lunes"),
+ *                 @OA\Property(property="bloque_inicio", type="string", example="08:00"),
+ *                 @OA\Property(property="bloque_fin", type="string", example="09:30"),
+ *                 @OA\Property(property="institucion_id", type="integer", example=1),
+ *                 @OA\Property(property="created_at", type="string", format="date-time", example="2023-03-01T12:00:00Z")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=400,
+ *         description="Solicitud incorrecta",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="La hora de fin debe ser posterior a la hora de inicio")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Error de validación",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Los datos proporcionados no son válidos"),
+ *             @OA\Property(
+ *                 property="errors",
+ *                 type="object",
+ *                 @OA\Property(
+ *                     property="bloque_dia",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="El día del bloque no puede exceder los 255 caracteres")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="bloque_inicio",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="La hora de inicio debe tener el formato HH:mm")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="institucion_id",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="La institución no existe")
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Error interno del servidor",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="Error al crear el bloque: Mensaje de error específico")
+ *         )
+ *     ),
+ *     security={
+ *         {"api_key": {}}
+ *     }
+ * )
+ */
+
+
     // Schedule functions
     public function storeBlock(Request $request)
     {
@@ -2068,6 +2408,82 @@ class AcademicStructureController
             ], 500);
         }
     }
+
+/**
+ * Actualizar un bloque horario
+ * @OA\Put(
+ *     path="/api/blocks/{id}",
+ *     tags={"Horarios"},
+ *     summary="Actualizar un bloque horario existente",
+ *     description="Actualiza la información de un bloque horario específico",
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         description="ID del bloque horario",
+ *         @OA\Schema(type="integer", example=1)
+ *     ),
+ *     @OA\RequestBody(
+ *         required=true,
+ *         description="Datos del bloque horario a actualizar",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="bloque_dia", type="string", maxLength=255, example="Lunes", description="Día de la semana"),
+ *             @OA\Property(property="bloque_inicio", type="string", format="time", example="08:00", description="Hora de inicio en formato HH:mm"),
+ *             @OA\Property(property="bloque_fin", type="string", format="time", example="09:30", description="Hora de fin en formato HH:mm (debe ser posterior a la hora de inicio)")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Bloque actualizado exitosamente",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Bloque actualizado con éxito"),
+ *             @OA\Property(property="data", type="object",
+ *                 @OA\Property(property="id", type="integer", example=1),
+ *                 @OA\Property(property="bloque_dia", type="string", example="Lunes"),
+ *                 @OA\Property(property="bloque_inicio", type="string", example="08:00:00"),
+ *                 @OA\Property(property="bloque_fin", type="string", example="09:30:00"),
+ *                 @OA\Property(property="created_at", type="string", format="date-time", example="2023-01-01T00:00:00Z"),
+ *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2023-01-02T12:00:00Z")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Bloque no encontrado",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="Bloque no encontrado")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Error de validación",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="The given data was invalid."),
+ *             @OA\Property(property="errors", type="object",
+ *                 @OA\Property(property="bloque_dia", type="array",
+ *                     @OA\Items(type="string", example="El día del bloque no puede exceder los 255 caracteres")
+ *                 ),
+ *                 @OA\Property(property="bloque_inicio", type="array",
+ *                     @OA\Items(type="string", example="La hora de inicio debe tener el formato HH:mm:ss")
+ *                 ),
+ *                 @OA\Property(property="bloque_fin", type="array",
+ *                     @OA\Items(type="string", example="La hora de fin debe ser posterior a la hora de inicio")
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Error interno del servidor",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="Error al actualizar el bloque: Mensaje de error específico")
+ *         )
+ *     )
+ * )
+ */
 
     public function updateBlock(Request $request, $id)
     {
@@ -2144,6 +2560,102 @@ class AcademicStructureController
         }
     }
 
+    /**
+ * Crear un nuevo horario
+ * @OA\Post(
+ *     path="/api/schedules",
+ *     tags={"Horarios"},
+ *     summary="Crear un nuevo horario",
+ *     description="Crea una nueva asignación de horario para un docente",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         description="Datos para crear el horario",
+ *         @OA\JsonContent(
+ *             required={"asignacion_id", "bloque_id"},
+ *             @OA\Property(
+ *                 property="asignacion_id",
+ *                 type="integer",
+ *                 example=1,
+ *                 description="ID de la asignación docente"
+ *             ),
+ *             @OA\Property(
+ *                 property="bloque_id",
+ *                 type="integer",
+ *                 example=1,
+ *                 description="ID del bloque horario"
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Horario creado exitosamente",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Horario creado con éxito"),
+ *             @OA\Property(property="data", type="object",
+ *                 @OA\Property(property="horario_id", type="integer", example=1),
+ *                 @OA\Property(property="asignacion_id", type="integer", example=1),
+ *                 @OA\Property(property="bloque_id", type="integer", example=1),
+ *                 @OA\Property(property="created_at", type="string", format="date-time", example="2023-01-01T00:00:00Z"),
+ *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2023-01-01T00:00:00Z")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Recurso no encontrado",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string",
+ *                 example="Asignación no encontrada",
+ *                 description="Puede indicar que no se encontró la asignación o el bloque"
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=409,
+ *         description="Conflicto - Horario ya existe",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string",
+ *                 example="El docente ya tiene una clase programada en este horario."
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Error de validación",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="The given data was invalid."),
+ *             @OA\Property(property="errors", type="object",
+ *                 @OA\Property(property="asignacion_id", type="array",
+ *                     @OA\Items(type="string", example="La asignación no existe")
+ *                 ),
+ *                 @OA\Property(property="bloque_id", type="array",
+ *                     @OA\Items(type="string", example="El bloque no existe")
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Error interno del servidor",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string",
+ *                 example="Error al crear el horario: Mensaje de error específico"
+ *             )
+ *         )
+ *     )
+ * )
+ */
+
     public function storeSchedule(Request $request)
     {
         try {
@@ -2203,6 +2715,150 @@ class AcademicStructureController
         }
     }
 
+    /**
+ * Update an existing schedule
+ * @OA\Put(
+ *     path="/api/schedules/{id}",
+ *     tags={"Horarios"},
+ *     summary="Update a schedule",
+ *     description="Updates an existing schedule with validation to prevent teacher double-booking",
+ *     operationId="updateSchedule",
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         description="ID of the schedule to update",
+ *         @OA\Schema(
+ *             type="integer",
+ *             format="int64",
+ *             example=1
+ *         )
+ *     ),
+ *     @OA\RequestBody(
+ *         required=true,
+ *         description="Schedule data to update",
+ *         @OA\JsonContent(
+ *             required={},
+ *             @OA\Property(
+ *                 property="asignacion_id",
+ *                 type="integer",
+ *                 example=5,
+ *                 description="Assignment ID (optional)"
+ *             ),
+ *             @OA\Property(
+ *                 property="horario_dia",
+ *                 type="string",
+ *                 format="date",
+ *                 example="2023-12-15",
+ *                 description="Schedule date (optional)"
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Schedule updated successfully",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Horario actualizado con éxito"),
+ *             @OA\Property(
+ *                 property="data",
+ *                 type="object",
+ *                 ref="#/components/schemas/Schedule"
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Resource not found",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string",
+ *                 oneOf={
+ *                     @OA\Schema(type="string", example="Horario no encontrado"),
+ *                     @OA\Schema(type="string", example="Asignación no encontrada")
+ *                 }
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=409,
+ *         description="Conflict - Teacher already has a class scheduled",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string",
+ *                 example="El docente ya tiene una clase programada en este horario."
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Validation error",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="The given data was invalid."),
+ *             @OA\Property(
+ *                 property="errors",
+ *                 type="object",
+ *                 @OA\Property(
+ *                     property="asignacion_id",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="The selected asignacion_id is invalid.")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="horario_dia",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="The horario_dia must be a valid date.")
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Internal server error",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string",
+ *                 example="Error al actualizar el horario: [specific error message]"
+ *             )
+ *         )
+ *     ),
+ *     security={
+ *         {"api_key": {}}
+ *     }
+ * )
+ * 
+ * @OA\Schema(
+ *     schema="Schedule",
+ *     type="object",
+ *     @OA\Property(property="horario_id", type="integer", example=1),
+ *     @OA\Property(property="asignacion_id", type="integer", example=5),
+ *     @OA\Property(property="bloque_id", type="integer", example=3),
+ *     @OA\Property(
+ *         property="horario_dia",
+ *         type="string",
+ *         format="date",
+ *         example="2023-12-15"
+ *     ),
+ *     @OA\Property(
+ *         property="created_at",
+ *         type="string",
+ *         format="date-time",
+ *         example="2023-01-01T00:00:00Z"
+ *     ),
+ *     @OA\Property(
+ *         property="updated_at",
+ *         type="string",
+ *         format="date-time",
+ *         example="2023-12-15T08:30:00Z"
+ *     )
+ * )
+ */
+
     public function updateSchedule(Request $request, $id)
     {
         try {
@@ -2257,6 +2913,67 @@ class AcademicStructureController
         }
     }
 
+    /**
+ * Delete a schedule
+ * @OA\Delete(
+ *     path="/api/schedules/{id}",
+ *     tags={"Horarios"},
+ *     summary="Delete a schedule",
+ *     description="Deletes a specific schedule by its ID",
+ *     operationId="deleteSchedule",
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         description="ID of the schedule to delete",
+ *         @OA\Schema(
+ *             type="integer",
+ *             format="int64",
+ *             example=1
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Schedule deleted successfully",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(
+ *                 property="message", 
+ *                 type="string", 
+ *                 example="Horario eliminado con éxito"
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Schedule not found",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string",
+ *                 example="Horario no encontrado"
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Internal server error",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string",
+ *                 example="Error al eliminar el horario: [specific error message]"
+ *             )
+ *         )
+ *     ),
+ *     security={
+ *         {"api_key": {}}
+ *     }
+ * )
+ */
+
     public function destroySchedule($id)
     {
         try {
@@ -2282,6 +2999,125 @@ class AcademicStructureController
             ], 500);
         }
     }
+
+    /**
+ * Create a new observation
+ * @OA\Post(
+ *     path="/api/observations",
+ *     tags={"Observaciones"},
+ *     summary="Create a new observation",
+ *     description="Creates a new observation record for a student enrollment",
+ *     operationId="storeObservation",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         description="Observation data",
+ *         @OA\JsonContent(
+ *             required={"matricula_id", "observacion_tipo", "observacion_descripcion", "observacion_fecha"},
+ *             @OA\Property(
+ *                 property="matricula_id",
+ *                 type="integer",
+ *                 example=123,
+ *                 description="Enrollment ID"
+ *             ),
+ *             @OA\Property(
+ *                 property="observacion_tipo",
+ *                 type="string",
+ *                 example="Comportamiento",
+ *                 description="Type of observation"
+ *             ),
+ *             @OA\Property(
+ *                 property="observacion_descripcion",
+ *                 type="string",
+ *                 example="El estudiante mostró comportamiento disruptivo en clase",
+ *                 description="Observation details"
+ *             ),
+ *             @OA\Property(
+ *                 property="observacion_fecha",
+ *                 type="string",
+ *                 format="date",
+ *                 example="2023-05-15",
+ *                 description="Date when observation was made"
+ *             ),
+ *             @OA\Property(
+ *                 property="institucion_id",
+ *                 type="integer",
+ *                 example=1,
+ *                 description="Institution ID (if required)"
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Observation created successfully",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Observación creada con éxito"),
+ *             @OA\Property(
+ *                 property="data",
+ *                 type="object",
+ *                 @OA\Property(property="observacion_id", type="integer", example=1),
+ *                 @OA\Property(property="matricula_id", type="integer", example=123),
+ *                 @OA\Property(property="observacion_tipo", type="string", example="Comportamiento"),
+ *                 @OA\Property(property="observacion_descripcion", type="string", example="El estudiante mostró comportamiento disruptivo en clase"),
+ *                 @OA\Property(property="observacion_fecha", type="string", format="date", example="2023-05-15"),
+ *                 @OA\Property(property="created_at", type="string", format="date-time", example="2023-05-15T10:00:00Z"),
+ *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2023-05-15T10:00:00Z")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Validation error",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="The given data was invalid."),
+ *             @OA\Property(
+ *                 property="errors",
+ *                 type="object",
+ *                 @OA\Property(
+ *                     property="matricula_id",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="La matrícula no existe")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="observacion_tipo",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="El tipo de observación es requerido")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="observacion_descripcion",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="La descripción de la observación es requerida")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="observacion_fecha",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="La fecha de la observación debe ser una fecha válida")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="institucion_id",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="La institución no existe")
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Internal server error",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string",
+ *                 example="Error al crear la observación: [specific error message]"
+ *             )
+ *         )
+ *     ),
+ *     security={
+ *         {"api_key": {}}
+ *     }
+ * )
+ */
 
     // Observations functions
     public function storeObservation(Request $request)
@@ -2323,6 +3159,120 @@ class AcademicStructureController
         }
     }
 
+    /**
+ * Update an existing observation
+ * @OA\Put(
+ *     path="/api/observations/{id}",
+ *     tags={"Observaciones"},
+ *     summary="Update an observation",
+ *     description="Updates an existing observation record",
+ *     operationId="updateObservation",
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         description="ID of the observation to update",
+ *         @OA\Schema(
+ *             type="integer",
+ *             format="int64",
+ *             example=1
+ *         )
+ *     ),
+ *     @OA\RequestBody(
+ *         required=true,
+ *         description="Observation data to update",
+ *         @OA\JsonContent(
+ *             @OA\Property(
+ *                 property="observacion_tipo",
+ *                 type="string",
+ *                 example="Comportamiento",
+ *                 description="Type of observation (optional)"
+ *             ),
+ *             @OA\Property(
+ *                 property="observacion_descripcion",
+ *                 type="string",
+ *                 example="El estudiante mostró mejoría en su comportamiento",
+ *                 description="Observation details (optional)"
+ *             ),
+ *             @OA\Property(
+ *                 property="observacion_fecha",
+ *                 type="string",
+ *                 format="date",
+ *                 example="2023-06-20",
+ *                 description="Date of observation (optional)"
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Observation updated successfully",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Observación actualizada con éxito"),
+ *             @OA\Property(
+ *                 property="data",
+ *                 type="object",
+ *                 @OA\Property(property="observacion_id", type="integer", example=1),
+ *                 @OA\Property(property="matricula_id", type="integer", example=123),
+ *                 @OA\Property(property="observacion_tipo", type="string", example="Comportamiento"),
+ *                 @OA\Property(property="observacion_descripcion", type="string", example="El estudiante mostró mejoría en su comportamiento"),
+ *                 @OA\Property(property="observacion_fecha", type="string", format="date", example="2023-06-20"),
+ *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2023-06-20T14:30:00Z")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Observation not found",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(property="message", type="string", example="Observación no encontrada")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Validation error",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="The given data was invalid."),
+ *             @OA\Property(
+ *                 property="errors",
+ *                 type="object",
+ *                 @OA\Property(
+ *                     property="observacion_tipo",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="El tipo de observación debe ser una cadena de caracteres")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="observacion_descripcion",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="La descripción de la observación es requerida")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="observacion_fecha",
+ *                     type="array",
+ *                     @OA\Items(type="string", example="La fecha de la observación debe ser una fecha válida")
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Internal server error",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=false),
+ *             @OA\Property(
+ *                 property="message", 
+ *                 type="string", 
+ *                 example="Error al actualizar la observación: [specific error message]"
+ *             )
+ *         )
+ *     ),
+ *     security={
+ *         {"api_key": {}}
+ *     }
+ * )
+ */
+
     public function updateObservation(Request $request, $id)
     {
         try {
@@ -2363,6 +3313,78 @@ class AcademicStructureController
         }
     }
 
+    /**
+ * Eliminar una observación
+ * @OA\Delete(
+ *     path="/api/observations/{id}",
+ *     tags={"Observaciones"},
+ *     summary="Eliminar una observación",
+ *     description="Elimina una observación específica del sistema",
+ *     operationId="destroyObservation",
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         description="ID de la observación a eliminar",
+ *         @OA\Schema(
+ *             type="integer",
+ *             format="int64"
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Observación eliminada con éxito",
+ *         @OA\JsonContent(
+ *             @OA\Property(
+ *                 property="success",
+ *                 type="boolean",
+ *                 example=true
+ *             ),
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string",
+ *                 example="Observación eliminada con éxito"
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Observación no encontrada",
+ *         @OA\JsonContent(
+ *             @OA\Property(
+ *                 property="success",
+ *                 type="boolean",
+ *                 example=false
+ *             ),
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string",
+ *                 example="Observación no encontrada"
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Error interno del servidor",
+ *         @OA\JsonContent(
+ *             @OA\Property(
+ *                 property="success",
+ *                 type="boolean",
+ *                 example=false
+ *             ),
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string",
+ *                 example="Error al eliminar la observación: [mensaje de error]"
+ *             )
+ *         )
+ *     ),
+ *     security={
+ *         {"bearerAuth": {}}
+ *     }
+ * )
+ */
+
     public function destroyObservation($id)
     {
         try {
@@ -2388,6 +3410,140 @@ class AcademicStructureController
             ], 500);
         }
     }
+
+    /**
+ * Registrar o actualizar asistencias
+ * @OA\Post(
+ *     path="/api/attendances",
+ *     tags={"Asistencias"},
+ *     summary="Registrar o actualizar asistencias",
+ *     description="Registra o actualiza múltiples asistencias para un grupo en una fecha específica",
+ *     operationId="storeAttendance",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         description="Datos para registrar asistencias",
+ *         @OA\JsonContent(
+ *             required={"asignacion_id", "asistencia_fecha", "matriculas", "asistencias_estados", "justificaciones"},
+ *             @OA\Property(
+ *                 property="asignacion_id",
+ *                 type="string",
+ *                 format="uuid",
+ *                 description="ID de la asignación (grupo)",
+ *                 example="550e8400-e29b-41d4-a716-446655440000"
+ *             ),
+ *             @OA\Property(
+ *                 property="asistencia_fecha",
+ *                 type="string",
+ *                 format="date",
+ *                 description="Fecha de la asistencia (YYYY-MM-DD)",
+ *                 example="2023-05-15"
+ *             ),
+ *             @OA\Property(
+ *                 property="matriculas",
+ *                 type="array",
+ *                 description="Array de IDs de matrículas",
+ *                 @OA\Items(
+ *                     type="string",
+ *                     format="uuid",
+ *                     example="550e8400-e29b-41d4-a716-446655440001"
+ *                 )
+ *             ),
+ *             @OA\Property(
+ *                 property="asistencias_estados",
+ *                 type="array",
+ *                 description="Estados de asistencia correspondientes (presente, ausente, etc.)",
+ *                 @OA\Items(
+ *                     type="string",
+ *                     example="presente"
+ *                 )
+ *             ),
+ *             @OA\Property(
+ *                 property="justificaciones",
+ *                 type="array",
+ *                 description="Justificaciones para ausencias (opcional)",
+ *                 @OA\Items(
+ *                     type="string",
+ *                     example="Enfermedad comprobada"
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Asistencias registradas/actualizadas exitosamente",
+ *         @OA\JsonContent(
+ *             @OA\Property(
+ *                 property="success",
+ *                 type="boolean",
+ *                 example=true
+ *             ),
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string",
+ *                 example="Asistencia creada con éxito"
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=400,
+ *         description="Error en los datos proporcionados",
+ *         @OA\JsonContent(
+ *             @OA\Property(
+ *                 property="success",
+ *                 type="boolean",
+ *                 example=false
+ *             ),
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string",
+ *                 example="El número de asistencias no coincide con el número de matrículas o no se proporcionaron justificaciones"
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Error de validación",
+ *         @OA\JsonContent(
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string",
+ *                 example="Los datos proporcionados no son válidos"
+ *             ),
+ *             @OA\Property(
+ *                 property="errors",
+ *                 type="object",
+ *                 @OA\Property(
+ *                     property="asignacion_id",
+ *                     type="array",
+ *                     @OA\Items(
+ *                         type="string",
+ *                         example="El campo asignacion_id es obligatorio"
+ *                     )
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Error interno del servidor",
+ *         @OA\JsonContent(
+ *             @OA\Property(
+ *                 property="success",
+ *                 type="boolean",
+ *                 example=false
+ *             ),
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string",
+ *                 example="Error al crear la asistencia: [mensaje de error]"
+ *             )
+ *         )
+ *     ),
+ *     security={
+ *         {"bearerAuth": {}}
+ *     }
+ * )
+ */
 
     // Attendance functions
     public function storeAttendance(Request $request)
@@ -2452,6 +3608,8 @@ class AcademicStructureController
         }
     }
 
+
+
     public function updateAttendance(Request $request, $id)
     {
         try {
@@ -2478,6 +3636,151 @@ class AcademicStructureController
             ], 500);
         }
     }
+
+    /**
+ * Crear o actualizar notas académicas
+ * @OA\Post(
+ *     path="/api/grades",
+ *     tags={"Calificaciones"},
+ *     summary="Registrar o actualizar notas",
+ *     description="Crea o actualiza múltiples calificaciones para estudiantes en una asignación específica",
+ *     operationId="storeGrade",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         description="Datos para registrar las notas",
+ *         @OA\JsonContent(
+ *             required={"asignacion_id", "notas", "matriculas", "periodos"},
+ *             @OA\Property(
+ *                 property="asignacion_id",
+ *                 type="string",
+ *                 format="uuid",
+ *                 description="ID de la asignación (grupo-materia)",
+ *                 example="550e8400-e29b-41d4-a716-446655440000"
+ *             ),
+ *             @OA\Property(
+ *                 property="notas",
+ *                 type="array",
+ *                 description="Valores numéricos de las notas",
+ *                 @OA\Items(
+ *                     type="number",
+ *                     format="float",
+ *                     example=4.5
+ *                 )
+ *             ),
+ *             @OA\Property(
+ *                 property="matriculas",
+ *                 type="array",
+ *                 description="IDs de matrículas de los estudiantes",
+ *                 @OA\Items(
+ *                     type="string",
+ *                     format="uuid",
+ *                     example="550e8400-e29b-41d4-a716-446655440001"
+ *                 )
+ *             ),
+ *             @OA\Property(
+ *                 property="periodos",
+ *                 type="array",
+ *                 description="IDs de periodos académicos",
+ *                 @OA\Items(
+ *                     type="string",
+ *                     format="uuid",
+ *                     example="550e8400-e29b-41d4-a716-446655440002"
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Notas creadas/actualizadas exitosamente",
+ *         @OA\JsonContent(
+ *             @OA\Property(
+ *                 property="success",
+ *                 type="boolean",
+ *                 example=true
+ *             ),
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string",
+ *                 example="Notas creadas con éxito"
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=400,
+ *         description="Error en los datos de entrada",
+ *         @OA\JsonContent(
+ *             oneOf={
+ *                 @OA\Schema(
+ *                     @OA\Property(
+ *                         property="success",
+ *                         type="boolean",
+ *                         example=false
+ *                     ),
+ *                     @OA\Property(
+ *                         property="message",
+ *                         type="string",
+ *                         example="El número de notas no coincide con el número de matrículas o periodos"
+ *                     )
+ *                 ),
+ *                 @OA\Schema(
+ *                     @OA\Property(
+ *                         property="success",
+ *                         type="boolean",
+ *                         example=false
+ *                     ),
+ *                     @OA\Property(
+ *                         property="message",
+ *                         type="string",
+ *                         example="La nota debe estar entre 0.0 y 5.0"
+ *                     )
+ *                 )
+ *             }
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Error de validación",
+ *         @OA\JsonContent(
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string",
+ *                 example="Los datos proporcionados no son válidos"
+ *             ),
+ *             @OA\Property(
+ *                 property="errors",
+ *                 type="object",
+ *                 @OA\Property(
+ *                     property="asignacion_id",
+ *                     type="array",
+ *                     @OA\Items(
+ *                         type="string",
+ *                         example="El campo asignacion_id es obligatorio"
+ *                     )
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Error interno del servidor",
+ *         @OA\JsonContent(
+ *             @OA\Property(
+ *                 property="success",
+ *                 type="boolean",
+ *                 example=false
+ *             ),
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string",
+ *                 example="Error al crear las notas: [mensaje de error]"
+ *             )
+ *         )
+ *     ),
+ *     security={
+ *         {"bearerAuth": {}}
+ *     }
+ * )
+ */
 
     // Grades functions
     public function storeGrade(Request $request)
@@ -2563,6 +3866,202 @@ class AcademicStructureController
             ], 500);
         }
     }
+
+    /**
+ * Registrar un nuevo pago
+ * @OA\Post(
+ *     path="/api/payments",
+ *     tags={"Pagos"},
+ *     summary="Crear un nuevo pago",
+ *     description="Registra un nuevo pago en el sistema",
+ *     operationId="storePayment",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         description="Datos para registrar el pago",
+ *         @OA\JsonContent(
+ *             required={"matricula_id", "concepto_id", "pago_fecha", "pago_valor", "pago_estado"},
+ *             @OA\Property(
+ *                 property="matricula_id",
+ *                 type="string",
+ *                 format="uuid",
+ *                 description="ID de la matrícula asociada",
+ *                 example="550e8400-e29b-41d4-a716-446655440000"
+ *             ),
+ *             @OA\Property(
+ *                 property="concepto_id",
+ *                 type="string",
+ *                 format="uuid",
+ *                 description="ID del concepto de pago",
+ *                 example="550e8400-e29b-41d4-a716-446655440001"
+ *             ),
+ *             @OA\Property(
+ *                 property="pago_fecha",
+ *                 type="string",
+ *                 format="date",
+ *                 description="Fecha del pago (YYYY-MM-DD)",
+ *                 example="2023-05-15"
+ *             ),
+ *             @OA\Property(
+ *                 property="pago_valor",
+ *                 type="number",
+ *                 format="float",
+ *                 description="Valor del pago",
+ *                 example=150.75
+ *             ),
+ *             @OA\Property(
+ *                 property="pago_estado",
+ *                 type="string",
+ *                 description="Estado del pago (ej. pagado, pendiente, anulado)",
+ *                 example="pagado"
+ *             ),
+ *             @OA\Property(
+ *                 property="pago_comprobante",
+ *                 type="string",
+ *                 description="Número de comprobante (opcional)",
+ *                 example="PAY-12345",
+ *                 nullable=true
+ *             ),
+ *             @OA\Property(
+ *                 property="pago_observaciones",
+ *                 type="string",
+ *                 description="Observaciones adicionales (opcional)",
+ *                 example="Pago realizado por transferencia bancaria",
+ *                 nullable=true
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Pago creado exitosamente",
+ *         @OA\JsonContent(
+ *             @OA\Property(
+ *                 property="success",
+ *                 type="boolean",
+ *                 example=true
+ *             ),
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string",
+ *                 example="Pago creado con éxito"
+ *             ),
+ *             @OA\Property(
+ *                 property="data",
+ *                 type="object",
+ *                 @OA\Property(
+ *                     property="pago_id",
+ *                     type="string",
+ *                     format="uuid",
+ *                     example="550e8400-e29b-41d4-a716-446655440002"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="matricula_id",
+ *                     type="string",
+ *                     example="550e8400-e29b-41d4-a716-446655440000"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="concepto_id",
+ *                     type="string",
+ *                     example="550e8400-e29b-41d4-a716-446655440001"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="pago_fecha",
+ *                     type="string",
+ *                     format="date",
+ *                     example="2023-05-15"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="pago_valor",
+ *                     type="number",
+ *                     example=150.75
+ *                 ),
+ *                 @OA\Property(
+ *                     property="pago_estado",
+ *                     type="string",
+ *                     example="pagado"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="created_at",
+ *                     type="string",
+ *                     format="date-time",
+ *                     example="2023-05-15T14:30:00Z"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="updated_at",
+ *                     type="string",
+ *                     format="date-time",
+ *                     example="2023-05-15T14:30:00Z"
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=400,
+ *         description="El pago ya existe",
+ *         @OA\JsonContent(
+ *             @OA\Property(
+ *                 property="success",
+ *                 type="boolean",
+ *                 example=false
+ *             ),
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string",
+ *                 example="El pago ya existe"
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Error de validación",
+ *         @OA\JsonContent(
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string",
+ *                 example="Los datos proporcionados no son válidos"
+ *             ),
+ *             @OA\Property(
+ *                 property="errors",
+ *                 type="object",
+ *                 @OA\Property(
+ *                     property="matricula_id",
+ *                     type="array",
+ *                     @OA\Items(
+ *                         type="string",
+ *                         example="La matrícula no existe"
+ *                     )
+ *                 ),
+ *                 @OA\Property(
+ *                     property="pago_valor",
+ *                     type="array",
+ *                     @OA\Items(
+ *                         type="string",
+ *                         example="El valor de pago debe ser un número"
+ *                     )
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Error interno del servidor",
+ *         @OA\JsonContent(
+ *             @OA\Property(
+ *                 property="success",
+ *                 type="boolean",
+ *                 example=false
+ *             ),
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string",
+ *                 example="Error al crear el pago: [mensaje de error]"
+ *             )
+ *         )
+ *     ),
+ *     security={
+ *         {"bearerAuth": {}}
+ *     }
+ * )
+ */
 
     // Payments functions
     public function storePayment(Request $request)
