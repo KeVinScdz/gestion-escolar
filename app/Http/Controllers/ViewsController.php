@@ -505,7 +505,7 @@ class ViewsController
             ->get();
         $grupos = Grupo::where('institucion_id', $institucion_id)->get();
 
-        // Obtener el horario del grupo seleccionado
+        // Obtener el horario del grupo seleccionados
         $selectedGroupId = request('grupo_id');
         $bloquesHorario = Bloque::where('institucion_id', $institucion_id)
             ->orderByRaw("FIELD(bloque_dia, 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo') ASC")
